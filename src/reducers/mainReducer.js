@@ -1,3 +1,5 @@
+import { bindActionCreators } from "redux";
+
 // import { FETCH_DATA, RECEIVED_DATA } from '../actions/types';
 
 // const setLang = async (type) => {
@@ -11,7 +13,7 @@
 // }
 
 
-export default function (state = {}, action) {
+export default (state = {}, action) => {
     switch (action.type) {
         /* REACT-WEB3 Actions */
         case "web3/RECEIVE_ACCOUNT":
@@ -28,6 +30,11 @@ export default function (state = {}, action) {
             return {
                 ...state,
                 ethAddress: null
+            }
+        case "SET_WEB3_TO_STORE":
+            return {
+                ...state,
+                GlobalWeb3Object: window.web3
             }
         /* END */
         case "FETCH_PRODUCTS_LIST": 

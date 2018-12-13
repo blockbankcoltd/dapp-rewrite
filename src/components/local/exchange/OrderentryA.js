@@ -1,0 +1,219 @@
+import * as React from 'react'
+import styled from 'styled-components';
+import numeral from 'numeral';
+
+export default class OrderentryA extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    state = {
+        buy: true,
+        amount: 0,
+        amountString: '',
+        price: 0,
+        priceString: '',
+        total: 0,
+        percentBtn: -1,
+    }
+
+    percentActive(ref) {
+
+        //When click the percent button, active this function
+    }
+
+
+    setPriceAmount(type) {
+        const priceAmount = 1; // When click the price in/decrease arrow, the price is moving by this number
+        const currentPrice = this.state.price;
+        const decimal = 2; // Decimal expression digits
+
+        if (type === 'up') {
+            const price = parseFloat((currentPrice + priceAmount).toFixed(8));
+            const value = (price.toFixed(decimal)).replace(/,/g, '').split('.');
+            const float = value.length > 1 ? (`.${value[1]}`) : '';
+            this.setState({
+                price,
+                priceString: numeral(value[0]).format() + float,
+                total: price * this.state.amount,
+            });
+        } else {
+            const price = currentPrice < priceAmount ? 0 : parseFloat((currentPrice - priceAmount).toFixed(8));
+            const value = (price.toFixed(decimal)).replace(/,/g, '').split('.');
+            const float = value.length > 1 ? (`.${value[1]}`) : '';
+            this.setState({
+                price,
+                priceString: numeral(value[0]).format() + float,
+                total: price * this.state.amount,
+            });
+        }
+    }
+
+    changePrice(e) {
+        const total = parseInt(e.target.value) * this.state.amount;
+        this.setState({price: parseInt(e.target.value), total})
+    };
+
+    changeMode = buy => {
+        this.setState({buy});
+    }
+
+    changeAmount = e => {
+        const total = this.state.price * parseInt(e.target.value);
+        this.setState({amount: parseInt(e.target.value), total})
+    };
+
+
+    render() {
+        const {TRADES, BUY_SELL_ADV, BUY_SELL_MODAL} = this.props.languageConfig;
+        const tabs2 = (
+            <div className="d-select">
+                <label
+                    htmlFor="select1"
+                    onClick={() => {
+                        this.changeMode(true);
+                        this.setState({
+                            percentBtn: -1,
+                        });
+                    }}
+                    className={this.state.buy ? 'buy active' : ''}
+                >
+                    {BUY_SELL_MODAL.BUY}
+                </label>
+
+                <label
+                    onClick={() => {
+                        this.changeMode(false);
+                        this.setState({
+                            percentBtn: -1,
+                        });
+                    }}
+                    htmlFor="select2"
+                    className={this.state.buy ? '' : 'sell active'}
+                >
+                    {BUY_SELL_MODAL.SELL}
+                </label>
+                <span className="greyLine"/>
+            </div>
+        );
+        const percentButton = [
+            {
+                ref: 10,
+                text: '10%',
+            },
+            {
+                ref: 25,
+                text: '25%',
+            },
+            {
+                ref: 50,
+                text: '50%',
+            },
+            {
+                ref: 100,
+                text: '100%',
+            },
+        ];
+        return (
+            <Entry>
+                <div className="rowclearfix">
+                    <div
+                        className="pad"
+                        style={{
+                            width: '100%',
+                            height: '40px',
+                        }}
+                    >{tabs2}</div>
+                </div>
+                <div className={this.state.buy ? 'percent_tab buy' : 'percent_tab sell'}>
+                    {
+                        percentButton.map((item, index) => (<button
+                            key={index}
+                            type="button"
+                            onClick={() => {
+                                this.percentActive(item.ref);
+                                this.setState({
+                                    percentBtn: index,
+                                });
+                            }}
+                            className={this.state.percentBtn === index ? 'percent_button active' : 'percent_button'}
+                        >{item.text}</button>))
+                    }
+                </div>
+
+                <div className="clearfix pad-y input-data">
+                    <div className="form-group">
+                        <label>
+                            {this.state.buy
+                                ? BUY_SELL_MODAL.BUY_AMNT
+                                : BUY_SELL_MODAL.SELL_AMNT
+                            } (symbol)
+                        </label>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                value={this.state.amount === 0 ? '' : this.state.amount}
+                                placeholder="0"
+                                onChange={this.changeAmount}
+                                className="form-control"
+                            />
+                            <span className="coinSymbol">Symbol</span>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>
+                            {BUY_SELL_MODAL.VALUE} (ETH)
+                        </label>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                value={this.state.price === 0 ? '' : this.state.price}
+                                placeholder="0"
+                                onChange={this.changePrice}
+                                className="form-control"
+                            />
+                            <span className="coinSymbol"/>
+                            <div className="orderArrow">
+                                <div className="top_arrow" onClick={() => this.setPriceAmount("up")}/>
+                                <div className="bottom_arrow" onClick={() => this.setPriceAmount("down")}/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className={this.state.buy ? 'summary-wrap buy' : 'summary-wrap sell'}>
+                    <div className="order-amount">
+                        <div className="summary-item">{TRADES.FEE_TEXT} :</div>
+                        <div className="order-amount-total">
+                            0 *Fee price or amount
+                        </div>
+                    </div>
+                    {
+                        <div className="order-price">
+                            <div
+                                className="summary-item">{BUY_SELL_ADV.ORDER_TOTAL} :
+                            </div>
+                            <div className="order-price-total">
+                                <span
+                                    className="sub-total-price">{isNaN(numeral(this.state.total).format('0')) ? this.state.total.toFixed(8) : numeral(this.state.total).format('0,0.[00000000]')}</span> ETH
+                            </div>
+                        </div>
+                    }
+                    <div className="min-order-price">
+                        <div
+                            className="summary-item">·{BUY_SELL_ADV.MIN_ORDER_AMOUNT} : Min_order
+                        </div>
+                        <div className="summary-item">·{BUY_SELL_ADV.FEES}
+                            Fee
+                        </div>
+                    </div>
+                </div>
+            </Entry>
+        )
+    }
+}
+
+const Entry = styled.div`
+  
+`

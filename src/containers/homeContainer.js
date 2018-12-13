@@ -12,10 +12,10 @@ class HomeContainer extends Component {
 
     }
     componentDidMount(){
-        console.log("LANGUAGE CONFIG Root -------------------------------------->>>>>>>> ", this.props);
+        console.log("LANGUAGE CONFIG Home -------------------------------------->>>>>>>> ", this.props);
     }
     render() {
-        const { INDEX } = this.props;
+        const { INDEX } = this.props.languageConfig;
         return (
             <div>
                 <MainVisual id="mainVisual">

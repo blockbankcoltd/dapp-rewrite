@@ -12,26 +12,20 @@ class Routes extends Component {
     }
     render(){
         const attachPropsToContainers = (Container, props) => {
-            console.log("Component for Route ----> ", Container)
             return (
               <Container
-                {...props}
+                languageConfig = {props}
               />
             );
           }
         const { navLinks, language } = this.props;
-        console.log("IN ROUTES --> ", language);
-        console.log("navLinks IN ROUTES --> ", navLinks);
         return (
-            // <Router>
-                <Switch>
-                    {navLinks.map( r => {
-                        let container = () => attachPropsToContainers(r.component, language);
-                        // return <Route key={r.path} languages={languagesConfig} exact path={r.path} component={r.component}/>
-                        return <Route key={r.path} language={language} exact path={r.path} render={container}/>
-                    })}
-                </Switch>
-            // </Router>
+            <Switch>
+                {navLinks.map( r => {
+                    let container = () => attachPropsToContainers(r.component, language);
+                    return <Route key={r.path} exact={true} path={r.path} render={container}/>
+                })}
+            </Switch>
         )
     }
 };

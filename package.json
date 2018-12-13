@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "history": "^4.7.2",
+    "npm": "^6.5.0",
+    "numeral": "^2.0.6",
     "react": "^16.6.3",
+    "react-device-detect": "^1.6.1",
     "react-dom": "^16.6.3",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
