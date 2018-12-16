@@ -1,5 +1,5 @@
 import { bindActionCreators } from "redux";
-
+import Constants, * as Constant from '../constants/constants';
 // import { FETCH_DATA, RECEIVED_DATA } from '../actions/types';
 
 // const setLang = async (type) => {
@@ -31,10 +31,20 @@ export default (state = {}, action) => {
                 ...state,
                 ethAddress: null
             }
-        case "SET_WEB3_TO_STORE":
+        case Constants.Requests.WEB3_OBJECT_REQUEST:
+            return {
+                ...state
+            }
+        case Constants.Success.WEB3_OBJECT_SUCCESS:
+        console.log("SUCCESS ON WEB3 OBJECT --> ", action.web3Object)
             return {
                 ...state,
-                GlobalWeb3Object: window.web3
+                GlobalWeb3Object: action.web3Object
+            }
+        case Constants.Failure.WEB3_OBJECT_FAILURE:
+            return {
+                ...state,
+                GlobalWeb3Object: action.error
             }
         /* END */
         case "FETCH_PRODUCTS_LIST": 

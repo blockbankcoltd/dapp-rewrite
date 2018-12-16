@@ -7,17 +7,17 @@ export default class OrderentryA extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            buy: true,
+            amount: 0,
+            amountString: '',
+            price: 0,
+            priceString: '',
+            total: 0,
+            percentBtn: -1,
+        }
     }
 
-    state = {
-        buy: true,
-        amount: 0,
-        amountString: '',
-        price: 0,
-        priceString: '',
-        total: 0,
-        percentBtn: -1,
-    }
 
     percentActive(ref) {
 
@@ -51,7 +51,7 @@ export default class OrderentryA extends React.Component {
         }
     }
 
-    changePrice(e) {
+    changePrice = (e) => {
         const total = parseInt(e.target.value) * this.state.amount;
         this.setState({price: parseInt(e.target.value), total})
     };
@@ -204,9 +204,12 @@ export default class OrderentryA extends React.Component {
                         <div
                             className="summary-item">·{BUY_SELL_ADV.MIN_ORDER_AMOUNT} : Min_order
                         </div>
-                        <div className="summary-item">·{BUY_SELL_ADV.FEES}
-                            Fee
+                        <div className="summary-item">·{BUY_SELL_ADV.FEES} : Fee
                         </div>
+                    </div>
+                    <div>
+                        <CancelButton type="button" onClick={() => console.log("Cancelled. Clear the Form now.")}>{BUY_SELL_MODAL.CANCEL}</CancelButton>
+                        <Button type="button" onClick={(e) => this.state.buy ? this.props.buyOrder(this.state.price, this.state.total) : this.props.sellOrder(this.state.price, this.state.total)}>{BUY_SELL_MODAL.PLACE_ORDER}</Button>
                     </div>
                 </div>
             </Entry>
@@ -216,4 +219,17 @@ export default class OrderentryA extends React.Component {
 
 const Entry = styled.div`
   
+`
+const Button = styled.button`
+    width: 45%;
+    background-color: red;
+    color: white;
+    padding: 10px 0px;
+    font-size: 14px;
+`
+
+const CancelButton = styled.button`
+    width: 45%;
+    padding: 10px 0px;
+    font-size: 14px;
 `

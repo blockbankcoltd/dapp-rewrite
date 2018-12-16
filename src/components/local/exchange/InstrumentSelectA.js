@@ -1,17 +1,22 @@
 import * as React from 'react'
 import styled from 'styled-components';
 import {isMobile} from 'react-device-detect';
+import updown_1_image from '../../../../src/assets/images/updown_1.png';
+import updown_2_image from '../../../../src/assets/images/updown_2.png';
+import updown_3_image from '../../../../src/assets/images/updown_3.png';
+
 
 export default class InstrumentSelectA extends React.Component{
 
     constructor(props) {
         super(props);
+        this.state = {
+            isMobile,
+            sortType: 'up-volume',
+            activeTabData : []
+        }
     }
 
-    state = {
-        isMobile,
-        sortType: 'up-volume'
-    }
 
     onViewMarketList() {
         document.querySelector('#mobileInst').classList.toggle('on');
@@ -35,9 +40,24 @@ export default class InstrumentSelectA extends React.Component{
         }
     }
 
+    // renderTabs = (obj) => {
+    //     let tabHeading = obj.productName;
+
+    //     return (
+           
+    //     );
+    // }
+
+    componentDidMount(){
+        let tradeData = this.props.data.default.productList[0].prTrade;
+        this.setState({activeTabData: tradeData})
+    }
+
     render() {
         let timer = null;
         const {INSTRUMENTS} = this.props.languageConfig;
+        const data = this.props.data.default;
+        // console.log(data);
         return (
             <Selector className="mobileWrapper">
 
@@ -49,78 +69,52 @@ export default class InstrumentSelectA extends React.Component{
                         <i className="xi-caret-down"/>
                     </button> : ''}
                 <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
-                    <table className="coinTable">
-                        <colgroup>
-                            <col width="32%"/>
-                            <col width="25%"/>
-                            <col width="20%"/>
-                            <col width="23%"/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th onClick={() => {
-                                this.selectSort('char');
-                            }}>{INSTRUMENTS.COIN_NAME}<img
-                                src={`/static/images/${this.selectImage('char')}`}/></th>
-                            <th onClick={() => {
-                                this.selectSort('price');
-                            }}>{INSTRUMENTS.COIN_PRICE}<img
-                                src={`/static/images/${this.selectImage('price')}`}/></th>
-                            <th onClick={() => {
-                                this.selectSort('percent');
-                            }}>{INSTRUMENTS.COIN_DAY_BEFORE}<img
-                                src={`/static/images/${this.selectImage('percent')}`}/></th>
-                            <th onClick={() => {
-                                this.selectSort('volume');
-                            }}>{INSTRUMENTS.COIN_VOLUME}<img
-                                src={`/static/images/${this.selectImage('volume')}`}/></th>
-                        </tr>
+                    <table style={{width: "100%", background:"#fff"}}>
+                        <thead style={{borderWidth: "1px", borderStyle: "solid", borderColor: "grey"}}>
+                            <tr style={{fontSize: 10, fontWeight: "bold", display: "table-row"}}>
+                                {data.productList.map( (obj) => {
+                                    return (
+                                        <th key={obj.productName} style={{width: '50%'}} onClick={ () => {
+                                            this.setState({activeTabData: obj.prTrade})
+                                        }}>{obj.productName}</th>
+                                    )
+                                })}
+                            </tr>
+                            {/* <tr style={{border:"none", fontWeight: "bold", display: "table-row"}}>
+                                <th onClick={() => {
+                                    this.selectSort('char');
+                                }}>{INSTRUMENTS.COIN_NAME}<img
+                                    src={`../../assets/images/${this.selectImage('char')}`}/></th>
+                                <th onClick={() => {
+                                    this.selectSort('price');
+                                }}>{INSTRUMENTS.COIN_PRICE}<img
+                                    src={`../../assets/images/${this.selectImage('price')}`}/></th>
+                                <th onClick={() => {
+                                    this.selectSort('percent');
+                                }}>{INSTRUMENTS.COIN_DAY_BEFORE}<img
+                                    src={`../../assets/images/${this.selectImage('percent')}`}/></th>
+                                <th onClick={() => {
+                                    this.selectSort('volume');
+                                }}>{INSTRUMENTS.COIN_VOLUME}<img
+                                    src={`../../assets/images/${this.selectImage('volume')}`}/></th>
+                            </tr> */}
                         </thead>
-                        <tbody className="coinList">
-                        <tr
-                            key=""
-                            className={`instrument-*coinSymbol`}
-                            // className = {`instrument-${item.symbol} `}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (timer) {
-                                    clearTimeout(timer);
-                                }
-                                timer = setTimeout(() => {
-                                    // this.selectInstrument(item.InstrumentId);
-                                    this.onViewMarketList();
-                                }, 50);
-                            }}
-                        >
-                            <td
-                                className={`coinSymbol`}
-                                style={{
-                                    // background: (20x20 symbol image) 13px 50% no-repeat`,
-                                }}
-                            >
-                                <p className={`coinSymbolText ${localStorage.getItem('lang')}`}>
-                                    *coinName
-                                </p>
-                                <p className="marketSymbol">
-                                    *coinSymbol/ETH
-                                </p>
-                            </td>
-                            <td className={`up dataNumber`}>
-                                {/* up or down or normal*/}
-                                *Last trade price
-                                <p className="coinToKrw">*KRW conversion price</p>
-                            </td>
-                            <td className={`up dataNumber dataPer`}>
-                                {/* up or down or normal*/}
-                                %
-                                *price change percent
-                            </td>
-                            <td className="volume">
-                                *volume
-                            </td>
-                        </tr>
+                        <tbody>
+                            {this.state.activeTabData.map( (obj) => {
+                                return (
+                                    <tr key={obj.productName} className={`instrument-*coinSymbol`} style={{border:"none", fontWeight: "bold", display: "table-row"}}>
+                                        <td className={`coinSymbol`} style={{fontSize: 10, padding: "10px", margin:"0px", borderStyle: "none"}}>{obj.productName}</td>
+                                        <td className={`up dataNumber`} style={{fontSize: 10, padding: "10px", margin:"0px", borderStyle: "none"}}>{obj.price}</td>
+                                        <td className={`up dataNumber dataPer`} style={{fontSize: 10, padding: "10px", margin:"0px", borderStyle: "none"}}>{obj.change}</td>
+                                        <td className="volume" style={{fontSize: 10, padding: "10px", marginLeft:"0px", marginRight:"0px", borderStyle: "none"}}>{obj.volume}</td>
+                                    </tr>
+                                )
+                            })}
+                            
                         </tbody>
                     </table>
+                    
+                    
                 </div>
             </Selector>
         )

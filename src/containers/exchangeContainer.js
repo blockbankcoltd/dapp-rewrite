@@ -10,8 +10,8 @@ import PrivateTradesA from '../components/local/exchange/PrivateTradesA';
 import BalanceA from '../components/local/exchange/BalanceA';
 import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
-
-
+import Actions from '../actions/index';
+import * as config from '../utilities/config';
 class ExchangeContainer extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +23,25 @@ class ExchangeContainer extends Component {
 
     componentDidMount(){
         console.log("LANGUAGE CONFIG Exchange -------------------------------------->>>>>>>> ", this.props);
+        // dispatch Action to get data for Orderbook
+        this.props.getOrderbook(2,3,10);
+
+        // this.props.placeBuyOrder()
+        // this.props.placeSellrder()
+        // this.props.depositEth()
+        // this.props.withdrawEth()
+        // this.props.depositToken()
+        // this.props.withdrawToken()
+    }
+
+    placeBuyOrder = (price, total) => {
+        console.log("Received values from child component + Buy Order --> ", price, total);
+        this.props.placeBuyOrder(price, total);
+    }
+
+    placeSellOrder = (price, total) => {
+        console.log("Received values from child component + Sell Order --> ", price, total);
+        this.props.placeSellOrder(price, total);
     }
 
     render() {
@@ -42,6 +61,8 @@ class ExchangeContainer extends Component {
             }
 
         ];
+
+        
 
         return (
             <Exchange id="wrap">
@@ -72,7 +93,8 @@ class ExchangeContainer extends Component {
                                 }
 
                                 <div className="quotation">
-                                    <OrderbookA languageConfig={this.props.languageConfig} />
+                                    
+                                    <OrderbookA languageConfig={this.props.languageConfig} data={this.props.orderBook }/>
                                 </div>
 
 
@@ -88,7 +110,7 @@ class ExchangeContainer extends Component {
                                                     <div id="trigger-content-1">
 
                                                         <div className="order-entry">
-                                                            <OrderentryA languageConfig={this.props.languageConfig}/>
+                                                            <OrderentryA languageConfig={this.props.languageConfig} buyOrder={this.placeBuyOrder} sellOrder={this.placeSellOrder}/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -162,7 +184,7 @@ class ExchangeContainer extends Component {
                 </ExchangeColumn1>
                 <ExchangeColumn2>
                     <div id="inst">
-                        <InstrumentSelectA  languageConfig={this.props.languageConfig}/>
+                        <InstrumentSelectA  languageConfig={this.props.languageConfig} data={config}/>
                     </div>
                 </ExchangeColumn2>
 
@@ -171,13 +193,18 @@ class ExchangeContainer extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-
-})
-
+const mapStateToProps = (state) => {
+    return {
+        orderBook: state.smartContract.orderBook
+    }
+}
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        placeBuyOrder: (x, y) => dispatch(Actions.smartContract.placeBuyOrderRequest(x,y)),
+        placeSellOrder: (x, y) => dispatch(Actions.smartContract.placeSellOrderRequest(x,y)),
+        getOrderbook: (x, y, z) => dispatch(Actions.smartContract.getOrderBookRequest(x, y, z)),
+        
+        
     }
 }
 

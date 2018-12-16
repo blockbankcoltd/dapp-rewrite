@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'
+import bitnaruLogo from '../../../src/assets/images/bitnaruLogo.png';
+import englishLangIcon from '../../../src/assets/images/icon/en.png';
+import koreanLangIcon from '../../../src/assets/images/icon/kr.png';
 
 export default class HeaderComponent extends React.Component {
     constructor(props) {
@@ -17,17 +20,18 @@ export default class HeaderComponent extends React.Component {
     }
 
     render() {
-        const { navLinks } = this.props;
+        const { navLinks, titleSrc, language } = this.props;
         // const {children,titleSrc,Language} = this.props;
         // const header=Language.HEADER;
         // const buttons=Language.BUTTONS;
-        // const {MENU_TEXT_HOME}=Language.HEADER;
+        const { MENU_TEXT_HOME } = language.HEADER;
         return (
             <Header className={this.state.headerAdd ? 'header scr_on' : 'header'}>
                 <HeaderContents>
                     <Title>
                         <Link to="/">
-                           <TitleImage onClick={this.viewSide} id="logo" />
+                           <TitleImage onClick={this.viewSide} id="logo" src={bitnaruLogo} alt={MENU_TEXT_HOME}/>
+                           {/* <TitleImage onClick={this.viewSide} id="logo" src={titleSrc} alt={MENU_TEXT_HOME} /> */}
                         </Link>
                     </Title>
                     <HeaderLinks>
@@ -37,8 +41,11 @@ export default class HeaderComponent extends React.Component {
                     </HeaderLinks>
                     
                     <div className="lang_navi">
-                        <p className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"}
-                            onClick={(e) => { this.setState({ langActive: !this.state.langActive }) }}><span>{localStorage.getItem('lang') === "kr" ? "KR" : "EN"}<i className="xi-caret-down-min"></i></span></p>
+                        <p className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"} onClick={(e) => { this.setState({ langActive: !this.state.langActive }) }}>
+                            <span>{localStorage.getItem('lang') === "kr" ? "KR" : "EN"}
+                                <i className="xi-caret-down-min"></i>
+                            </span>
+                        </p>
                         <ul id="langSelect" className={"lang_" + (this.state.langActive ? "on" : "off")}>
                             <li className="lang_kr" onClick={(e) => { this.props.switchLanguage("kr") }}>KR</li>
                             <li className="lang_en" onClick={(e) => { this.props.switchLanguage("en") }}>EN</li>
@@ -78,7 +85,7 @@ const Header = styled.section`
 
 const HeaderLinks = styled.div`
     text-align: left;
-    margin-top: 18px;
+    margin: 21px 0px 0px 160px;
     position: absolute;
     font-size: 20px;
         a{
@@ -145,18 +152,18 @@ const HeaderContents = styled.div`
     }
 
     .lang_navi ul .lang_kr {
-        background-image: url(/static/images/icon/kr.png);
+        background-image: url(${koreanLangIcon});
     }
 
     .lang_navi ul .lang_en {
-        background-image: url(/static/images/icon/en.png);
+        background-image: url(${englishLangIcon});
     }
     .lang_navi .lang_kr {
-        background-image: url(/static/images/icon/kr.png);
+        background-image: url(${koreanLangIcon});
     }
 
     .lang_navi .lang_en {
-        background-image: url(/static/images/icon/en.png);
+        background-image: url(${englishLangIcon});
     }
     @media (max-width: 1024px) {
         width: 100%;

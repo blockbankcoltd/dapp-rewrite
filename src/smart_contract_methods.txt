@@ -1,0 +1,18 @@
+function getBalance(uint32 prCode) view public returns (uint256 available, uint256 reserved)
+
+function depositToken(address prAddress, uint256 amount) public
+
+function withdrawToken(address prAddress, uint256 amount) public
+
+function GetMyOrders() view public returns (uint32[] prTrade, uint32[] prBase, bool[] sells, uint80[] prices, uint104[] qtys, uint64[] timestamp)
+
+function depositETH() payable public
+
+function withdrawETH(uint256 amount) public
+
+function LimitOrder(uint32 ownerId, uint32 prTrade, uint32 prBase, bool isSell, uint256 price, uint256 qty) public returns (uint32)  
+
+function GetProductInfo(address product) view public returns (uint32 prCode, uint256 divider, string name, string symbol, bool isAccepted) .  USE .call
+
+function GetProductList() constant public returns (address[] products, uint32[] productIds)       USE .call()
+

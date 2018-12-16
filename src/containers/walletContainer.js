@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import ReactTable from 'react-table';
+import "react-table/react-table.css";
+import Config from '../utilities/config';
+import Actions from '../actions/index';
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -11,11 +15,108 @@ class WalletContainer extends Component {
             notice: true,
             auth: false
 
-        };    
+        };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("LANGUAGE CONFIG Wallet -------------------------------------->>>>>>>> ", this.props);
+        this.props.getMyOrders();
+        this.props.getBalance();
+    }
+
+    deposit = (e, cellInfo) => {
+        console.log("Deposit Button Clicked --> ", cellInfo.original)
+        // if(cellInfo.original.product === 'ETH'){
+        //     this.props.depositEth();
+        // }else{
+        //     this.props.depositToken(cellInfo.original.tokenAddress)
+        // }
+    }
+    
+    withdraw = (e, cellInfo) => {
+        console.log("Withdraw Button Clicked --> ", cellInfo.original)
+    }
+
+    renderEditable(cellInfo, flag) {
+        if(flag === "deposit") {
+            return <div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button></div>
+
+        }else{
+            return <div><button onClick={(e) => this.withdraw(e, cellInfo)} type="button">Withdraw</button></div>
+        }
+        
+        console.log("CELLINFO --> ", cellInfo.original)
+        
+        // return (
+        //   <div
+        //     style={{ backgroundColor: "#fafafa" }}
+        //     contentEditable
+        //     suppressContentEditableWarning
+        //     onBlur={e => {
+        //       const data = [...this.state.data];
+        //       data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+        //       this.setState({ data });
+        //     }}
+        //     dangerouslySetInnerHTML={{
+        //       __html: this.state.data[cellInfo.index][cellInfo.column.id]
+        //     }}
+        //   />
+        // );
+      }
+
+    renderTable() {
+        // let data = [];
+        // Config.productList.forEach(obj => {
+        //     data.push({
+        //         product: obj.productName,
+        //         totalBalance: obj.decimal,
+        //         hold: obj.decimal,
+        //         pendingDeposits: obj.decimal
+        //     });
+        //     if (obj.prTrade && obj.prTrade.length > 0) {
+        //         obj.prTrade.forEach(o => {
+        //             data.push({
+        //                 product: o.productName,
+        //                 totalBalance: o.decimal,
+        //                 hold: o.decimal,
+        //                 pendingDeposits: o.decimal,
+        //                 tokenAddress: o.tokenAddress
+        //             });
+        //         })
+        //     }
+        // });
+        return (
+            <ReactTable data={this.props.balance} columns={[
+                {
+                    Header: "Product",
+                    id: "product",
+                    accessor: "product"
+                },
+                {
+                    Header: "Total Balance",
+                    id: "total_balance",
+                    accessor: d => d.balance.total
+                },
+                {
+                    Header: "Hold",
+                    id: "hold",
+                    accessor: d => d.balance.hold
+                },
+                {
+                    // Header: "Pending Deposits",
+                    id: "deposit_buttons",
+                    accessor: d => <div><button type="button">Deposit</button></div>,
+                    Cell: (d) => this.renderEditable(d, "deposit")
+                },
+                {
+                    // Header: "Pending Deposits",
+                    id: "withdraw_buttons",
+                    accessor: d => <div><button type="button" >Withdraw</button></div>,
+                    Cell: (d) => this.renderEditable(d, "withdraw")
+                }
+                
+            ]} defaultPageSize={10} className="-striped -highlight" />
+        );
     }
 
     render() {
@@ -35,13 +136,18 @@ class WalletContainer extends Component {
                                 </div>
 
                                 <div className="asset_balance">
-                                            {/* onClick={(e) => {
+                                    {/* onClick={(e) => {
                                                 e.target.className.indexOf('market-button') !== -1 && e.target.className.indexOf('marketLOCUS') === -1
                                                 && setTimeout(() => {Router.push('/exchange');
                                                     document.body.scrollTop = document.documentElement.scrollTop = 0;
                                                 }, 500)
                                             }} */}
-                                    <div className="ap-balances" ap-widget='Balances' hide-header="false"></div>
+                                    <div className="balances_list">
+                                        <div className="total_balance"></div>
+                                        <div className="products_list_balances">
+                                            {this.renderTable()}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -54,11 +160,18 @@ class WalletContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
-
+    balance: state.smartContract.balance,
+    myOrders: state.smartContract.myOrders
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        getBalance: () => dispatch(Actions.smartContract.getBalanceRequest()),
+        depositEth: () => dispatch(Actions.smartContract.placeDepositEthRequest()),
+        withdrawEth: () => dispatch(Actions.smartContract.placeWithdrawEthRequest()),
+        depositToken: () => dispatch(Actions.smartContract.placeDepositTokenRequest()),
+        withdrawToken: () => dispatch(Actions.smartContract.placeWithdrawTokenRequest()),
+        getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
 
     }
 }
@@ -84,6 +197,7 @@ const Wallet = styled.div`
         ul {
             display:flex;
             flex-direction: row;
+            list-style: none;
             li {
                 width:50%;
                 text-align:center;

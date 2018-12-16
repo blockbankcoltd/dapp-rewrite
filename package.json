@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
     "npm": "^6.5.0",
     "numeral": "^2.0.6",
     "react": "^16.6.3",
@@ -12,10 +13,13 @@
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
+    "react-table": "^6.8.6",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
+    "redux-persist": "^5.10.0",
     "redux-saga": "^0.16.2",
-    "styled-components": "^4.1.2"
+    "styled-components": "^4.1.2",
+    "web3": "^1.0.0-beta.37"
   },
   "scripts": {
     "start": "react-scripts start",

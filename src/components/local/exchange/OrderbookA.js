@@ -5,16 +5,35 @@ export default class OrderbookA extends React.Component{
 
     constructor(props) {
         super(props);
+        this.state = {};
+    }
 
+    componentDidUpdate(prevProps){
+        if(this.props.data != prevProps.data){
+            this.setState({data: this.props.data});
+        }
     }
 
     render() {
         const { BUTTONS } = this.props.languageConfig;
+        const { priceA = [], priceB = [], volumeA = [], volumeB = [] } = this.state.data ? this.state.data : [[],[],[],[]];
+        let _obj = {
+            bidOrder: [],
+            askOrder: []
+        };
+        priceA.forEach( (o, i) => {
+            _obj.bidOrder.push({
+                priceA: o,
+                volume: volumeA[i]
+            });
+            _obj.askOrder.push({
+                priceB: priceB[i],
+                volume: volumeB[i]
+            });
+        })
+
         const setRowAmount = 15; //amount of show
-        const testArray = [];
-        for(let i=0; i<setRowAmount; i++ ){
-            testArray.push(i);
-        }
+        
         return (
             <Book id="moduleOrderBook" className="bookview">
                 <div id="orderBookActions" className="buttons-holder">
@@ -40,26 +59,26 @@ export default class OrderbookA extends React.Component{
                         <div id="bookTable" className="booktable">
                             <div id="askRows">
                                 {
-                                    testArray.map(item => {
+                                   _obj.bidOrder.map( (item, i) => {
                                         return(
-                                        <span className="bookrow" key={item}>
-                                            <div className="CellMyOrders price">*user's bid order</div>
-                                            <div className="CellBidPrice CellPrice">*price</div>
-                                            <div className="CellPublicOrders">-</div>
-                                        </span>
+                                            <span className="bookrow" key={i}>
+                                                <div className="CellMyOrders price">{item.volume}</div>
+                                                <div className="CellBidPrice CellPrice">{item.priceA}</div>
+                                                <div className="CellPublicOrders">-</div>
+                                            </span>
                                         )
                                     })
                                 }
                             </div>
                             <div id="bidRows">
                                 {
-                                    testArray.map(item => {
+                                    _obj.askOrder.map( (item, i) => {
                                         return(
-                                            <span className="bookrow" key={item*100}>
-                                            <div className="CellMyOrders price">-</div>
-                                            <div className="CellBidPrice CellPrice">*price</div>
-                                            <div className="CellPublicOrders">*user's ask order</div>
-                                        </span>
+                                            <span className="bookrow" key={i}>
+                                                <div className="CellMyOrders price">-</div>
+                                                <div className="CellBidPrice CellPrice">{item.priceB}</div>
+                                                <div className="CellPublicOrders">{item.volume}</div>
+                                            </span>
                                         )
                                     })
                                 }

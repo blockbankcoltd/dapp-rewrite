@@ -7,22 +7,21 @@ import Routes from '../router/routes';
 import links from '../router/navLinks';
 import HeaderComponent from '../components/global/header';
 import store from '../store/reduxStore';
-
-import actions from '../actions/index';
+import Actions from '../actions/index';
 
 class RootContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeLanguage: "kr",
-            languageConfig: koreanConfig
+            activeLanguage: "en",
+            languageConfig: englishConfig
         };
     }
 
     componentDidMount(){
         if(window.web3){
-            this.props.putWeb3ToStore();
-            this.props.putSmartContractObjectToStore();
+            // this.props.putWeb3ToStore();
+            // this.props.putSmartContractObjectToStore();
         }else{
             // render an Error Page if window.web3 is not available
         }
@@ -54,7 +53,7 @@ class RootContainer extends Component {
         
         return (
             <div className="App">
-                <HeaderComponent switchLanguage={switchLanguage} navLinks={links}/>
+                <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig}/>
                 <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links}/>
             </div>
         )
@@ -62,13 +61,14 @@ class RootContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    GlobalWeb3Object : state.main.GlobalWeb3Object
+    GlobalWeb3Object : state.main.GlobalWeb3Object,
+    GlobalSmartContractObject: state.smartContract.GlobalSmartContractObject
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        putWeb3ToStore: () => dispatch(actions.global.putWeb3ToStore()),
-        putSmartContractObjectToStore: () => dispatch(actions.smartContract.putSmartContractToStore())
+        putWeb3ToStore: () => dispatch(Actions.global.putWeb3ToStore()),
+        putSmartContractObjectToStore: () => dispatch(Actions.smartContract.putSmartContractToStore())
     }
 }
 
