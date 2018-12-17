@@ -74,7 +74,6 @@ export default class OrderentryA extends React.Component {
 
 
     render() {
-        console.log(this.props)
         const {TRADES, BUY_SELL_ADV, BUY_SELL_MODAL} = this.props.languageConfig;
         const tabs2 = (
             <div className="d-select">

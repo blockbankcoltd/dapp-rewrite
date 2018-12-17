@@ -9,7 +9,6 @@ export default class BalanceA extends React.Component {
     }
 
     render() {
-        console.log(this.props)
         const {ACCOUNT_BALANCES} = this.props.languageConfig;
         return (
             <Balance>

@@ -147,7 +147,6 @@ export default class InstrumentSelectA extends React.Component {
         const {INSTRUMENTS} = this.props.languageConfig;
         const data = this.props.data.default;
         const sortedCoin = this.doSort(this.state.sortType, this.state.activeTabData);
-        console.log(sortedCoin)
         // console.log(data);
         return (
             <Selector className="mobileWrapper">
