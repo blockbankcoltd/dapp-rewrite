@@ -76,9 +76,9 @@ export default class InstrumentSelectA extends React.Component {
     // }
 
     componentDidMount() {
-        let tradeData = this.props.data.default.productList[0].prTrade;
-        this.setState({activeTabData: tradeData, activeBaseToken: this.props.data.default.productList[0].productId})
-        this.props.handleTradeCurrencyChange(this.props.data.default.productList[0].productId, tradeData[0].productId)
+        let tradeData = this.props.data[0].market.trades;
+        this.setState({activeTabData: tradeData, activeBaseToken: this.props.data[0].market.productId})
+        this.props.handleTradeCurrencyChange(this.props.data[0].market.productId, tradeData[0].productId)
     }
 
     makeData(arr) {
@@ -96,7 +96,7 @@ export default class InstrumentSelectA extends React.Component {
     render() {
         let timer = null;
         const {INSTRUMENTS} = this.props.languageConfig;
-        const data = this.props.data.default;
+        const data = this.props.data;
         const sortedCoin = this.doSort(this.state.sortType, this.state.activeTabData);
         return (
             <Selector className="mobileWrapper">
@@ -109,16 +109,16 @@ export default class InstrumentSelectA extends React.Component {
                     </button> : ''}
                 <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
                     <div className="coinsTab">
-                        {data.productList.map((obj, idx) => {
+                        {data.map((obj, idx) => {
                             return (
-                                <button key={obj.productName} className={this.state.activeTab === idx ? "active" : ""}
+                                <button key={obj.market.productName} className={this.state.activeTab === idx ? "active" : ""}
                                         onClick={() => {
                                             this.setState({
-                                                activeTabData: obj.prTrade,
-                                                activeBaseToken: obj.productId,
+                                                activeTabData: obj.market.trades,
+                                                activeBaseToken: obj.market.productId,
                                                 activeTab: idx
                                             })
-                                        }}>{obj.productName}</button>
+                                        }}>{obj.market.productName}</button>
                             )
                         })}
                     </div>
@@ -148,7 +148,7 @@ export default class InstrumentSelectA extends React.Component {
                                     onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
                                     className={`instrument-*coinSymbol`}
                                     style={{border: "none", fontWeight: "bold", display: "table-row"}}>
-                                    <td className={`coinSymbol`}>{obj.symbolName}</td>
+                                    <td className={`coinSymbol`}>{obj.productName}</td>
                                     <td className={`up dataNumber`}>{obj.price}</td>
                                     <td className={`up dataNumber`}>{obj.change}</td>
                                 </tr>

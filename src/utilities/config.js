@@ -16,7 +16,7 @@ export const config =  {
             logo: ""
         },
         {
-            productName: "VIKKY TOKEN",
+            productName: "VIKKY",
             decimal: 18,
             productId: 4,
             tokenAddress: "0xae94b3e45eb554f434f6f06f73348b65d4f26615",
