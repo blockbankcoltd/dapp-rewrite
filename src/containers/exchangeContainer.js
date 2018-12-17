@@ -19,8 +19,8 @@ class ExchangeContainer extends Component {
         this.state = {
             baseCurrency: null,
             tradeCurrency: null,
-            baseBalance: null,
-            tradeBalance: null,
+            baseFullName: '',
+            tradeFullName: '',
             baseName: '',
             tradeName: '',
             price: 0,
@@ -44,16 +44,13 @@ class ExchangeContainer extends Component {
     changeTradeCurrency = (base, trade) => {
         const baseName = config.default.productList.find(data => data.productId === base);
         const prodName = baseName.prTrade.find(data => data.productId === trade);
-        const baseBalance = this.props.balance ? this.props.balance.find(data => data.product === baseName.productName).balance : null;
-        const tradeBalance = this.props.balance ? this.props.balance.find(data => data.product === prodName.productName).balance : null;
         this.setState({
             baseCurrency: base,
             tradeCurrency: trade,
             baseName: baseName.symbolName,
             tradeName: prodName.symbolName,
-            tradeFullName: prodName.productName,
-            baseBalance,
-            tradeBalance
+            baseFullName: baseName.productName,
+            tradeFullName: prodName.productName
         });
         console.log("Changing Default Trading Tokens ------>>> ", this.state, base, trade);
         this.props.getOrderbook(base, trade, 10);
@@ -119,7 +116,6 @@ class ExchangeContainer extends Component {
 
                                             <div className="trigger-content">
                                                 <div id="chart-trigger-content-1">
-                                                    {/*<div ap-widget='ChartWidget' hide-header="true"></div>*/}
                                                     <div>*Chart Area</div>
                                                 </div>
                                             </div>
@@ -137,13 +133,12 @@ class ExchangeContainer extends Component {
                                 <div className="orderPanel">
                                     <div className="account-overview">
                                         <BalanceA languageConfig={this.props.languageConfig}
-                                        baseName={this.state.baseName}
-                                        tradeName={this.state.tradeName}
-                                        tradeBalance={this.state.tradeBalance}
-                                        baseBalance={this.state.baseBalance}/>
+                                                  baseName={this.state.baseName}
+                                                  tradeName={this.state.tradeName}
+                                                  baseFullName={this.state.baseFullName}
+                                                  productFullName={this.state.tradeFullName}
+                                                  balance={this.props.balance}/>
 
-                                        {/*{*/}
-                                        {/*AlphaPoint.config.exchange.orderEntry ?*/}
                                         <div className="order-entry-head">
                                             <form>
                                                 <div className="trigger-content">
@@ -161,10 +156,6 @@ class ExchangeContainer extends Component {
                                                 </div>
                                             </form>
                                         </div>
-                                        {/*:*/}
-                                        {/* <div className="emptyOrderEntry">매수/매도 점검중입니다.</div> */}
-
-                                        {/*}*/}
 
                                     </div>
                                 </div>
@@ -220,8 +211,6 @@ class ExchangeContainer extends Component {
 
                                 <div className="trigger-content">
                                     <div id="chart-trigger-content-1">
-                                        {/*<div ap-widget='ChartWidget' hide-header="true"></div>*/}
-                                        {/* <div ap-widget='Chart' hide-header="true"></div> */}
                                     </div>
                                 </div>
                             </form>

@@ -46,58 +46,8 @@ export default class InstrumentSelectA extends React.Component {
         if (!coin) {
             return [];
         }
-        // const volume = this.state.volume;
-        // const instrumentTicks = this.state.instrumentTicks;
-        // if (type === 'up-volume') {
-        //     return coin.sort((a, b) => {
-        //         if (volume[a.InstrumentId - 1] < volume[b.InstrumentId - 1]) return 1;
-        //         if (volume[a.InstrumentId - 1] > volume[b.InstrumentId - 1]) return -1;
-        //         return 0;
-        //     });
-        // } else if (type === 'down-volume') {
-        //     return coin.sort((a, b) => {
-        //         if (volume[a.InstrumentId - 1] < volume[b.InstrumentId - 1]) return -1;
-        //         if (volume[a.InstrumentId - 1] > volume[b.InstrumentId - 1]) return 1;
-        //         return 0;
-        //     });
-        // } else if (type === 'up-price') {
-        //     return coin.sort((a, b) => {
-        //         if (instrumentTicks[a.InstrumentId].LastTradedPx < instrumentTicks[b.InstrumentId].LastTradedPx) return 1;
-        //         if (instrumentTicks[a.InstrumentId].LastTradedPx > instrumentTicks[b.InstrumentId].LastTradedPx) return -1;
-        //         return 0;
-        //     });
-        // } else if (type === 'down-price') {
-        //     return coin.sort((a, b) => {
-        //         if (instrumentTicks[a.InstrumentId].LastTradedPx < instrumentTicks[b.InstrumentId].LastTradedPx) return -1;
-        //         if (instrumentTicks[a.InstrumentId].LastTradedPx > instrumentTicks[b.InstrumentId].LastTradedPx) return 1;
-        //         return 0;
-        //     });
-        // } else if (type === 'up-percent') {
-        //     return coin.sort((a, b) => {
-        //         const aLast = instrumentTicks[a.InstrumentId].LastTradedPx;
-        //         const bLast = instrumentTicks[b.InstrumentId].LastTradedPx;
-        //         const aPast = instrumentTicks[a.InstrumentId].CurrentDayPxChange;
-        //         const bPast = instrumentTicks[b.InstrumentId].CurrentDayPxChange;
-        //         const aPer = Util.getDayBeforePercent(aLast, aPast);
-        //         const bPer = Util.getDayBeforePercent(bLast, bPast);
-        //         if (aPer < bPer) return 1;
-        //         if (aPer > bPer) return -1;
-        //         return 0;
-        //     });
-        // } else if (type === 'down-percent') {
-        //     return coin.sort((a, b) => {
-        //         const aLast = instrumentTicks[a.InstrumentId].LastTradedPx;
-        //         const bLast = instrumentTicks[b.InstrumentId].LastTradedPx;
-        //         const aPast = instrumentTicks[a.InstrumentId].CurrentDayPxChange;
-        //         const bPast = instrumentTicks[b.InstrumentId].CurrentDayPxChange;
-        //         const aPer = Util.getDayBeforePercent(aLast, aPast);
-        //         const bPer = Util.getDayBeforePercent(bLast, bPast);
-        //         if (aPer < bPer) return -1;
-        //         if (aPer > bPer) return 1;
-        //         return 0;
-        //     });
-        // } else
-            if (type === 'up-char') {
+
+        if (type === 'up-char') {
             return coin.sort((a, b) => {
                 const aChar = a.productName.substring(0, 1);
                 const bChar = b.productName.substring(0, 1);
@@ -113,7 +63,8 @@ export default class InstrumentSelectA extends React.Component {
                 if (aChar > bChar) return -1;
                 return 0;
             });
-        } return [];
+        }
+        return [];
     }
 
     // renderTabs = (obj) => {
@@ -147,15 +98,13 @@ export default class InstrumentSelectA extends React.Component {
         const {INSTRUMENTS} = this.props.languageConfig;
         const data = this.props.data.default;
         const sortedCoin = this.doSort(this.state.sortType, this.state.activeTabData);
-        // console.log(data);
         return (
             <Selector className="mobileWrapper">
 
                 {this.state.isMobile ?
                     <button className="setCoinMarket" onClick={this.onViewMarketList}>
                         <span className="marketSelector"
-                            // style={{background: `#fff url('20x20 coin symbol') 0 50% no-repeat`}}>{`${coinName}(${coinSymbol/ETH})`}
-                        ></span>
+                        />
                         <i className="xi-caret-down"/>
                     </button> : ''}
                 <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>

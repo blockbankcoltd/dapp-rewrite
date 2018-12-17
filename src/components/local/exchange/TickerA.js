@@ -1,9 +1,5 @@
 import * as React from 'react'
 import styled from 'styled-components';
-// import {inject, observer} from "mobx-react";
-
-// @inject("Language")
-// @observer
 export default class TickerA extends React.Component{
 
     constructor(props) {
@@ -15,10 +11,6 @@ export default class TickerA extends React.Component{
         const {EXCHANGE, EXCHANGE_PAGE, INSTRUMENTS} = this.props.languageConfig;
         return (
             <Ticker className="ticker-wrapper down">
-                {/*
-                        className = up or down
-                        it is mean the direction of prices
-                    */}
                 <div className="currentCoin">
                     <div className="marketInfo">
                         <h3

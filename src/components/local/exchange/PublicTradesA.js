@@ -44,16 +44,6 @@ export default class PublicTradesA extends React.Component {
                         </tbody>
                     </table>
                 </div>
-
-
-                {/*{pages.length > 1 &&*/}
-                {/*<div className="clearfix pad-x">*/}
-                    {/*<ul className="pagi pull-right">*/}
-                        {/*<li><a onClick={() => this.gotoPage(0)}>&laquo;</a></li>*/}
-                        {/*{pages}*/}
-                        {/*<li onClick={() => this.gotoPage(totalPages - 1)}><a>&raquo;</a></li>*/}
-                    {/*</ul>*/}
-                {/*</div>}*/}
             </Public>
         )
     }
