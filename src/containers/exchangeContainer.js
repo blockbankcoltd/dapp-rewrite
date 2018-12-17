@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import TickerA from '../components/local/exchange/TickerA';
 import OrderbookA from '../components/local/exchange/OrderbookA';
 import OrderentryA from '../components/local/exchange/OrderentryA';
@@ -12,22 +12,27 @@ import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
 import Actions from '../actions/index';
 import * as config from '../utilities/config';
+
 class ExchangeContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             baseCurrency: null,
             tradeCurrency: null,
-            price: 0
+            baseFullName: '',
+            tradeFullName: '',
+            baseName: '',
+            tradeName: '',
+            price: 0,
         };
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("LANGUAGE CONFIG Exchange -------------------------------------->>>>>>>> ", this.props);
         // dispatch Action to get data for Orderbook
-        this.props.getOrderbook(2,3,10);
-
+        this.props.getOrderbook(2, 3, 10);
+        this.props.getBalance();
         // this.props.placeBuyOrder()
         // this.props.placeSellrder()
         // this.props.depositEth()
@@ -37,7 +42,16 @@ class ExchangeContainer extends Component {
     }
 
     changeTradeCurrency = (base, trade) => {
-        this.setState({baseCurrency: base, tradeCurrency: trade});
+        const baseName = config.default.productList.find(data => data.productId === base);
+        const prodName = baseName.prTrade.find(data => data.productId === trade);
+        this.setState({
+            baseCurrency: base,
+            tradeCurrency: trade,
+            baseName: baseName.symbolName,
+            tradeName: prodName.symbolName,
+            baseFullName: baseName.productName,
+            tradeFullName: prodName.productName
+        });
         console.log("Changing Default Trading Tokens ------>>> ", this.state, base, trade);
         this.props.getOrderbook(base, trade, 10);
     }
@@ -46,7 +60,7 @@ class ExchangeContainer extends Component {
     //     this.setState({baseCurrency: value});
     // }
 
-   
+
     handleBuySellPrice = (val) => {
         this.setState({price: val});
     }
@@ -62,8 +76,8 @@ class ExchangeContainer extends Component {
     }
 
     render() {
-        const { ORDER_HISTORY, TRADES } = this.props.languageConfig;
-        
+        const {ORDER_HISTORY, TRADES} = this.props.languageConfig;
+
         const isMobile = false;
         const list = [
             {
@@ -82,7 +96,10 @@ class ExchangeContainer extends Component {
             <Exchange id="wrap">
                 <ExchangeColumn1>
                     <div id="ticker">
-                        <TickerA languageConfig={this.props.languageConfig}/>
+                        <TickerA languageConfig={this.props.languageConfig}
+                                 baseName={this.state.baseName}
+                                 tradeName={this.state.tradeName}
+                                 tradeFullName={this.state.tradeFullName}/>
                     </div>
                     <div className="example-grow">
                         <div className="parent">
@@ -93,12 +110,12 @@ class ExchangeContainer extends Component {
                                     <div className="chart-wrap">
                                         <form className="module-trigger chart-trigger">
                                             <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked/>
-                                            <label htmlFor="chart-trigger-1" className="price-ch-btn">Price chart</label>
+                                            <label htmlFor="chart-trigger-1" className="price-ch-btn">Price
+                                                chart</label>
                                             <div className="clear"></div>
 
                                             <div className="trigger-content">
                                                 <div id="chart-trigger-content-1">
-                                                    {/*<div ap-widget='ChartWidget' hide-header="true"></div>*/}
                                                     <div>*Chart Area</div>
                                                 </div>
                                             </div>
@@ -107,39 +124,46 @@ class ExchangeContainer extends Component {
                                 }
 
                                 <div className="quotation">
-                                    
-                                    <OrderbookA languageConfig={this.props.languageConfig} data={this.props.orderBook } handleChangePrice={this.handleBuySellPrice}/>
+
+                                    <OrderbookA languageConfig={this.props.languageConfig} data={this.props.orderBook}
+                                                handleChangePrice={this.handleBuySellPrice}/>
                                 </div>
 
 
                                 <div className="orderPanel">
                                     <div className="account-overview">
-                                        <BalanceA  languageConfig={this.props.languageConfig} />
+                                        <BalanceA languageConfig={this.props.languageConfig}
+                                                  baseName={this.state.baseName}
+                                                  tradeName={this.state.tradeName}
+                                                  baseFullName={this.state.baseFullName}
+                                                  productFullName={this.state.tradeFullName}
+                                                  balance={this.props.balance}/>
 
-                                        {/*{*/}
-                                        {/*AlphaPoint.config.exchange.orderEntry ?*/}
                                         <div className="order-entry-head">
                                             <form>
                                                 <div className="trigger-content">
                                                     <div id="trigger-content-1">
 
                                                         <div className="order-entry">
-                                                            <OrderentryA languageConfig={this.props.languageConfig} buyOrder={this.placeBuyOrder} sellOrder={this.placeSellOrder} price={this.state.price}/>
+                                                            <OrderentryA languageConfig={this.props.languageConfig}
+                                                                         buyOrder={this.placeBuyOrder}
+                                                                         sellOrder={this.placeSellOrder}
+                                                                         price={this.state.price}
+                                                                         baseName={this.state.baseName}
+                                                                         tradeName={this.state.tradeName}/>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
-                                        {/*:*/}
-                                        {/* <div className="emptyOrderEntry">매수/매도 점검중입니다.</div> */}
-                                        <div className="emptyOrderEntry">{TRADES.NO_DATA}</div>
-                                        {/*}*/}
 
                                     </div>
                                 </div>
 
                                 <div className="publicTrades">
-                                    <PublicTradesA languageConfig={this.props.languageConfig}/>
+                                    <PublicTradesA languageConfig={this.props.languageConfig}
+                                                   baseName={this.state.baseName}
+                                                   tradeName={this.state.tradeName}/>
                                 </div>
 
                                 <div className="open-order-head">
@@ -148,14 +172,13 @@ class ExchangeContainer extends Component {
                                             {
                                                 list.map((item, index) => {
                                                     return <li key={index}
-                                                            className={this.state.tabSelected === index ? "active" : ""}
-                                                            data-tab={item.tabName}
-                                                            ap-translate={item.apTranslate}
-                                                            onClick={(e) => {
-                                                                this.setState({
-                                                                    tabSelected: index
-                                                                })
-                                                            }}
+                                                               className={this.state.tabSelected === index ? "active" : ""}
+                                                               data-tab={item.tabName}
+                                                               onClick={(e) => {
+                                                                   this.setState({
+                                                                       tabSelected: index
+                                                                   })
+                                                               }}
                                                     >{item.text}</li>
                                                 })
                                             }
@@ -163,12 +186,12 @@ class ExchangeContainer extends Component {
                                     </div>
                                     <div className="tab_container">
                                         <div id="historyTab"
-                                            className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}>
-                                            <OpenOrdersA  languageConfig={this.props.languageConfig}/>
+                                             className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}>
+                                            <OpenOrdersA languageConfig={this.props.languageConfig}/>
                                         </div>
                                         <div id="tradesTab"
-                                            className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}>
-                                            <PrivateTradesA  languageConfig={this.props.languageConfig}/>
+                                             className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}>
+                                            <PrivateTradesA languageConfig={this.props.languageConfig}/>
                                         </div>
                                     </div>
                                 </div>
@@ -188,8 +211,6 @@ class ExchangeContainer extends Component {
 
                                 <div className="trigger-content">
                                     <div id="chart-trigger-content-1">
-                                        {/*<div ap-widget='ChartWidget' hide-header="true"></div>*/}
-                                        {/* <div ap-widget='Chart' hide-header="true"></div> */}
                                     </div>
                                 </div>
                             </form>
@@ -198,8 +219,9 @@ class ExchangeContainer extends Component {
                 </ExchangeColumn1>
                 <ExchangeColumn2>
                     <div id="inst">
-                        <InstrumentSelectA handleTradeCurrencyChange={this.changeTradeCurrency} languageConfig={this.props.languageConfig} data={config}/>
-                        
+                        <InstrumentSelectA handleTradeCurrencyChange={this.changeTradeCurrency}
+                                           languageConfig={this.props.languageConfig} data={config}/>
+
                     </div>
                 </ExchangeColumn2>
 
@@ -210,21 +232,22 @@ class ExchangeContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        orderBook: state.smartContract.orderBook
+        orderBook: state.smartContract.orderBook,
+        balance: state.smartContract.balance,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        placeBuyOrder: (x, y) => dispatch(Actions.smartContract.placeBuyOrderRequest(x,y)),
-        placeSellOrder: (x, y) => dispatch(Actions.smartContract.placeSellOrderRequest(x,y)),
+        placeBuyOrder: (x, y) => dispatch(Actions.smartContract.placeBuyOrderRequest(x, y)),
+        placeSellOrder: (x, y) => dispatch(Actions.smartContract.placeSellOrderRequest(x, y)),
         getOrderbook: (x, y, z) => dispatch(Actions.smartContract.getOrderBookRequest(x, y, z)),
-        
-        
+        getBalance: () => dispatch(Actions.smartContract.getBalanceRequest()),
+
+
     }
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ExchangeContainer));
-
 
 
 const Exchange = styled.div`
@@ -541,6 +564,9 @@ const ExchangeColumn1 = styled.div`
                 }
                 #bookHolder {
                     height:508px;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size : 14px;
                     overflow-y: scroll;
                     &::-webkit-scrollbar-track {
                         background: #efefef;
@@ -964,35 +990,35 @@ const ExchangeColumn1 = styled.div`
                         }
                     }
                     .button-wrap {
-                        .not-login {
-                            margin:10px 0 0 0;
-                            display:flex;
-                            flex-direction: row;
-                            place-content: center space-between;
-                            justify-content: space-between;
-                            align-items: center;
-                            height:38px;
-                            padding:0 24px;
-                            .modal-btn {
-                                height:38px;
-                                line-height:38px;
-                                display:block;
-                                text-align:center;
-                                font-size:14px;
-                                font-weight:bold;
-                                &.register-btn {
-                                    width:28%;
-                                    color:#036;
-                                    background:#f2f2f2;
-                                }
-                                &.login-btn {
-                                    width:66%;
-                                    color:#fff;
-                                    background:#06c;
-                                }
-                            }
-                        }
-                        .loggedin {
+                        //.not-login {
+                        //    margin:10px 0 0 0;
+                        //    display:flex;
+                        //    flex-direction: row;
+                        //    place-content: center space-between;
+                        //    justify-content: space-between;
+                        //    align-items: center;
+                        //    height:38px;
+                        //    padding:0 24px;
+                        //    .modal-btn {
+                        //        height:38px;
+                        //        line-height:38px;
+                        //        display:block;
+                        //        text-align:center;
+                        //        font-size:14px;
+                        //        font-weight:bold;
+                        //        &.register-btn {
+                        //            width:28%;
+                        //            color:#036;
+                        //            background:#f2f2f2;
+                        //        }
+                        //        &.login-btn {
+                        //            width:66%;
+                        //            color:#fff;
+                        //            background:#06c;
+                        //        }
+                        //    }
+                        //}
+                        //.loggedin {
                             margin:10px 0 0 0;
                             display:flex;
                             flex-direction: row;
@@ -1032,7 +1058,7 @@ const ExchangeColumn1 = styled.div`
                                     }
                                 }
                             }
-                        }
+                        //}
                     }
                 }
             }
@@ -1130,7 +1156,7 @@ const ExchangeColumn1 = styled.div`
             .open-order-head {
                 box-shadow: 2px 2px 4px #dee1e7;
                 width:51%;
-                margin:-60px 0 0 0;
+                margin:-30px 0 0 0;
                 height:100%;
                 background: #fff;
                 .tab_cont{
@@ -1579,6 +1605,7 @@ const ExchangeColumn2 = styled.div`
             th {
                 height:40px;
                 border-bottom:2px solid #036;
+                padding: 0;
                 color:#1a1a1a;
                 font-size:14px;
                 text-align:center;

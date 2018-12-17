@@ -21,7 +21,6 @@ export default class OpenOrdersA extends React.Component{
         const {TRANSACTION, OPEN_ORDERS} = this.props.languageConfig;
         const maxLines = 5; // maximum of show orders
 
-        // const filterRows = (this.state.data).filter(item => item.Instrument === this.state.selectedCoin);
         const filterRows = []; // openOrder list
         const rows = filterRows
             .slice(maxLines * this.state.page, maxLines * (this.state.page + 1))
