@@ -4,6 +4,13 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 
 class HomeContainer extends Component {
+    state = {
+        exchangeAdd: false,
+        featureAdd: false,
+        isLogin: false,
+        use2FA: false,
+        instrumentTicks: []
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -13,7 +20,33 @@ class HomeContainer extends Component {
     }
     componentDidMount(){
         console.log("LANGUAGE CONFIG Home -------------------------------------->>>>>>>> ", this.props);
+        const EXCHANGETOP = document.getElementById('exchangeInfo').offsetTop * 0.5;
+        const FEATUERTOP = document.getElementById('features').offsetTop * 0.6;
+        let scrollOn = {
+            exchange: true,
+            feature: true
+        };
+        let txtEffect = null;
+        window.onscroll = () => {
+            let windowTop = window.scrollY;
+            if (windowTop > EXCHANGETOP && scrollOn.exchange) {
+                this.setState({exchageAdd: true});
+                scrollOn.exchange = false;
+            }
+            if (windowTop > FEATUERTOP && scrollOn.feature) {
+                this.setState({featureAdd: true});
+                scrollOn.feature = false;
+            }
+            if (windowTop > 100) {
+                this.setState({headerAdd: true});
+                scrollOn.header = false;
+            } else {
+                this.setState({headerAdd: false});
+                scrollOn.header = true;
+            }
+        }
     }
+
     render() {
         const { INDEX } = this.props.languageConfig;
         return (
@@ -56,7 +89,7 @@ class HomeContainer extends Component {
 
                     <ExchangeInfo id="exchangeInfo">
                         <div className="container">
-                            <div className='txt_effect'>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
                                 <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum01.png"
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -66,7 +99,7 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
                                 <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum02.png"
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -76,7 +109,7 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
                                 <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum03.png"
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -86,7 +119,7 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
                                 <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum04.png"
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -680,7 +713,7 @@ const ExchangeInfo = styled.div`
                 width:280px;
                 margin:30px auto 0;
                 dt {
-                    font-size: 1.6rem;
+                    font-size: 1.3rem;
                     line-height: 1.3em;
                     font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
                     color: #003366;
@@ -718,6 +751,7 @@ const ExchangeInfo = styled.div`
                     position: relative;
                     top: 50px;
                     opacity: 0;
+                    margin-inline-start:unset;
                 }
             }
             &.txt_effect {
@@ -789,7 +823,7 @@ const Features = styled.div`
             padding: 35px 15px 20px;
             box-sizing: border-box;
             box-shadow: 0 5px 30px #666;
-            opacity: 1;
+            opacity: 0;
             top: 100px;
             transition: all .4s .2s;
             &:nth-child(3n) {
