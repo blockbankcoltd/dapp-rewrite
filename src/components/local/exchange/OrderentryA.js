@@ -74,6 +74,7 @@ export default class OrderentryA extends React.Component {
 
 
     render() {
+        console.log(this.props)
         const {TRADES, BUY_SELL_ADV, BUY_SELL_MODAL} = this.props.languageConfig;
         const tabs2 = (
             <div className="d-select">
@@ -156,7 +157,7 @@ export default class OrderentryA extends React.Component {
                             {this.state.buy
                                 ? BUY_SELL_MODAL.BUY_AMNT
                                 : BUY_SELL_MODAL.SELL_AMNT
-                            } (symbol)
+                            } ({this.props.tradeName})
                         </label>
                         <div className="input-group">
                             <input
@@ -166,12 +167,12 @@ export default class OrderentryA extends React.Component {
                                 onChange={this.changeAmount}
                                 className="form-control"
                             />
-                            <span className="coinSymbol">Symbol</span>
+                            <span className="coinSymbol">{this.props.tradeName}</span>
                         </div>
                     </div>
                     <div className="form-group">
                         <label>
-                            {BUY_SELL_MODAL.VALUE} (ETH)
+                            {BUY_SELL_MODAL.VALUE} ({this.props.baseName})
                         </label>
                         <div className="input-group">
                             <input
@@ -203,7 +204,7 @@ export default class OrderentryA extends React.Component {
                             </div>
                             <div className="order-price-total">
                                 <span
-                                    className="sub-total-price">{isNaN(numeral(this.state.total).format('0')) ? this.state.total.toFixed(8) : numeral(this.state.total).format('0,0.[00000000]')}</span> ETH
+                                    className="sub-total-price">{isNaN(numeral(this.state.total).format('0')) ? this.state.total.toFixed(8) : numeral(this.state.total).format('0,0.[00000000]')}</span> {this.props.baseName}
                             </div>
                         </div>
                     }
@@ -214,10 +215,14 @@ export default class OrderentryA extends React.Component {
                         <div className="summary-item">·{BUY_SELL_ADV.FEES} : Fee
                         </div>
                     </div>
-                    <div>
-                        <CancelButton type="button" onClick={() => console.log("Cancelled. Clear the Form now.")}>{BUY_SELL_MODAL.CANCEL}</CancelButton>
-                        <Button type="button" onClick={(e) => this.state.buy ? this.props.buyOrder(this.state.price, this.state.total) : this.props.sellOrder(this.state.price, this.state.total)}>{BUY_SELL_MODAL.PLACE_ORDER}</Button>
-                    </div>
+
+                </div>
+                <div className="button-wrap pad">
+                    <CancelButton className="btn set-default" type="button" onClick={() => console.log("Cancelled. Clear the Form now.")}>{BUY_SELL_MODAL.SET_DEFAULT}</CancelButton>
+                    {this.state.buy ?
+                        <Button className="btn btn-action buy" type="button" onClick={(e) =>  this.props.buyOrder(this.state.price, this.state.total)}>{BUY_SELL_MODAL.BUY}</Button> :
+                        <Button className="btn btn-action sell" type="button" onClick={(e) => this.props.sellOrder(this.state.price, this.state.total)}>{BUY_SELL_MODAL.SELL}</Button>}
+
                 </div>
             </Entry>
         )

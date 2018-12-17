@@ -22,8 +22,8 @@ export default class PublicTradesA extends React.Component {
                     <thead>
                     <tr>
                         <th>{PUBLIC_TRADES.TIME_TEXT}</th>
-                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.PRICE_TEXT}<span>(ETH)</span>`}}/>
-                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.SIZE}<span>(symbol)</span>`}}/>
+                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.PRICE_TEXT}<span>(${this.props.baseName})</span>`}}/>
+                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.SIZE}<span>(${this.props.tradeName})</span>`}}/>
                     </tr>
 
                     </thead>

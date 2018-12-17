@@ -26,15 +26,15 @@ export default class TickerA extends React.Component{
                                 // background: '25x25size symbol url' 0 1px no-repeat`,
                                 fontSize: '21px'
                             }}
-                        >*Name of coin</h3>
-                        <h4>*Symbol of coin/ETH</h4>
+                        >{this.props.tradeFullName}</h3>
+                        <h4>{this.props.tradeName}/{this.props.baseName}</h4>
                     </div>
 
                     <div className="currentCurrency">
                         <div className='currentCurrencyLh'>
                             <div className="lastPrice">
                                 *last price
-                                &nbsp;<span>ETH</span>
+                                &nbsp;<span>{this.props.baseName}</span>
                             </div>
                             <div className="currentDayPx">
                                 <p className="dayBeforeTxt">{EXCHANGE_PAGE.CURRENT_DAY_PX_CHANGE}</p>
@@ -72,12 +72,12 @@ export default class TickerA extends React.Component{
                         <div className="vol volStatusRoot">
                             <span>{EXCHANGE_PAGE.VOLUME}</span>
                             <span
-                                className="dataNumber">0 *Coinsymbol</span>
+                                className="dataNumber">0 {this.props.tradeName}</span>
                         </div>
                         <div className="trade volStatusRoot">
                             <span>{INSTRUMENTS.COIN_VOLUME}</span>
                             <span
-                                className="dataNumber">0 ETH</span>
+                                className="dataNumber">0 {this.props.baseName}</span>
                         </div>
                     </div>
                 </div>

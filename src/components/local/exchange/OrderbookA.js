@@ -66,9 +66,9 @@ export default class OrderbookA extends React.Component{
                                    _obj.bidOrder.map( (item, i) => {
                                         return(
                                             <span className="bookrow" key={i} onClick={ () => this.handleChangePrice(item.priceA)}>
-                                                <div className="CellMyOrders price">{item.volume}</div>
+                                                <div className="CellPublicOrders">{item.volume}</div>
                                                 <div className="CellBidPrice CellPrice">{item.priceA}</div>
-                                                <div className="CellPublicOrders">-</div>
+                                                <div className="CellMyOrders price">-</div>
                                             </span>
                                         )
                                     })

@@ -9,6 +9,7 @@ export default class BalanceA extends React.Component {
     }
 
     render() {
+        console.log(this.props)
         const {ACCOUNT_BALANCES} = this.props.languageConfig;
         return (
             <Balance>
@@ -27,16 +28,16 @@ export default class BalanceA extends React.Component {
                     </thead>
                     <tbody>
                     <tr className="first-row">
-                        <td className="symbol">ETH</td>
+                        <td className="symbol">{this.props.baseName}</td>
                         <td className="able">
                             <p>*ETH available</p>
                         </td>
                         <td className="total">
-                            <p>*ETH total</p>
+                            <p>{}</p>
                         </td>
                     </tr>
                     <tr>
-                        <td className="symbol">*Symbol</td>
+                        <td className="symbol">{this.props.tradeName}</td>
                         <td className="able">
                             <p>*coin available</p>
                         </td>
