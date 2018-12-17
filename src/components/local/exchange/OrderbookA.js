@@ -14,6 +14,10 @@ export default class OrderbookA extends React.Component{
         }
     }
 
+    handleChangePrice(val) {
+        this.props.handleChangePrice(val);
+    }
+
     render() {
         const { BUTTONS } = this.props.languageConfig;
         const { priceA = [], priceB = [], volumeA = [], volumeB = [] } = this.state.data ? this.state.data : [[],[],[],[]];
@@ -61,7 +65,7 @@ export default class OrderbookA extends React.Component{
                                 {
                                    _obj.bidOrder.map( (item, i) => {
                                         return(
-                                            <span className="bookrow" key={i}>
+                                            <span className="bookrow" key={i} onClick={ () => this.handleChangePrice(item.priceA)}>
                                                 <div className="CellMyOrders price">{item.volume}</div>
                                                 <div className="CellBidPrice CellPrice">{item.priceA}</div>
                                                 <div className="CellPublicOrders">-</div>
@@ -74,7 +78,7 @@ export default class OrderbookA extends React.Component{
                                 {
                                     _obj.askOrder.map( (item, i) => {
                                         return(
-                                            <span className="bookrow" key={i}>
+                                            <span className="bookrow" key={i} onClick={ () => this.handleChangePrice(item.priceB)}>
                                                 <div className="CellMyOrders price">-</div>
                                                 <div className="CellBidPrice CellPrice">{item.priceB}</div>
                                                 <div className="CellPublicOrders">{item.volume}</div>

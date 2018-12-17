@@ -16,7 +16,9 @@ class ExchangeContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+            baseCurrency: null,
+            tradeCurrency: null,
+            price: 0
         };
 
     }
@@ -32,6 +34,21 @@ class ExchangeContainer extends Component {
         // this.props.withdrawEth()
         // this.props.depositToken()
         // this.props.withdrawToken()
+    }
+
+    changeTradeCurrency = (base, trade) => {
+        this.setState({baseCurrency: base, tradeCurrency: trade});
+        console.log("Changing Default Trading Tokens ------>>> ", this.state, base, trade);
+        this.props.getOrderbook(base, trade, 10);
+    }
+
+    // changeBaseCurrency = (value) => {
+    //     this.setState({baseCurrency: value});
+    // }
+
+   
+    handleBuySellPrice = (val) => {
+        this.setState({price: val});
     }
 
     placeBuyOrder = (price, total) => {
@@ -59,10 +76,7 @@ class ExchangeContainer extends Component {
                 apTranslate: ORDER_HISTORY["TITLE_TEXT"],
                 text: "Order History"
             }
-
         ];
-
-        
 
         return (
             <Exchange id="wrap">
@@ -94,7 +108,7 @@ class ExchangeContainer extends Component {
 
                                 <div className="quotation">
                                     
-                                    <OrderbookA languageConfig={this.props.languageConfig} data={this.props.orderBook }/>
+                                    <OrderbookA languageConfig={this.props.languageConfig} data={this.props.orderBook } handleChangePrice={this.handleBuySellPrice}/>
                                 </div>
 
 
@@ -110,7 +124,7 @@ class ExchangeContainer extends Component {
                                                     <div id="trigger-content-1">
 
                                                         <div className="order-entry">
-                                                            <OrderentryA languageConfig={this.props.languageConfig} buyOrder={this.placeBuyOrder} sellOrder={this.placeSellOrder}/>
+                                                            <OrderentryA languageConfig={this.props.languageConfig} buyOrder={this.placeBuyOrder} sellOrder={this.placeSellOrder} price={this.state.price}/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -184,7 +198,8 @@ class ExchangeContainer extends Component {
                 </ExchangeColumn1>
                 <ExchangeColumn2>
                     <div id="inst">
-                        <InstrumentSelectA  languageConfig={this.props.languageConfig} data={config}/>
+                        <InstrumentSelectA handleTradeCurrencyChange={this.changeTradeCurrency} languageConfig={this.props.languageConfig} data={config}/>
+                        
                     </div>
                 </ExchangeColumn2>
 

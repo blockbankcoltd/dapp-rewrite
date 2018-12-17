@@ -6,6 +6,8 @@ import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import Config from '../utilities/config';
 import Actions from '../actions/index';
+import config from '../utilities/config';
+// import PromptComponent from '../components/global/prompt';
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -25,28 +27,60 @@ class WalletContainer extends Component {
     }
 
     deposit = (e, cellInfo) => {
-        console.log("Deposit Button Clicked --> ", cellInfo.original)
+        let amount = window.prompt("Enter the deposit amount");
+        let tokenObj = cellInfo.original;
+        console.log("Deposit Button Clicked --> ", cellInfo.original);
+        
+        if(amount !== null && tokenObj.product === 'ETH'){
+            console.log("Entered value --> ", amount);
+            // let decimal = config.productList[0].decimal;
+            // this.props.depositEth(Math.pow(amount, decimal));
+            this.props.depositEth(amount);
+            
+        }else if(amount !== null && tokenObj.product !== 'ETH'){
+            console.log("Entered value --> ", amount);
+            // let tokenInTradeList;
+            // config.productList.forEach(obj => {
+
+            // })
+            // let decimal = config.productList[0].decimal;
+            this.props.depositToken(tokenObj.tokenAddress, amount);
+        }else{
+            console.log("Cancelled")
+        }
         // if(cellInfo.original.product === 'ETH'){
         //     this.props.depositEth();
         // }else{
         //     this.props.depositToken(cellInfo.original.tokenAddress)
         // }
     }
-    
+
     withdraw = (e, cellInfo) => {
+        let amount = window.prompt("Enter the deposit amount");
+        let tokenObj = cellInfo.original;
         console.log("Withdraw Button Clicked --> ", cellInfo.original)
+        
+        if(amount !== null && tokenObj.product === 'ETH'){
+            console.log("Entered value --> ", amount);
+            this.props.withdrawEth(amount);
+            
+        }else if(amount !== null && tokenObj.product !== 'ETH'){
+            console.log("Entered value --> ", amount);
+            this.props.withdrawToken(tokenObj.tokenAddress, amount);
+        }else{
+            console.log("Cancelled")
+        }
     }
 
-    renderEditable(cellInfo, flag) {
-        if(flag === "deposit") {
-            return <div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button></div>
 
-        }else{
+    renderEditable(cellInfo, flag) {
+        if (flag === "deposit") {
+            return <div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button></div>
+        } else {
             return <div><button onClick={(e) => this.withdraw(e, cellInfo)} type="button">Withdraw</button></div>
         }
-        
-        console.log("CELLINFO --> ", cellInfo.original)
-        
+
+
         // return (
         //   <div
         //     style={{ backgroundColor: "#fafafa" }}
@@ -62,7 +96,7 @@ class WalletContainer extends Component {
         //     }}
         //   />
         // );
-      }
+    }
 
     renderTable() {
         // let data = [];
@@ -114,7 +148,7 @@ class WalletContainer extends Component {
                     accessor: d => <div><button type="button" >Withdraw</button></div>,
                     Cell: (d) => this.renderEditable(d, "withdraw")
                 }
-                
+
             ]} defaultPageSize={10} className="-striped -highlight" />
         );
     }
@@ -167,10 +201,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         getBalance: () => dispatch(Actions.smartContract.getBalanceRequest()),
-        depositEth: () => dispatch(Actions.smartContract.placeDepositEthRequest()),
-        withdrawEth: () => dispatch(Actions.smartContract.placeWithdrawEthRequest()),
-        depositToken: () => dispatch(Actions.smartContract.placeDepositTokenRequest()),
-        withdrawToken: () => dispatch(Actions.smartContract.placeWithdrawTokenRequest()),
+        depositEth: (amt) => dispatch(Actions.smartContract.placeDepositEthRequest(amt)),
+        withdrawEth: (amt) => dispatch(Actions.smartContract.placeWithdrawEthRequest(amt)),
+        depositToken: (address, amount) => dispatch(Actions.smartContract.placeDepositTokenRequest(address, amount)),
+        withdrawToken: (address, amount) => dispatch(Actions.smartContract.placeWithdrawTokenRequest(address, amount)),
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
 
     }

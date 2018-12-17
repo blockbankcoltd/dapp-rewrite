@@ -43,12 +43,6 @@ export const getMyOrdersRequest = () => {
     }
 };
 
-export const placeDepositEthRequest = () => {
-    return {
-        type: Constants.default.Requests.DEPOSIT_ETH_REQUEST
-    }
-};
-
 export const getBalanceRequest = (prCode) => {
     return {
         type: Constants.default.Requests.GET_BALANCE_REQUEST,
@@ -56,20 +50,31 @@ export const getBalanceRequest = (prCode) => {
     }
 };
 
-export const placeWithdrawEthRequest = () => {
+export const placeDepositEthRequest = (amount) => {
     return {
-        type: Constants.default.Requests.WITHDRAW_ETH_REQUEST
+        type: Constants.default.Requests.DEPOSIT_ETH_REQUEST,
+        payload: { amount }
     }
 };
 
-export const placeDepositTokenRequest = () => {
+
+export const placeWithdrawEthRequest = (amount) => {
     return {
-        type: Constants.default.Requests.DEPOSIT_TOKEN_REQUEST
+        type: Constants.default.Requests.WITHDRAW_ETH_REQUEST,
+        payload: { amount }
     }
 };
 
-export const placeWithdrawTokenRequest = () => {
+export const placeDepositTokenRequest = (prAddress, amount) => {
     return {
-        type: Constants.default.Requests.DEPOSIT_TOKEN_REQUEST
+        type: Constants.default.Requests.DEPOSIT_TOKEN_REQUEST,
+        payload: { prAddress, amount }
+    }
+};
+
+export const placeWithdrawTokenRequest = (prAddress, amount) => {
+    return {
+        type: Constants.default.Requests.WITHDRAW_TOKEN_REQUEST,
+        payload: { prAddress, amount }
     }
 };

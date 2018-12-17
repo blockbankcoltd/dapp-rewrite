@@ -127,36 +127,40 @@ function* getBalance() {
     yield put({type: Constants.default.Success.GET_BALANCE_SUCCESS, balance: data});
 }
 
-function* depositEthRequest() {
+function* depositEthRequest(params) {
+    console.log("We are here ===---->>>> ", params.payload);
     const Contract = createSmartContract();
+    const { amount } = params.payload;
     const deposit = Contract.methods.depositETH().send({
-        from:  Contract.givenProvider.selectedAddress
+        from:  Contract.givenProvider.selectedAddress,
+        value: +amount
     });
     yield put({type: Constants.default.Success.DEPOSIT_ETH_SUCCESS, depositedEth: deposit});
 }
 
 function* withdrawEthRequest(params) {
     const Contract = createSmartContract();
-    const { amount } = params;
-    const withdrawAmount = Contract.methods.withdrawETH(amount).send({
-        from:  Contract.givenProvider.selectedAddress
+    const { amount } = params.payload;
+    const withdrawAmount = Contract.methods.withdrawETH(+amount).send({
+        from:  Contract.givenProvider.selectedAddress,
+        value: amount
     });
     yield put({type: Constants.default.Success.WITHDRAW_ETH_SUCCESS, withdrawnAmount: withdrawAmount});
 }
 
 function* depositTokenRequest(params) {
     const Contract = createSmartContract();
-    const { prAddress, amount } = params;
-    const deposit = Contract.methods.depositToken(prAddress, amount).send({
+    const { prAddress, amount } = params.payload;
+    const deposit = Contract.methods.depositToken(prAddress, +amount).send({
         from:  Contract.givenProvider.selectedAddress
     });
-    yield put({type: Constants.default.Success.DEPOSIT_ETH_SUCCESS, depositedToken: deposit});
+    yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
 }
 
 function* withdrawTokenRequest(params) {
     const Contract = createSmartContract(); 
-    const { prAddress, amount } = params;
-    const withdrawAmount = Contract.methods.withdrawToken(prAddress, amount).send({
+    const { prAddress, amount } = params.payload;
+    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +amount).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount});
@@ -175,6 +179,7 @@ function* actionWatcher() {
     
     yield takeEvery(Constants.default.Requests.DEPOSIT_TOKEN_REQUEST, depositTokenRequest)
     yield takeEvery(Constants.default.Requests.WITHDRAW_TOKEN_REQUEST, withdrawTokenRequest)
+
     yield takeEvery(Constants.default.Requests.GET_BALANCE_REQUEST, getBalance)
     
 }

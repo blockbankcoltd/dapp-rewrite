@@ -65,6 +65,13 @@ export default class OrderentryA extends React.Component {
         this.setState({amount: parseInt(e.target.value), total})
     };
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.price !== this.props.price){
+            console.log("Changing Price ------>>>> ", prevProps.price, this.props.price);
+            this.setState({price: parseInt(this.props.price)});
+        }
+    }
+
 
     render() {
         const {TRADES, BUY_SELL_ADV, BUY_SELL_MODAL} = this.props.languageConfig;
