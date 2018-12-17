@@ -2,28 +2,28 @@ import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 import store from '../store/reduxStore';
 import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants';
-import config from '../utilities/config';
+import {config, filterMarkets} from '../utilities/config';
 import Lodash from 'lodash';
 let data = [];
 
-config.productList.forEach( (obj, i) => {
-    data.push({
-        product: obj.productName,
-        prCode: obj.productId,
-        tokenAddress: obj.tokenAddress
-    });
-    if(i === 0){
-        if (obj.prTrade && obj.prTrade.length > 0) {
-            obj.prTrade.forEach(o => {
-                data.push({
-                    product: o.productName,
-                    prCode: o.productId,
-                    tokenAddress: o.tokenAddress
-                });
-            })
-        }
-    }
-});
+// filterMarkets().forEach( (obj, i) => {
+//     data.push({
+//         product: obj.productName,
+//         prCode: obj.productId,
+//         tokenAddress: obj.tokenAddress
+//     });
+//     if(i === 0){
+//         if (obj.prTrade && obj.prTrade.length > 0) {
+//             obj.prTrade.forEach(o => {
+//                 data.push({
+//                     product: o.productName,
+//                     prCode: o.productId,
+//                     tokenAddress: o.tokenAddress
+//                 });
+//             })
+//         }
+//     }
+// });
 
 console.log("Config data --> ", Lodash.uniq(data));
 
