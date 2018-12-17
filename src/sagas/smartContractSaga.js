@@ -6,7 +6,7 @@ import {config, filterMarkets} from '../utilities/config';
 import Lodash from 'lodash';
 let data = [];
 
-// filterMarkets().forEach( (obj, i) => {
+// config.productList.forEach( (obj, i) => {
 //     data.push({
 //         product: obj.productName,
 //         prCode: obj.productId,
@@ -23,7 +23,7 @@ let data = [];
 //             })
 //         }
 //     }
-// });
+// }); this code make error
 
 console.log("Config data --> ", Lodash.uniq(data));
 
