@@ -18,7 +18,7 @@ export default class TickerA extends React.Component{
                                 // background: '25x25size symbol url' 0 1px no-repeat`,
                                 fontSize: '21px'
                             }}
-                        >{this.props.tradeFullName}</h3>
+                        >{this.props.tradeName}</h3>
                         <h4>{this.props.tradeName}/{this.props.baseName}</h4>
                     </div>
 

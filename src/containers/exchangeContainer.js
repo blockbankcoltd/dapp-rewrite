@@ -11,7 +11,7 @@ import BalanceA from '../components/local/exchange/BalanceA';
 import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
 import Actions from '../actions/index';
-import * as config from '../utilities/config';
+import {config, filterMarkets} from '../utilities/config';
 
 class ExchangeContainer extends Component {
     constructor(props) {
@@ -19,8 +19,6 @@ class ExchangeContainer extends Component {
         this.state = {
             baseCurrency: null,
             tradeCurrency: null,
-            baseFullName: '',
-            tradeFullName: '',
             baseName: '',
             tradeName: '',
             price: 0,
@@ -42,15 +40,13 @@ class ExchangeContainer extends Component {
     }
 
     changeTradeCurrency = (base, trade) => {
-        const baseName = config.default.productList.find(data => data.productId === base);
-        const prodName = baseName.prTrade.find(data => data.productId === trade);
+        const baseName = filterMarkets().find(data => data.market.productId === base);
+         const prodName = baseName.market.trades.find(data => data.productId === trade);
         this.setState({
             baseCurrency: base,
             tradeCurrency: trade,
-            baseName: baseName.symbolName,
-            tradeName: prodName.symbolName,
-            baseFullName: baseName.productName,
-            tradeFullName: prodName.productName
+            baseName: baseName.market.productName,
+            tradeName: prodName.productName
         });
         console.log("Changing Default Trading Tokens ------>>> ", this.state, base, trade);
         this.props.getOrderbook(base, trade, 10);
@@ -98,8 +94,7 @@ class ExchangeContainer extends Component {
                     <div id="ticker">
                         <TickerA languageConfig={this.props.languageConfig}
                                  baseName={this.state.baseName}
-                                 tradeName={this.state.tradeName}
-                                 tradeFullName={this.state.tradeFullName}/>
+                                 tradeName={this.state.tradeName}/>
                     </div>
                     <div className="example-grow">
                         <div className="parent">
@@ -135,8 +130,6 @@ class ExchangeContainer extends Component {
                                         <BalanceA languageConfig={this.props.languageConfig}
                                                   baseName={this.state.baseName}
                                                   tradeName={this.state.tradeName}
-                                                  baseFullName={this.state.baseFullName}
-                                                  productFullName={this.state.tradeFullName}
                                                   balance={this.props.balance}/>
 
                                         <div className="order-entry-head">
@@ -220,7 +213,7 @@ class ExchangeContainer extends Component {
                 <ExchangeColumn2>
                     <div id="inst">
                         <InstrumentSelectA handleTradeCurrencyChange={this.changeTradeCurrency}
-                                           languageConfig={this.props.languageConfig} data={config}/>
+                                           languageConfig={this.props.languageConfig} data={filterMarkets()}/>
 
                     </div>
                 </ExchangeColumn2>
