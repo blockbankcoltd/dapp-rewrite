@@ -151,7 +151,7 @@ function* withdrawEthRequest(params) {
 function* depositTokenRequest(params) {
     const Contract = createSmartContract();
     const { prAddress, amount } = params.payload;
-    const deposit = Contract.methods.depositToken(prAddress, +amount).send({
+    const deposit = Contract.methods.depositToken(prAddress, +amount, true).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
@@ -160,7 +160,7 @@ function* depositTokenRequest(params) {
 function* withdrawTokenRequest(params) {
     const Contract = createSmartContract(); 
     const { prAddress, amount } = params.payload;
-    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +amount).send({
+    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +amount, false).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount});
