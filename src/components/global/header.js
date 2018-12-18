@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import bitnaruLogo from '../../../src/assets/images/bitnaruLogo.png';
 import englishLangIcon from '../../../src/assets/images/icon/en.png';
 import koreanLangIcon from '../../../src/assets/images/icon/kr.png';
+import dexhiLogo from '../../../src/assets/images/Dexhi_white.png';
 
 export default class HeaderComponent extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ export default class HeaderComponent extends React.Component {
                 <HeaderContents>
                     <Title>
                         <Link to="/">
-                           <TitleImage onClick={this.viewSide} id="logo" src={bitnaruLogo} alt={MENU_TEXT_HOME}/>
+                           <TitleImage onClick={this.viewSide} id="logo" src={dexhiLogo} alt={MENU_TEXT_HOME}/>
                            {/* <TitleImage onClick={this.viewSide} id="logo" src={titleSrc} alt={MENU_TEXT_HOME} /> */}
                         </Link>
                     </Title>
@@ -79,7 +80,7 @@ const Header = styled.section`
     left:0;
     width:100%;
     height:70px;
-    background-color:#003366;
+    background-color:#112434;
     transition:height .2s;
 `
 
@@ -127,7 +128,7 @@ const HeaderContents = styled.div`
         position: absolute;
         background: rgba(0, 0, 0, .8);
         padding: 10px 10px;
-        margin: 5px 0 0 -20%;
+        margin: -7px 0 0 -20%;
         box-sizing: border-box;
         font-size: 15px;
         font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
