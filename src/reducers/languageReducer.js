@@ -21,7 +21,9 @@ export default function (state = {}, action) {
             }
         case "SWITCH_LANGUAGE":
             return {
-                ...state
+                ...state,
+                activeLang: action.activeLang,
+                languageConfig: action.languageConfig
             }
         case "LANGUAGE_CHANGED":
             return {
