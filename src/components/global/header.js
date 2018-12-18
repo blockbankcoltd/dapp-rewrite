@@ -36,7 +36,7 @@ export default class HeaderComponent extends React.Component {
                     </Title>
                     <HeaderLinks>
                         {navLinks.map(r => {
-                            return <Link key={r.path} to={r.path}>{r.name}</Link>
+                            return <Link key={r.path} to={r.path} >{r.name}</Link>
                         })}
                     </HeaderLinks>
                     
@@ -89,8 +89,9 @@ const HeaderLinks = styled.div`
     position: absolute;
     font-size: 20px;
         a{
+            font-weight:700;
             color: white;
-            padding: 0px 20px;
+            padding: 0px 50px;
             text-decoration: none;
         }
 `
@@ -102,6 +103,7 @@ const HeaderContents = styled.div`
     .lang_navi {
         float: right;
         position: relative;
+        right: 20%;
         top: 50%;
         transform: translateY(-50%);
     }
@@ -125,10 +127,11 @@ const HeaderContents = styled.div`
         position: absolute;
         background: rgba(0, 0, 0, .8);
         padding: 10px 10px;
-        margin: 10px 0 0 -20%;
+        margin: 5px 0 0 -20%;
         box-sizing: border-box;
         font-size: 15px;
         font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+        
     }
 
     .lang_navi ul.lang_off {
@@ -140,6 +143,7 @@ const HeaderContents = styled.div`
     }
 
     .lang_navi ul li {
+    list-style-type : none;
         cursor: pointer;
         color: #fff;
         text-indent: 30px;

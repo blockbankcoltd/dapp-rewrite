@@ -7,6 +7,7 @@ import "react-table/react-table.css";
 import Config from '../utilities/config';
 import Actions from '../actions/index';
 import config from '../utilities/config';
+import {isMobile} from "react-device-detect";
 // import PromptComponent from '../components/global/prompt';
 
 class WalletContainer extends Component {
@@ -137,7 +138,7 @@ class WalletContainer extends Component {
                     accessor: d => d.balance.hold
                 },
                 {
-                    // Header: "Pending Deposits",
+                     Header: "Pending Deposits",
                     id: "deposit_buttons",
                     accessor: d => <div><button type="button">Deposit</button></div>,
                     Cell: (d) => this.renderEditable(d, "deposit")
@@ -170,6 +171,44 @@ class WalletContainer extends Component {
                                 </div>
 
                                 <div className="asset_balance">
+
+                                    <div>
+                                        <div className="tab_list" />
+                                        <div className="wallet_info">
+                                            <h3>
+
+                                                <div className="first">{WALLET.TOTAL_ASSET}</div>
+
+                                                <div className="second">
+                                                    <strong id="balanceTxt">
+                                                        0
+                                                    </strong>
+                                                    <span className="krw"> KRW</span>
+                                                </div>
+                                            </h3>
+
+                                        </div>
+
+                                        <div className="tit_list">
+                                            {
+                                                isMobile ?
+                                                    ''
+                                                    :
+                                                    <ul>
+                                                        <li className="coinName">{WALLET.COIN_NAME}</li>
+                                                        <li className="totalBalance">{WALLET.TOTAL}</li>
+                                                        <li className="hold">{`${WALLET.AVAILABLE} `}
+                                                            <i
+                                                                data-for="Balance"
+                                                                data-tip={WALLET.AVAILABLE_TIP}
+                                                                className="xi-help-o"
+                                                            /></li>
+                                                        <li className="pending">{WALLET.IN}</li>
+                                                    </ul>
+                                            }
+                                        </div>
+                                    </div>
+
                                     {/* onClick={(e) => {
                                                 e.target.className.indexOf('market-button') !== -1 && e.target.className.indexOf('marketLOCUS') === -1
                                                 && setTimeout(() => {Router.push('/exchange');
@@ -179,7 +218,16 @@ class WalletContainer extends Component {
                                     <div className="balances_list">
                                         <div className="total_balance"></div>
                                         <div className="products_list_balances">
-                                            {this.renderTable()}
+                                            <div className="row2">
+                                                <div className="balance">
+                                                    <div
+                                                        className="balances_name"
+                                                        onMouseEnter={() => this.mouseEnter('name')}
+                                                        onMouseLeave={this.mouseLeave}
+                                                    >
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -219,6 +267,9 @@ const Wallet = styled.div`
     padding:55px 0 0 0;
     margin:0 0 130px 0;
     min-height:800px;
+    .wallet_wrap{
+    padding:55px 0 0 0;
+    }
     .main {
         width:1200px;
         margin:0 auto;
@@ -232,6 +283,7 @@ const Wallet = styled.div`
             display:flex;
             flex-direction: row;
             list-style: none;
+            padding-inline-start:unset;
             li {
                 width:50%;
                 text-align:center;
@@ -240,6 +292,7 @@ const Wallet = styled.div`
                     font-size:18px;
                     font-weight:700;
                     color : #999999;
+                    text-decoration:none;
                 }
                 &.active {
                     border-bottom: 3px solid #003366;
@@ -339,7 +392,11 @@ const Wallet = styled.div`
                 place-content:center flex-start;
                 justify-content: flex-start;
                 align-items:center;
+                height:40px;
+                margin-block-start: unset;
+                margin-block-end: unset;
                 li {
+                list-style-type:none;
                     font-size: 18px;
                     font-weight: 700;
                     box-sizing: border-box;
