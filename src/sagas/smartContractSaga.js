@@ -6,24 +6,24 @@ import {config, filterMarkets} from '../utilities/config';
 import Lodash from 'lodash';
 let data = [];
 
-// config.productList.forEach( (obj, i) => {
-//     data.push({
-//         product: obj.productName,
-//         prCode: obj.productId,
-//         tokenAddress: obj.tokenAddress
-//     });
-//     if(i === 0){
-//         if (obj.prTrade && obj.prTrade.length > 0) {
-//             obj.prTrade.forEach(o => {
-//                 data.push({
-//                     product: o.productName,
-//                     prCode: o.productId,
-//                     tokenAddress: o.tokenAddress
-//                 });
-//             })
-//         }
-//     }
-// }); this code make error
+config.trades.forEach( (obj, i) => {
+    data.push({
+        product: obj.productName,
+        prCode: obj.productId,
+        tokenAddress: obj.tokenAddress
+    });
+    if(i === 0){
+        if (obj.prTrade && obj.prTrade.length > 0) {
+            obj.prTrade.forEach(o => {
+                data.push({
+                    product: o.productName,
+                    prCode: o.productId,
+                    tokenAddress: o.tokenAddress
+                });
+            })
+        }
+    }
+});
 
 console.log("Config data --> ", Lodash.uniq(data));
 

@@ -37,6 +37,9 @@ export default class HeaderComponent extends React.Component {
                     </Title>
                     <HeaderLinks>
                         {navLinks.map(r => {
+                            if(r.name === "Home") {
+                                return null;
+                            }
                             return <Link key={r.path} to={r.path} >{r.name}</Link>
                         })}
                     </HeaderLinks>
