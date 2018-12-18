@@ -63,12 +63,12 @@ export default class OrderbookA extends React.Component{
                         <div id="bookTable" className="booktable">
                             <div id="askRows">
                                 {
-                                   _obj.bidOrder.map( (item, i) => {
+                                   _obj.bidOrder.reverse().map( (item, i) => {
                                         return(
                                             <span className="bookrow" key={i} onClick={ () => this.handleChangePrice(item.priceA)}>
-                                                <div className="CellMyOrders price">{item.volume}</div>
+                                                <div className="CellPublicOrders">{item.volume}</div>
                                                 <div className="CellBidPrice CellPrice">{item.priceA}</div>
-                                                <div className="CellPublicOrders">-</div>
+                                                <div className="CellMyOrders price">-</div>
                                             </span>
                                         )
                                     })

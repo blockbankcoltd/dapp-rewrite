@@ -143,7 +143,9 @@
     "COIN_DAY_BEFORE": "전일대비",
     "COIN_MARKET": "마켓",
     "COIN_VOLUME": "거래대금",
-    "VOLUME_SET" : " 천원"
+    "VOLUME_SET" : " 천원",
+    "BEST_BID" : "매도가",
+    "BEST_ASK" : "매수가"
   },
   "BUY_SELL_ADV": {
     "TITLE_TEXT": "주문 입력",
@@ -748,7 +750,7 @@
     "CONTACT_TEXT": "문의안내",
     "FEES_TEXT": "수수료",
     "NEWS_TEXT": "보도자료",
-    "ABOUT_TEXT": "LinkerKorea Co., Ltd.",
+    "ABOUT_TEXT": "DexHigh Co., Ltd.",
     "FAQS_TEXT": "FAQ's",
     "SECURITY_TEXT": "보안",
     "COMPANY": "(주)링커코리아",

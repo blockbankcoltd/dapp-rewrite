@@ -8,6 +8,7 @@ import links from '../router/navLinks';
 import HeaderComponent from '../components/global/header';
 import store from '../store/reduxStore';
 import Actions from '../actions/index';
+import FooterComponent from "../components/global/footer";
 
 class RootContainer extends Component {
     constructor(props) {
@@ -50,11 +51,36 @@ class RootContainer extends Component {
             localStorage.setItem('lang', code);
             return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
         };
+        const FooterData={
+            titleLink:"",
+            titleSrc:"/static/images/bitnaruLogo.png",
+            chatUrl:"http://pf.kakao.com/_xkxbxbeC/chat",
+            email:"https://bitnaru.com/mailto:support@bitnaru.com",
+            sns:{
+                facebook:{
+                    src:"",
+                    link:"https://www.facebook.com/Bitnaru"
+                },
+                twitter:{
+                    src:"",
+                    link:"https://twitter.com/bitnaru"
+                },
+                naver:{
+                    src:"",
+                    link:"https://blog.naver.com/bitnaru_official"
+                },
+                telegram: {
+                    src : "",
+                    link : "https://t.me/bitnaruofficial"
+                }
+            }
+        }
         
         return (
             <div className="App">
                 <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig}/>
                 <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links}/>
+                <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig}/>
             </div>
         )
     }

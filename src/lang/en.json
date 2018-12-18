@@ -140,7 +140,9 @@
     "COIN_DAY_BEFORE": "Change",
     "COIN_MARKET": "Market",
     "COIN_VOLUME": "Volume",
-    "VOLUME_SET": "K Won"
+    "VOLUME_SET": "K Won",
+    "BEST_BID" : "Best Bid",
+    "BEST_ASK" : "Best Ask"
   },
   "BUY_SELL_ADV":{
     "TITLE_TEXT": "Order Entry",
@@ -687,10 +689,10 @@
   "CONTACT_TEXT":"Contact Us",
   "FEES_TEXT":"Fees",
   "NEWS_TEXT":"News",
-  "ABOUT_TEXT":"LinkerKorea Co., Ltd.",
+  "ABOUT_TEXT":"DexHigh Co., Ltd.",
   "FAQS_TEXT":"FAQ's",
   "SECURITY_TEXT":"Security",
-  "COMPANY": "LinkerKorea Co., Ltd.",
+  "COMPANY": "DexHigh Co., Ltd.",
   "ADDRESS": "10 Gukjegeumyung-ro, Youngdeungpo-gu, Seoul 07326, South Korea",
   "CEO": "CEO: Jeonggon Mun",
   "FOT_NUM1": "<strong>EID</strong> 401-81-57985",
@@ -1097,7 +1099,7 @@
   "PRIVACY": {
     "PRIVACY_TIT": "Privacy Policy",
     "GENERAL": "1. General rules",
-    "GENERAL01": "LinkerKorea Co., Ltd. (hereinafter “Company”) values customers’ personal information highly and complies with laws, including the Act on Promotion of Information and Communications Network Utilization and Information Protection, and other relative laws regarding the Personal Information Protection Act, and take such action to protect customer’s personal information.",
+    "GENERAL01": "DexHigh Co., Ltd. (hereinafter “Company”) values customers’ personal information highly and complies with laws, including the Act on Promotion of Information and Communications Network Utilization and Information Protection, and other relative laws regarding the Personal Information Protection Act, and take such action to protect customer’s personal information.",
     "GENERAL02": "“Processing Personal Information” means a guideline that Company needs to comply in order to let the customers to use the services with confidence by protecting customer’s personal information, which the company highly values.",
     "GENERAL03": "This processing personal information is applied to company’s website(https://www.bitnaru.com) service. Separate privacy policies may apply to services provided on other websites.",
     "GENERAL04": "The company will company will notify you through the website announcement (or individual notice) when revising the personal information processing policy. Users are urged to check back frequently when visiting our site.",
@@ -1319,7 +1321,7 @@
   "TERMS": {
     "CHAPTER1_TITLE": "Chapter 1 General Provision",
     "ARTICLE1_TITLE": "Article 1 Purpose",
-    "ARTICLE1_TXT": "This agreement stipulates the rights and responsibilities of the company and its customers regarding the terms and conditions of use of BitNaru and BitNaru related services (hereinafter referred to as “services”) provided by LinkerKorea Co., Ltd. (hereinafter referred to as “company”)",
+    "ARTICLE1_TXT": "This agreement stipulates the rights and responsibilities of the company and its customers regarding the terms and conditions of use of BitNaru and BitNaru related services (hereinafter referred to as “services”) provided by DexHigh Co., Ltd. (hereinafter referred to as “company”)",
     "ARTICLE2_TITLE": "Article 2 (Specification, Explanation and Revision of Terms)",
     "ARTICLE2_LIST1": "1. The terms of this Agreement shall be posted on the website for mobile app and pc provided by the company or otherwise notified to the user and shall be effective upon acceptance of these Terms by the user as a customer.",
     "ARTICLE2_LIST2": "2. The Company may amend these Terms and Conditions to the extent that it does not violate the relevant laws such as the “Regulation of Standardized Contract Act”. The law regarding the promotion of information and communication network usage and protection of information. If the Company amends the Terms and Conditions, it shall notify the date of application and the reason for the revision and shall be announced along with the current terms on the initial screen of the Company site, or on the popup screen or notice field from 7 days prior to the effective date to the day before the effective date.",

@@ -22,8 +22,8 @@ export default class PublicTradesA extends React.Component {
                     <thead>
                     <tr>
                         <th>{PUBLIC_TRADES.TIME_TEXT}</th>
-                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.PRICE_TEXT}<span>(ETH)</span>`}}/>
-                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.SIZE}<span>(symbol)</span>`}}/>
+                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.PRICE_TEXT}<span>(${this.props.baseName})</span>`}}/>
+                        <th dangerouslySetInnerHTML={{__html: `${PUBLIC_TRADES.SIZE}<span>(${this.props.tradeName})</span>`}}/>
                     </tr>
 
                     </thead>
@@ -44,16 +44,6 @@ export default class PublicTradesA extends React.Component {
                         </tbody>
                     </table>
                 </div>
-
-
-                {/*{pages.length > 1 &&*/}
-                {/*<div className="clearfix pad-x">*/}
-                    {/*<ul className="pagi pull-right">*/}
-                        {/*<li><a onClick={() => this.gotoPage(0)}>&laquo;</a></li>*/}
-                        {/*{pages}*/}
-                        {/*<li onClick={() => this.gotoPage(totalPages - 1)}><a>&raquo;</a></li>*/}
-                    {/*</ul>*/}
-                {/*</div>}*/}
             </Public>
         )
     }
