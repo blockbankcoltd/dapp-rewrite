@@ -1,6 +1,7 @@
 import HomeContainer from '../containers/homeContainer';
 import ExchangeContainer from '../containers/exchangeContainer';
 import WalletContainer from '../containers/walletContainer';
+import TransactionContainer from '../containers/transactionContainer';
 
 const links = [
     {
@@ -17,6 +18,11 @@ const links = [
         name: "Wallet",
         path: "/wallet",
         component: WalletContainer
+    },
+    {
+        name: "TransactionDetails",
+        path: "/transactionDetails",
+        component: TransactionContainer
     }
 ];
 

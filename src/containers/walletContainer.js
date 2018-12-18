@@ -4,11 +4,9 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import Config from '../utilities/config';
 import Actions from '../actions/index';
-import config from '../utilities/config';
 import {isMobile} from "react-device-detect";
-// import PromptComponent from '../components/global/prompt';
+import { Link } from 'react-router-dom';
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -75,6 +73,7 @@ class WalletContainer extends Component {
 
 
     renderEditable(cellInfo, flag) {
+        console.log(this.props)
         if (flag === "deposit") {
             return <div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button></div>
         } else {
@@ -120,7 +119,7 @@ class WalletContainer extends Component {
         //         })
         //     }
         // });
-        return (
+        return(
             <ReactTable data={this.props.balance} columns={[
                 {
                     Header: "Product",
@@ -138,7 +137,7 @@ class WalletContainer extends Component {
                     accessor: d => d.balance.hold
                 },
                 {
-                     Header: "Pending Deposits",
+                    Header: "Pending Deposits",
                     id: "deposit_buttons",
                     accessor: d => <div><button type="button">Deposit</button></div>,
                     Cell: (d) => this.renderEditable(d, "deposit")
@@ -155,6 +154,7 @@ class WalletContainer extends Component {
     }
 
     render() {
+        console.log(this.props);
         const { WALLET } = this.props.languageConfig;
         return (
             <div>
@@ -164,9 +164,9 @@ class WalletContainer extends Component {
                             <div className="container">
                                 <div className="page_link">
                                     <ul>
-                                        <li className="active"><a href="/wallet">{WALLET.DEPOSIT}</a>
+                                        <li className="active"><Link to="/wallet">{WALLET.DEPOSIT}</Link>
                                         </li>
-                                        <li><a href="/transactionDetails">{WALLET.ORDERS}</a></li>
+                                        <li><Link to="/transactionDetails">{WALLET.ORDERS}</Link></li>
                                     </ul>
                                 </div>
 
@@ -207,6 +207,7 @@ class WalletContainer extends Component {
                                                     </ul>
                                             }
                                         </div>
+                                        {this.renderTable()}
                                     </div>
 
                                     {/* onClick={(e) => {
