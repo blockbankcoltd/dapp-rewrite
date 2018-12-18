@@ -4,6 +4,11 @@ import WalletContainer from '../containers/walletContainer';
 
 const links = [
     {
+        name: "Home",
+        path: "/",
+        component: HomeContainer
+    },
+    {
         name: "Exchange",
         path: "/exchange",
         component: ExchangeContainer
@@ -12,12 +17,7 @@ const links = [
         name: "Wallet",
         path: "/wallet",
         component: WalletContainer
-    },
-    {
-        name: "Customer Service",
-        path: "/",
-        component: HomeContainer
-    },
+    }
 ];
 
 export default links;
