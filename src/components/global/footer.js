@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom'
+import dexhiLogo from '../../../src/assets/images/Dexhi_white.png';
 
 
 export default class FooterComponent extends React.Component {
@@ -13,7 +14,7 @@ export default class FooterComponent extends React.Component {
                     <ContentsInner>
                         <Title>
                             <Link to="/" className="titleLink">
-                                <TitleImage src={FooterData.titleSrc} alt={FOOTER.MENU_TEXT_HOME}/>
+                                <TitleImage src={dexhiLogo} alt={FOOTER.MENU_TEXT_HOME}/>
                             </Link>
                         </Title>
                         <FooterInfo>
@@ -115,7 +116,7 @@ const TitleImage = styled.img`
 const Contents = styled.div`
     padding:35px 0 25px;
     width:100%;
-    background:#036;
+    background:#112434;
     overflow:hidden;
     @media(max-width: 1024px) {
         padding:1rem 0;

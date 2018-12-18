@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import thum_icon1 from '../../src/assets/images/dexhi_icon_1.png';
+import thum_icon2 from '../../src/assets/images/dexhi_icon_2.png';
+import thum_icon3 from '../../src/assets/images/dexhi_icon_3.png';
+import thum_icon4 from '../../src/assets/images/dexhi_icon_4.png';
+import thum_icon5 from '../../src/assets/images/dexhi_icon_5.png';
 
 class HomeContainer extends Component {
     state = {
@@ -16,12 +21,13 @@ class HomeContainer extends Component {
         this.state = {
 
         };
+        this.EXCHANGETOP_ref = React.createRef();
 
     }
     componentDidMount(){
         console.log("LANGUAGE CONFIG Home -------------------------------------->>>>>>>> ", this.props);
-        const EXCHANGETOP = document.getElementById('exchangeInfo').offsetTop * 0.5;
-        const FEATUERTOP = document.getElementById('features').offsetTop * 0.6;
+        const EXCHANGETOP = this.EXCHANGETOP_ref.current.offsetTop * 0.5;
+
         let scrollOn = {
             exchange: true,
             feature: true
@@ -32,10 +38,6 @@ class HomeContainer extends Component {
             if (windowTop > EXCHANGETOP && scrollOn.exchange) {
                 this.setState({exchageAdd: true});
                 scrollOn.exchange = false;
-            }
-            if (windowTop > FEATUERTOP && scrollOn.feature) {
-                this.setState({featureAdd: true});
-                scrollOn.feature = false;
             }
             if (windowTop > 100) {
                 this.setState({headerAdd: true});
@@ -88,73 +90,78 @@ class HomeContainer extends Component {
 
 
                     <ExchangeInfo id="exchangeInfo">
+                        <div className="container_title">
+                            <dl>
+                                <dt>DexHI Decentralized Exchange Advantages:</dt>
+                                <dd>Pure Decentralized Exchange:</dd>
+                            </dl>
+                        </div>
                         <div className="container">
-                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
-                                <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum01.png"
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb"><img src={thum_icon1}
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl>
-                                        <dt>{INDEX.EXCHANGE1_TIT}</dt>
-                                        <dd>{INDEX.EXCHANGE1_TXT}</dd>
+                                    <dl className="txt_cont_dl_1">
+                                        <dt>{INDEX.EXCHANGE5_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE5_TXT}</dd>
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
-                                <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum02.png"
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb"><img src={thum_icon2}
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl>
-                                        <dt>{INDEX.EXCHANGE2_TIT}</dt>
-                                        <dd>{INDEX.EXCHANGE2_TXT}</dd>
+                                    <dl className="txt_cont_dl_1">
+                                        <dt>{INDEX.EXCHANGE6_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE6_TXT}</dd>
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
-                                <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum03.png"
+                        </div>
+                        <div className="container2">
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb"><img src={thum_icon3}
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl>
-                                        <dt>{INDEX.EXCHANGE3_TIT}</dt>
-                                        <dd>{INDEX.EXCHANGE3_TXT}</dd>
+                                    <dl className="txt_cont_dl_1">
+                                        <dt>{INDEX.EXCHANGE7_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE7_TXT}</dd>
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : null}>
-                                <span className="thumb"><img src="https://static.bitnaru.com/v3_web/images/thumb/bitnaru_info_thum04.png"
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb"><img src={thum_icon4}
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl>
-                                        <dt>{INDEX.EXCHANGE4_TIT}</dt>
-                                        <dd>{INDEX.EXCHANGE4_TXT}</dd>
+                                    <dl className="txt_cont_dl_1">
+                                        <dt className="txt_cont_dt_1">{INDEX.EXCHANGE8_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE8_TXT}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb"><img src={thum_icon5}
+                                                             alt="" /></span>
+                                <div className="txt_cont">
+                                    <dl className="txt_cont_dl_1">
+                                        <dt className="txt_cont_dt_1">{INDEX.EXCHANGE9_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE9_TXT}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </ExchangeInfo>
-                    <Features id="features">
-                        <div className="grid_wrap">
-                            <div className={this.state.featureAdd ? 'grid_item txt_effect' : 'grid_item'}>
-                                <span>01</span>
-                                <h4>{INDEX.INFO1_TIT}</h4>
-                                <p>{INDEX.INFO1_TXT}</p>
-                            </div>
-                            <div className={this.state.featureAdd ? 'grid_item txt_effect' : 'grid_item'}>
-                                <span>02</span>
-                                <h4>{INDEX.INFO2_TIT}</h4>
-                                <p>{INDEX.INFO2_TXT}</p>
-                            </div>
-                            <div className={this.state.featureAdd ? 'grid_item txt_effect' : 'grid_item'}>
-                                <span>03</span>
-                                <h4>{INDEX.INFO3_TIT}</h4>
-                                <p>{INDEX.INFO3_TXT}</p>
-                            </div>
-                            <div className={this.state.featureAdd ? 'grid_item txt_effect' : 'grid_item'}>
-                                <span>04</span>
-                                <h4>{INDEX.INFO4_TIT}</h4>
-                                <p>{INDEX.INFO4_TXT}</p>
-                            </div>
-                        </div>
-                    </Features>
+
                 </Content>
             </div>
         )
@@ -686,8 +693,29 @@ const ExchangeInfo = styled.div`
     overflow:hidden;
     padding:100px 0 30px;
     background:#fff;
-    .container {
+    height: 1367px;
+    .container_title{
         width: 1200px;
+        margin: 0 auto;
+        overflow: hidden;
+        dl{
+            margin-bottom: 130px;
+            dt{
+                font-size: 40px;
+                font-weight: 700;
+                color: #112434;
+                text-align: center;
+                margin-bottom: 25px;
+            }
+            dd{
+                font-size: 30px;
+                color: #112434;
+                text-align: center;
+            }
+        }
+    }
+    .container {
+        width: 1000px;
         margin: 0 auto;
         overflow: hidden;
         > div {
@@ -710,19 +738,24 @@ const ExchangeInfo = styled.div`
                 width:100%;
             }
             dl {
-                width:280px;
                 margin:30px auto 0;
+                &.txt_cont_dl_1{
+                    width:200px;
+                }
+                &.txt_cont_dl_2{
+                    width:315px;
+                }
                 dt {
-                    font-size: 1.3rem;
+                    font-size: 25px;
                     line-height: 1.3em;
                     font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-                    color: #003366;
+                    color: #112434;
                     font-weight: bold;
                     word-break: keep-all;
                     margin: 0 0 25px;
                     text-align: center;
                     position: relative;
-                    padding: 0 0 20px;
+                    padding: 0 0 30px;
                     top: 50px;
                     opacity: 0;
                     transition: all .3s;
@@ -731,7 +764,7 @@ const ExchangeInfo = styled.div`
                         display: block;
                         width: 0;
                         height: 3px;
-                        background: #003366;
+                        background: #3c92ca;
                         position: absolute;
                         bottom: 0;
                         left: 50%;
@@ -741,11 +774,11 @@ const ExchangeInfo = styled.div`
                 }
                 dd {
                     width: 100%;
-                    font-size: 17px;
-                    font-weight: bold;
+                    font-size: 20px;
+                    font-weight: 500;
                     font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
                     word-break: keep-all;
-                    color: #454545;
+                    color: #000000;
                     text-align: center;
                     transition: all .2s .4s;
                     position: relative;
@@ -759,7 +792,8 @@ const ExchangeInfo = styled.div`
                     opacity: 1;
                     top:0;
                     &:after {
-                        width:100px;
+                        width:101px;
+                        height:8px;
                     }
                 }
                 dd {
@@ -769,7 +803,98 @@ const ExchangeInfo = styled.div`
             }
         }
     }
-    
+    .container2 {
+        width: 1355px;
+        margin: 0 auto;
+        overflow: hidden;
+        > div {
+            width: 33%;
+            box-sizing: border-box;
+            overflow: hidden;
+            //float: left;
+            display:inline-table;
+            margin: 0 0 70px;
+            .thumb {
+                width:100%;
+                text-align:center;
+                display:block;
+                img {
+                    vertical-align:top;
+                    border:0 none;
+                }
+            }
+            .txt_cont {
+                width:100%;
+            }
+            dl {
+                margin:30px auto 0;
+                &.txt_cont_dl_1{
+                    width:210px;
+                }
+                &.txt_cont_dl_2{
+                    width:220px;
+                }
+                dt {
+                    font-size: 25px;
+                    line-height: 1.3em;
+                    font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+                    color: #112434;
+                    font-weight: bold;
+                    word-break: keep-all;
+                    margin: 0 0 25px;
+                    text-align: center;
+                    position: relative;
+                    padding: 0 0 30px;
+                    top: 50px;
+                    opacity: 0;
+                    transition: all .3s;
+                    &:after {
+                        content: '';
+                        display: block;
+                        width: 0;
+                        height: 3px;
+                        background: #3c92ca;
+                        position: absolute;
+                        bottom: 0;
+                        left: 50%;
+                        margin-left: -50px;
+                        transition: all .2s .2s;
+                    }
+                     &.txt_cont_dt_1{
+                        line-height: 2.6em;
+                    }
+                }
+                dd {
+                    width: 100%;
+                    font-size: 20px;
+                    font-weight: 500;
+                    font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+                    word-break: keep-all;
+                    color: #000000;
+                    text-align: center;
+                    transition: all .2s .4s;
+                    position: relative;
+                    top: 50px;
+                    opacity: 0;
+                    margin-inline-start:unset;
+                }
+            }
+            &.txt_effect {
+                dt {
+                    opacity: 1;
+                    top:0;
+                    &:after {
+                        width:101px;
+                        height:8px;
+                    }
+                }
+                dd {
+                    top:0;
+                    opacity:1;
+                }
+            }
+        }
+    }
     @media(max-width:1024px){
         display:none;
     }
