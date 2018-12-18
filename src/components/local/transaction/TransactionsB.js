@@ -10,12 +10,7 @@ export default class TransactionsB extends React.Component{
     }
 
     state = {
-        isLogin: true,
-        page : 0
-    }
-
-    gotoPage (page) {
-        this.setState({ page })
+        isLogin: true
     }
 
     render() {

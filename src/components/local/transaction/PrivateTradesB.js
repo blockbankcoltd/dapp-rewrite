@@ -10,11 +10,7 @@ export default class PrivateTradesB extends React.Component{
     }
 
     state = {
-        isLogin: true,
-    }
-
-    gotoPage (page) {
-        this.setState({ page })
+        isLogin: true
     }
 
     render() {

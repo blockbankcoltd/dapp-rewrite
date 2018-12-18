@@ -10,14 +10,8 @@ export default class OpenOrdersB extends React.Component{
     }
 
     state = {
-        isLogin: true,
-        page : 0
+        isLogin: true
     }
-
-    gotoPage (page) {
-        this.setState({ page })
-    }
-
     render() {
         const {TRANSACTION, OPEN_ORDERS} = this.props.languageConfig;
 
