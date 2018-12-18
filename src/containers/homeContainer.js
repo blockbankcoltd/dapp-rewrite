@@ -21,11 +21,12 @@ class HomeContainer extends Component {
         this.state = {
 
         };
+        this.EXCHANGETOP_ref = React.createRef();
 
     }
     componentDidMount(){
         console.log("LANGUAGE CONFIG Home -------------------------------------->>>>>>>> ", this.props);
-        const EXCHANGETOP = document.getElementById('exchangeInfo').offsetTop * 0.5;
+        const EXCHANGETOP = this.EXCHANGETOP_ref.current.offsetTop * 0.5;
 
         let scrollOn = {
             exchange: true,
@@ -96,7 +97,7 @@ class HomeContainer extends Component {
                             </dl>
                         </div>
                         <div className="container">
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb"><img src={thum_icon1}
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -108,7 +109,7 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb"><img src={thum_icon2}
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -122,7 +123,7 @@ class HomeContainer extends Component {
                             </div>
                         </div>
                         <div className="container2">
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb"><img src={thum_icon3}
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -134,7 +135,7 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb"><img src={thum_icon4}
                                     alt="" /></span>
                                 <div className="txt_cont">
@@ -146,7 +147,7 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : 'txt_effect'}>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb"><img src={thum_icon5}
                                                              alt="" /></span>
                                 <div className="txt_cont">
