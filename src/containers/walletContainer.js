@@ -73,7 +73,6 @@ class WalletContainer extends Component {
 
 
     renderEditable(cellInfo, flag) {
-        console.log(this.props)
         if (flag === "deposit") {
             return <div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button></div>
         } else {
@@ -154,7 +153,6 @@ class WalletContainer extends Component {
     }
 
     render() {
-        console.log(this.props);
         const { WALLET } = this.props.languageConfig;
         return (
             <div>
