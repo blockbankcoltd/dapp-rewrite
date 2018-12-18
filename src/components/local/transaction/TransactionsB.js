@@ -6,13 +6,10 @@ export default class TransactionsB extends React.Component{
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            isLogin: true
+        }
     }
-
-    state = {
-        isLogin: true
-    }
-
     render() {
         const {TRANSACTION, OPEN_ORDERS} = this.props.languageConfig;
 

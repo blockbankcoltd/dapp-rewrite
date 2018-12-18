@@ -6,12 +6,12 @@ export default class OpenOrdersB extends React.Component{
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            isLogin: true
+        }
     }
 
-    state = {
-        isLogin: true
-    }
+
     render() {
         const {TRANSACTION, OPEN_ORDERS} = this.props.languageConfig;
 

@@ -6,13 +6,10 @@ export default class PrivateTradesB extends React.Component{
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            isLogin: true
+        }
     }
-
-    state = {
-        isLogin: true
-    }
-
     render() {
         const {TRANSACTION, TRADES} = this.props.languageConfig;
 
