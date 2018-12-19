@@ -1,4 +1,6 @@
-export const config =  {
+import * as contractJson2 from '../utilities/DEXHIGH2.json';
+import * as contractJson3 from '../utilities/DEXHIGH3.json';
+export const config = {
     basePrice: 10000000000,
     trades: [
         {
@@ -89,11 +91,11 @@ export const config =  {
     market: [
         {
             base: 1,
-            trade: [2,3,4,5,6,7,8,9,10]
+            trade: [2, 3, 4, 5, 6, 7, 8, 9, 10]
         },
         {
             base: 2,
-            trade: [7,8,9,10]
+            trade: [7, 8, 9, 10]
         }
     ]
 };
@@ -103,11 +105,11 @@ export const filterMarkets = () => {
     config.market.forEach(obj => {
         let trades = [];
         let base = config.base.find(o => o.productId === obj.base);
-        obj.trade.forEach( y => {
-            let tradeObject = config.trades.find( x => x.productId === y);
+        obj.trade.forEach(y => {
+            let tradeObject = config.trades.find(x => x.productId === y);
             trades.push(tradeObject);
         });
-        
+
         markets.push({
             market: {
                 productName: base.productName,
@@ -307,3 +309,16 @@ export default {
 
 }
 */
+
+export const contractList = [
+    {
+        name: "Latest",
+        address: "0x893642e2308c51661b7fac421d9c4c550f609b59",
+        abifile: contractJson2.default
+    },
+    {
+        name: "Order",
+        address: "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0",
+        abifile: contractJson3.default
+    }
+]

@@ -2,7 +2,7 @@ import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 import store from '../store/reduxStore';
 import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants';
-import {config, filterMarkets} from '../utilities/config';
+import {config, filterMarkets, contractList} from '../utilities/config';
 import Lodash from 'lodash';
 import Web3 from 'web3';
 let data = [];
@@ -31,9 +31,11 @@ coinList.forEach( (obj, i) => {
 console.log("Config data --> ", Lodash.uniq(data));
 
 function createSmartContract(){
-    const contract_address = "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0";
+    const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
+
+    const contract_address = selectedContract.address;
     const { GlobalWeb3Object } = store.getState().main;
-    const Contract = new GlobalWeb3Object.eth.Contract(contractJson.abi, contract_address);
+    const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
     return Contract;
 }
 
@@ -169,7 +171,7 @@ function* depositTokenRequest(params) {
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     let decimals = Web3.utils.toBN(config.decimal);
-    const deposit = Contract.methods.depositToken(prAddress, +sendAmount(amount, decimals), true).send({
+    const deposit = Contract.methods.depositToken(prAddress, sendAmount(amount, decimals), true).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
