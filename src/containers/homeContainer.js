@@ -58,7 +58,7 @@ class HomeContainer extends Component {
                         <div className="main_wrap">
                             <div className="login_wrap">
                                 <VisualText>
-                                    <h3>BLOCKCHAIN OF FINANCE</h3>
+                                    <h3>DECENTRALIZED FINANCE</h3>
                                     <p>{INDEX.TITLE_TEXT}</p>
                                 </VisualText>
                                 {this.LoginArea}
@@ -92,16 +92,17 @@ class HomeContainer extends Component {
                     <ExchangeInfo id="exchangeInfo">
                         <div className="container_title">
                             <dl>
-                                <dt>DexHI Decentralized Exchange Advantages:</dt>
-                                <dd>Pure Decentralized Exchange:</dd>
+                                <dt>{INDEX.EXCHANGE_TITLE2}</dt>
+                                <dd>{INDEX.EXCHANGE_TITLE3}</dd>
+                                <dd>{INDEX.EXCHANGE_TITLE4}</dd>
                             </dl>
                         </div>
                         <div className="container">
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                                <span className="thumb"><img src={thum_icon1}
+                                <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_2">
+                                    <dl className="txt_cont_dl_1">
                                         <dt>{INDEX.EXCHANGE5_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
@@ -110,10 +111,10 @@ class HomeContainer extends Component {
                                 </div>
                             </div>
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                                <span className="thumb"><img src={thum_icon2}
+                                <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_1">
+                                    <dl className="txt_cont_dl_2">
                                         <dt>{INDEX.EXCHANGE6_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
@@ -121,10 +122,9 @@ class HomeContainer extends Component {
                                     </dl>
                                 </div>
                             </div>
-                        </div>
-                        <div className="container2">
+
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                                <span className="thumb"><img src={thum_icon3}
+                                <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
                                     <dl className="txt_cont_dl_1">
@@ -136,26 +136,14 @@ class HomeContainer extends Component {
                                 </div>
                             </div>
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                                <span className="thumb"><img src={thum_icon4}
+                                <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
                                     <dl className="txt_cont_dl_1">
-                                        <dt className="txt_cont_dt_1">{INDEX.EXCHANGE8_TIT}</dt>
+                                        <dt>{INDEX.EXCHANGE8_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
                                         <dd>{INDEX.EXCHANGE8_TXT}</dd>
-                                    </dl>
-                                </div>
-                            </div>
-                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                                <span className="thumb"><img src={thum_icon5}
-                                                             alt="" /></span>
-                                <div className="txt_cont">
-                                    <dl className="txt_cont_dl_1">
-                                        <dt className="txt_cont_dt_1">{INDEX.EXCHANGE9_TIT}</dt>
-                                    </dl>
-                                    <dl className="txt_cont_dl_2">
-                                        <dd>{INDEX.EXCHANGE9_TXT}</dd>
                                     </dl>
                                 </div>
                             </div>
@@ -772,98 +760,6 @@ const ExchangeInfo = styled.div`
                         transition: all .2s .2s;
                     }
                     
-                }
-                dd {
-                    width: 100%;
-                    font-size: 20px;
-                    font-weight: 500;
-                    font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-                    word-break: keep-all;
-                    color: #000000;
-                    text-align: center;
-                    transition: all .2s .4s;
-                    position: relative;
-                    top: 50px;
-                    opacity: 0;
-                    margin-inline-start:unset;
-                }
-            }
-            &.txt_effect {
-                dt {
-                    opacity: 1;
-                    top:0;
-                    &:after {
-                        width:101px;
-                        height:8px;
-                    }
-                }
-                dd {
-                    top:0;
-                    opacity:1;
-                }
-            }
-        }
-    }
-    .container2 {
-        width: 1355px;
-        margin: 0 auto;
-        overflow: hidden;
-        > div {
-            width: 33%;
-            box-sizing: border-box;
-            overflow: hidden;
-            //float: left;
-            display:inline-table;
-            margin: 0 0 70px;
-            .thumb {
-                width:100%;
-                text-align:center;
-                display:block;
-                img {
-                    vertical-align:top;
-                    border:0 none;
-                }
-            }
-            .txt_cont {
-                width:100%;
-            }
-            dl {
-                margin:30px auto 0;
-                &.txt_cont_dl_1{
-                    width:210px;
-                }
-                &.txt_cont_dl_2{
-                    width:220px;
-                }
-                dt {
-                    font-size: 25px;
-                    line-height: 1.3em;
-                    font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-                    color: #112434;
-                    font-weight: bold;
-                    word-break: keep-all;
-                    margin: 0 0 25px;
-                    text-align: center;
-                    position: relative;
-                    padding: 0 0 30px;
-                    top: 50px;
-                    opacity: 0;
-                    transition: all .3s;
-                    &:after {
-                        content: '';
-                        display: block;
-                        width: 0;
-                        height: 3px;
-                        background: #3c92ca;
-                        position: absolute;
-                        bottom: 0;
-                        left: 50%;
-                        margin-left: -50px;
-                        transition: all .2s .2s;
-                    }
-                     &.txt_cont_dt_1{
-                        line-height: 2.6em;
-                    }
                 }
                 dd {
                     width: 100%;

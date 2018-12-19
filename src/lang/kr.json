@@ -336,6 +336,7 @@
     "WALLET": "자산관리",
     "CUSTOMER": "고객센터",
     "MYPAGE": "마이페이지",
+    "TRANSACTIONDETAILS": "거래내역",
     "LANGUAGE_CHANGE": "언어 변경"
   },
   "INDEX": {
@@ -947,6 +948,9 @@
     "EXPLORE": "거래소 바로가기",
     "OTP": "고객님의 보안을 위해 OTP 인증을 해주세요.",
     "EXCHANGE_TITLE": "국제 암호화폐 거래소",
+    "EXCHANGE_TITLE2": "DexHI Decentralized Exchange",
+    "EXCHANGE_TITLE3": "Onchain Match, Onchain Trade",
+    "EXCHANGE_TITLE4": "Your Funds, Your Control",
     "EXCHANGE1_TIT": "각국의 화폐로 거래 가능한 멀티 플랫폼 거래소",
     "EXCHANGE1_TXT": "전 세계 200종류 이상의 국가 화폐 적용 가능한 글로벌 거래소입니다.",
     "EXCHANGE2_TIT": "금융전문가들로 이루어진 마켓 메이킹팀",
@@ -963,8 +967,6 @@
     "EXCHANGE7_TXT": "BJ 혹은 유투버들은 거래 내역 공개로 자신의 실력 입증 가능",
     "EXCHANGE8_TIT": "주문 샤딩",
     "EXCHANGE8_TXT": "다수의 거래소의 각각 거래들 공유 가능",
-    "EXCHANGE9_TIT": "다수의 마켓",
-    "EXCHANGE9_TXT": "다수 마켓 지원 가능 / 각각의 ICO 토큰들만의 마켓 생성 가능",
     "INFO_TITLE": "차세대 고속 거래소",
     "INFO1_TIT": "모든 종류의 암호화폐 상장 가능",
     "INFO1_TXT": "엄격하게 선별된 암호화폐는 블록체인 종류 (퍼블릭/프라이빗) 관계없이 상장이 가능합니다.",

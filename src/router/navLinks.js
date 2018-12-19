@@ -12,17 +12,20 @@ const links = [
     {
         name: "Exchange",
         path: "/exchange",
-        component: ExchangeContainer
+        component: ExchangeContainer,
+        langname : "EXCHANGE"
     },
     {
         name: "Wallet",
         path: "/wallet",
-        component: WalletContainer
+        component: WalletContainer,
+        langname : "WALLET"
     },
     {
         name: "TransactionDetails",
         path: "/transactionDetails",
-        component: TransactionContainer
+        component: TransactionContainer,
+        langname : "TRANSACTIONDETAILS"
     }
 ];
 
