@@ -4,9 +4,12 @@ import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants';
 import {config, filterMarkets} from '../utilities/config';
 import Lodash from 'lodash';
+import Web3 from 'web3';
 let data = [];
 
-config.trades.forEach( (obj, i) => {
+const coinList = config.base.concat(config.trades);
+
+coinList.forEach( (obj, i) => {
     data.push({
         product: obj.productName,
         prCode: obj.productId,
@@ -67,6 +70,15 @@ function* placeBuyOrder(params) {
     // })
 }
 
+function sendAmount(amount,decimal) {
+    const BNAmount = Web3.utils.toBN(+amount * Math.pow(10,decimal));
+    return BNAmount;
+}
+
+function recieveAmount(amount,decimal) {
+    return amount / Math.pow(10,decimal)
+}
+
 function* getOrderBook(params) {
     const Contract = createSmartContract();
     const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
@@ -112,15 +124,18 @@ function* placeSellOrder(params) {
 
 function* getBalance() {
     // const { prCode } = params;
+
     const Contract = createSmartContract();
     for (let c of data) {
         // let x = yield c;
+        const config = coinList.find(coin => coin.productName === c.product);
+        let decimals = Web3.utils.toBN(config.decimal);
         const res = yield call(Contract.methods.getBalance, c.prCode)
         const balance = yield call(res.call, {
             from:  Contract.givenProvider.selectedAddress
         })
         console.log("Balance from SC --> ", balance)
-        c["balance"] = {hold: +balance.reserved, total: +balance.reserved + +balance.available};
+        c["balance"] = {hold: recieveAmount(+balance.reserved, decimals), total: recieveAmount(+balance.reserved + +balance.available, decimals)};
         // console.log("Balance of Token --====------==== >>> ", c)
         // data.push({productInfo: x.data, product: c});
     }
@@ -129,11 +144,12 @@ function* getBalance() {
 
 function* depositEthRequest(params) {
     console.log("We are here ===---->>>> ", params.payload);
+
     const Contract = createSmartContract();
     const { amount } = params.payload;
     const deposit = Contract.methods.depositETH().send({
         from:  Contract.givenProvider.selectedAddress,
-        value: +amount
+        value: sendAmount(amount,18)
     });
     yield put({type: Constants.default.Success.DEPOSIT_ETH_SUCCESS, depositedEth: deposit});
 }
@@ -143,7 +159,7 @@ function* withdrawEthRequest(params) {
     const { amount } = params.payload;
     const withdrawAmount = Contract.methods.withdrawETH(+amount).send({
         from:  Contract.givenProvider.selectedAddress,
-        value: amount
+        value: sendAmount(amount, 18)
     });
     yield put({type: Constants.default.Success.WITHDRAW_ETH_SUCCESS, withdrawnAmount: withdrawAmount});
 }
@@ -151,7 +167,9 @@ function* withdrawEthRequest(params) {
 function* depositTokenRequest(params) {
     const Contract = createSmartContract();
     const { prAddress, amount } = params.payload;
-    const deposit = Contract.methods.depositToken(prAddress, +amount, true).send({
+    const config = coinList.find(coin => coin.tokenAddress === prAddress);
+    let decimals = Web3.utils.toBN(config.decimal);
+    const deposit = Contract.methods.depositToken(prAddress, +sendAmount(amount, decimals), true).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
@@ -160,7 +178,9 @@ function* depositTokenRequest(params) {
 function* withdrawTokenRequest(params) {
     const Contract = createSmartContract(); 
     const { prAddress, amount } = params.payload;
-    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +amount, false).send({
+    const config = coinList.find(coin => coin.tokenAddress === prAddress);
+    let decimals = Web3.utils.toBN(config.decimal);
+    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +sendAmount(amount, decimals), false).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount});
