@@ -108,7 +108,7 @@ const Transaction = styled.div`
     background: #fff;
     width:100%;
     padding:55px 0;
-    margin-top : 50px;
+    margin-top : 55px;
     .main{
         width:1200px;
         margin: 0 auto;
@@ -124,6 +124,7 @@ const Transaction = styled.div`
                     list-style: none;
                     display:flex;
                     flex-direction: row;
+                    padding-inline-start:unset;
                     li {
                         width:50%;
                         text-align:center;
