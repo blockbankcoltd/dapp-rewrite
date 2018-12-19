@@ -101,7 +101,7 @@ class HomeContainer extends Component {
                                 <span className="thumb"><img src={thum_icon1}
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_1">
+                                    <dl className="txt_cont_dl_2">
                                         <dt>{INDEX.EXCHANGE5_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
@@ -771,6 +771,7 @@ const ExchangeInfo = styled.div`
                         margin-left: -50px;
                         transition: all .2s .2s;
                     }
+                    
                 }
                 dd {
                     width: 100%;
