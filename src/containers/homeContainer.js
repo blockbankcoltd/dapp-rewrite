@@ -102,7 +102,7 @@ class HomeContainer extends Component {
                                 <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_1">
+                                    <dl>
                                         <dt>{INDEX.EXCHANGE5_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
@@ -114,7 +114,7 @@ class HomeContainer extends Component {
                                 <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_2">
+                                    <dl>
                                         <dt>{INDEX.EXCHANGE6_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
@@ -127,7 +127,7 @@ class HomeContainer extends Component {
                                 <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_1">
+                                    <dl>
                                         <dt>{INDEX.EXCHANGE7_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
@@ -139,7 +139,7 @@ class HomeContainer extends Component {
                                 <span className="thumb"><img src=""
                                     alt="" /></span>
                                 <div className="txt_cont">
-                                    <dl className="txt_cont_dl_1">
+                                    <dl>
                                         <dt>{INDEX.EXCHANGE8_TIT}</dt>
                                     </dl>
                                     <dl className="txt_cont_dl_2">
