@@ -144,25 +144,26 @@ class WalletContainer extends Component {
         //         })
         //     }
         // });
+        const { WALLET } = this.props.languageConfig;
         return(
             <ReactTable data={this.props.balance} columns={[
                 {
-                    Header: "Product",
+                    Header: WALLET.COIN_NAME,
                     id: "product",
                     accessor: "name"
                 },
                 {
-                    Header: "Total Balance",
+                    Header: WALLET.TOTAL,
                     id: "total_balance",
                     accessor: d => Web3.utils.fromWei(d.total.toString(), 'ether')
                 },
                 {
-                    Header: "Hold",
+                    Header: WALLET.AVAILABLE,
                     id: "hold",
                     accessor: d => Web3.utils.fromWei(d.hold.toString(), 'ether')
                 },
                 {
-                    Header: "Pending Deposits",
+                    Header: WALLET.IN,
                     id: "deposit_buttons",
                     accessor: d => <div><button type="button">Deposit</button></div>,
                     Cell: (d) => this.renderEditable(d, "deposit")
@@ -184,9 +185,8 @@ class WalletContainer extends Component {
         this.callFunction(this.props.accountId);
 
         return (
-            <div>
                 <Wallet>
-                    <section className="main" role="main">
+                    <section className="main" role="">
                         <div id="wallet" className="wallet_wrap">
                             <div className="container">
                                 <div className="page_link">
@@ -214,25 +214,6 @@ class WalletContainer extends Component {
                                                 </div>
                                             </h3>
 
-                                        </div>
-
-                                        <div className="tit_list">
-                                            {
-                                                isMobile ?
-                                                    ''
-                                                    :
-                                                    <ul>
-                                                        <li className="coinName">{WALLET.COIN_NAME}</li>
-                                                        <li className="totalBalance">{WALLET.TOTAL}</li>
-                                                        <li className="hold">{`${WALLET.AVAILABLE} `}
-                                                            <i
-                                                                data-for="Balance"
-                                                                data-tip={WALLET.AVAILABLE_TIP}
-                                                                className="xi-help-o"
-                                                            /></li>
-                                                        <li className="pending">{WALLET.IN}</li>
-                                                    </ul>
-                                            }
                                         </div>
                                         {this.renderTable()}
                                     </div>
@@ -263,7 +244,6 @@ class WalletContainer extends Component {
                         </div>
                     </section>
                 </Wallet>
-            </div>
         )
     }
 }
@@ -293,9 +273,7 @@ export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WalletCon
 const Wallet = styled.div`
     background:#fff;
     width:100%;
-    padding:55px 0 0 0;
-    margin:0 0 130px 0;
-    min-height:800px;
+    padding:55px 0 ;
     .wallet_wrap{
     padding:55px 0 0 0;
     }
@@ -572,12 +550,9 @@ const Wallet = styled.div`
     @media(max-width: 1024px) {
         width:100%;
         overflow:hidden;
-        margin:0 0 5rem 0;
         padding:20px 0 0 0;
         .main {
             width: 100%;
-            padding: 0 0.5rem;
-            box-sizing: border-box;
             .container {
                 .page_link {
                     margin-bottom: 2rem;

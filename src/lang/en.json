@@ -690,7 +690,7 @@
   "CONTACT_TEXT":"Contact Us",
   "FEES_TEXT":"Fees",
   "NEWS_TEXT":"News",
-  "ABOUT_TEXT":"DexHigh Co., Ltd.",
+  "ABOUT_TEXT":"LinkerKorea Co., Ltd.",
   "FAQS_TEXT":"FAQ's",
   "SECURITY_TEXT":"Security",
   "COMPANY": "DexHigh Co., Ltd.",
@@ -708,7 +708,7 @@
   "PRIVACY": "Pravicy Policy",
   "FAQ": "FAQ",
   "CHAT" : "1:1 Live Chat",
-  "LISTING" : "Cryptocurrency Listing Request"
+  "LISTING" : "Listing Request"
 },
   "HEADER_TICKER": {
     "TITLE_TEXT": "Tickers",
