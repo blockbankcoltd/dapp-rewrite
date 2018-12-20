@@ -162,7 +162,7 @@ function* getBalance(params) {
     for (let c of data) {
         if(+c.prCode)
             prCodesArray.push(+c.prCode);
-            tokens.push({name: c.product, address: c.tokenAddress});
+            tokens.push({name: c.product, address: c.tokenAddress, decimal: c.decimal});
         // let x = yield c;
     }
 
@@ -175,10 +175,11 @@ function* getBalance(params) {
     console.log("Balance from SC --> ", balance);
     let _result = [];
     balance.available.forEach( (obj, index) => {
+        let dec = 1 + 'e' + tokens[index];
         _result.push({
             name: tokens[index].name,
-            hold: +balance.reserved[index],
-            total: +obj + +balance.reserved[index],
+            hold: Web3.utils.BN(balance.reserved[index]),
+            total: (Web3.utils.BN(obj) + Web3.utils.BN(balance.reserved[index])) / Web3.utils.BN(dec),
             tokenAddress: tokens[index].address
         });
     });

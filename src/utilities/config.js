@@ -5,7 +5,7 @@ export const config = {
     trades: [
         {
             productName: "BAT",
-            decimal: "1000000000000000000",
+            decimal: 18,
             productId: 2,
             tokenAddress: "0x4514fd2f873b859a5d713eba6dd9047a58a0da5e",
             logo: ""
