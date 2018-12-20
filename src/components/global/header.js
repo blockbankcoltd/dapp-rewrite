@@ -29,6 +29,7 @@ export default class HeaderComponent extends React.Component {
         // const header=Language.HEADER;
         // const buttons=Language.BUTTONS;
         const { MENU_TEXT_HOME } = language.HEADER;
+        const {HEADER} = this.props.language
         return (
             <Header className={this.state.headerAdd ? 'header scr_on' : 'header'}>
                 <HeaderContents>
@@ -43,7 +44,7 @@ export default class HeaderComponent extends React.Component {
                             if(r.name === "Home") {
                                 return null;
                             }
-                            return <Link key={r.path} to={r.path} >{r.name}</Link>
+                            return <Link key={r.path} to={r.path} >{HEADER[r.langname]}</Link>
                         })}
 
                     </HeaderLinks>
