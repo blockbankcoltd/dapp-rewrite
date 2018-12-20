@@ -23,7 +23,6 @@ class WalletContainer extends Component {
     }
 
     componentDidMount() {
-        console.log("LANGUAGE CONFIG Wallet -------------------------------------->>>>>>>> ", this.props);
         this.props.getMyAccountId();
     }
 
@@ -42,55 +41,35 @@ class WalletContainer extends Component {
     // }
 
     callFunction(id) {
-        console.log("Calling Get Balance", id);
         if(id && this.called === false){
             this.props.getMyOrders();
             this.props.getBalance(+id);
             this.called = true;
         }
-
     }
 
     deposit = (e, cellInfo) => {
         let amount = window.prompt("Enter the deposit amount");
         let tokenObj = cellInfo.original;
-        console.log("Deposit Button Clicked --> ", cellInfo.original);
         
         if(amount !== null && tokenObj.name === 'ETH'){
-            console.log("Entered value --> ", amount);
-            // let decimal = config.productList[0].decimal;
-            // this.props.depositEth(Math.pow(amount, decimal));
             this.props.depositEth(amount);
             
         }else if(amount !== null && tokenObj.name !== 'ETH'){
-            console.log("Entered value --> ", amount);
-            // let tokenInTradeList;
-            // config.productList.forEach(obj => {
-
-            // })
-            // let decimal = config.productList[0].decimal;
             this.props.depositToken(tokenObj.tokenAddress, amount);
         }else{
             console.log("Cancelled")
         }
-        // if(cellInfo.original.product === 'ETH'){
-        //     this.props.depositEth();
-        // }else{
-        //     this.props.depositToken(cellInfo.original.tokenAddress)
-        // }
     }
 
     withdraw = (e, cellInfo) => {
         let amount = window.prompt("Enter the deposit amount");
         let tokenObj = cellInfo.original;
-        console.log("Withdraw Button Clicked --> ", cellInfo.original)
         
         if(amount !== null && tokenObj.product === 'ETH'){
-            console.log("Entered value --> ", amount);
             this.props.withdrawEth(amount);
             
         }else if(amount !== null && tokenObj.product !== 'ETH'){
-            console.log("Entered value --> ", amount);
             this.props.withdrawToken(tokenObj.tokenAddress, amount);
         }else{
             console.log("Cancelled")
@@ -104,46 +83,9 @@ class WalletContainer extends Component {
         } else {
             return <div><button onClick={(e) => this.withdraw(e, cellInfo)} type="button">Withdraw</button></div>
         }
-
-
-        // return (
-        //   <div
-        //     style={{ backgroundColor: "#fafafa" }}
-        //     contentEditable
-        //     suppressContentEditableWarning
-        //     onBlur={e => {
-        //       const data = [...this.state.data];
-        //       data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-        //       this.setState({ data });
-        //     }}
-        //     dangerouslySetInnerHTML={{
-        //       __html: this.state.data[cellInfo.index][cellInfo.column.id]
-        //     }}
-        //   />
-        // );
     }
 
     renderTable() {
-        // let data = [];
-        // Config.productList.forEach(obj => {
-        //     data.push({
-        //         product: obj.productName,
-        //         totalBalance: obj.decimal,
-        //         hold: obj.decimal,
-        //         pendingDeposits: obj.decimal
-        //     });
-        //     if (obj.prTrade && obj.prTrade.length > 0) {
-        //         obj.prTrade.forEach(o => {
-        //             data.push({
-        //                 product: o.productName,
-        //                 totalBalance: o.decimal,
-        //                 hold: o.decimal,
-        //                 pendingDeposits: o.decimal,
-        //                 tokenAddress: o.tokenAddress
-        //             });
-        //         })
-        //     }
-        // });
         const { WALLET } = this.props.languageConfig;
         return(
             <ReactTable data={this.props.balance} columns={[
@@ -181,7 +123,6 @@ class WalletContainer extends Component {
 
     render() {
         const { WALLET } = this.props.languageConfig;
-        console.log(this.props.accountId, "<<<< My account Id");
         this.callFunction(this.props.accountId);
 
         return (
