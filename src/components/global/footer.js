@@ -10,6 +10,39 @@ export default class FooterComponent extends React.Component {
         const {FOOTER} = language;
         return (
             <Footer className="footer">
+                <FooterNavi>
+                    <FooterNaviInner>
+                        <ListItem>
+                            <Link to="/">
+                                <a>{FOOTER.NOTICE}</a>
+                            </Link>
+                        </ListItem>
+                        <ListItem>
+                            <Link to="/">
+                                <a>{FOOTER.GUIDE}</a>
+                            </Link>
+                        </ListItem>
+                        <ListItem>
+                            <Link to="/"><a>{FOOTER.FEE}</a>
+                            </Link>
+                        </ListItem>
+                        <ListItem>
+                            <Link to="/">
+                                <a >{FOOTER.TERMS}</a>
+                            </Link>
+                        </ListItem>
+                        <ListItem>
+                            <Link to="/">
+                                <a>{FOOTER.PRIVACY}</a>
+                            </Link>
+                        </ListItem>
+                        <ListItem>
+                            <Link to="/">
+                                <a>{FOOTER.LISTING}</a>
+                            </Link>
+                        </ListItem>
+                    </FooterNaviInner>
+                </FooterNavi>
                 <Contents>
                     <ContentsInner>
                         <Title>
@@ -78,7 +111,7 @@ export default class FooterComponent extends React.Component {
                                 </InfoBoxContents>
                             </InfoBox>
 
-                            <CopyRight>Copyright 2018 DexHigh Co., Ltd. All Rights Reserved.</CopyRight>
+                            <CopyRight>Copyright 2018 LinkerKorea Co., Ltd. All Rights Reserved.</CopyRight>
                         </FooterInfo>
                     </ContentsInner>
                 </Contents>
@@ -251,7 +284,7 @@ const CopyRight = styled.div`
 
 const FooterNavi = styled.div`
     background:#fff;
-    border-top:1px solid #e4e7ea;
+    box-shadow: #ccc 0px 3px 16px;
 `
 
 const FooterNaviInner = styled.ul`
@@ -271,9 +304,15 @@ const ListItem = styled.li`
     float:left;
     width:16%;
     font-size:15px;
+    font-weight:700;
     text-align:center;
     height:50px;
     line-height:50px;
+    list-style:none;
+        a{
+         color:#636363;
+         text-decoration:none;
+        }
     //.active{
     //  font-weight: 1000;
     //}
