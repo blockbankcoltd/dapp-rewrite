@@ -56,6 +56,7 @@ class WalletContainer extends Component {
             this.props.depositEth(amount);
             
         }else if(amount !== null && tokenObj.name !== 'ETH'){
+            console.log("Token address --> ", tokenObj);
             this.props.depositToken(tokenObj.tokenAddress, amount);
         }else{
             console.log("Cancelled")

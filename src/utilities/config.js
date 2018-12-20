@@ -5,7 +5,7 @@ export const config = {
     trades: [
         {
             productName: "BAT",
-            decimal: 18,
+            decimal: "1000000000000000000",
             productId: 2,
             tokenAddress: "0x4514fd2f873b859a5d713eba6dd9047a58a0da5e",
             logo: ""
@@ -130,7 +130,7 @@ export const filterMarkets = () => {
 export const contractList = [
     {
         name: "Latest",
-        address: "0xfdd4677237a7e9c111e2f9ce938dd4fafee486d0",
+        address: "0x31b84d572616cde8ab53f9e42654028c7ac4ad59",
         abifile: contractJson2.default
     },
     {

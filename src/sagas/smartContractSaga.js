@@ -5,6 +5,14 @@ import * as Constants from '../constants/constants';
 import {config, filterMarkets, contractList} from '../utilities/config';
 import Lodash from 'lodash';
 import Web3 from 'web3';
+import BN from 'bn.js';
+import * as mathLib from 'mathjs'
+
+mathLib.config({
+    number: 'BigNumber', // Default type of number:
+                         // 'number' (default), 'BigNumber', or 'Fraction'
+    precision: 18        // Number of significant digits for BigNumbers
+  })
 // import Bignumber from 'bignumber';
 let data = [];
 
@@ -123,7 +131,6 @@ function* getOrderBook(params) {
 
 function* getMyOrders() {
     const Contract = createSmartContract();
-    // const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
    
     const res = yield call(Contract.methods.GetMyOrders)
     const myOrders = yield call(res.call, {
@@ -148,25 +155,20 @@ function* placeSellOrder(params) {
 }
 
 function* getBalance(params) {
-    // const { prCode } = params;
-    console.log("Get Balance Saga Params -> ", params)
     const { id } = params.payload;
     const Contract = createSmartContract();
     let prCodesArray = [];
-    let tokenNames = [];
+    let tokens = [];
     for (let c of data) {
         if(+c.prCode)
             prCodesArray.push(+c.prCode);
-            tokenNames.push(c.product);
+            tokens.push({name: c.product, address: c.tokenAddress});
         // let x = yield c;
     }
 
 
     console.log("Data sent to contract --> ", prCodesArray, id);
-    // const config = coinList.find(coin => coin.productName === c.product);
-    // let decimals = Web3.utils.toBN(config.decimal);
     const res = yield call(Contract.methods.getBalance, +id, Lodash.uniq(prCodesArray))
-    console.log("Res from SC --> ", res)
     const balance = yield call(res.call, {
         from:  Contract.givenProvider.selectedAddress
     });
@@ -174,9 +176,10 @@ function* getBalance(params) {
     let _result = [];
     balance.available.forEach( (obj, index) => {
         _result.push({
-            name: tokenNames[index],
+            name: tokens[index].name,
             hold: +balance.reserved[index],
-            total: +obj + +balance.reserved[index]
+            total: +obj + +balance.reserved[index],
+            tokenAddress: tokens[index].address
         });
     });
     // c["balance"] = {hold: recieveAmount(+balance.reserved, decimals), total: recieveAmount(+balance.reserved + +balance.available, decimals)};
@@ -208,11 +211,18 @@ function* withdrawEthRequest(params) {
 }
 
 function* depositTokenRequest(params) {
+    console.log("Depositing Token =======================================================  ")
     const Contract = createSmartContract();
     const { prAddress, amount } = params.payload;
+
+
+    console.log("payload ---->>> ", params.payload);
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
-    let decimals = Web3.utils.toBN(config.decimal);
-    const deposit = Contract.methods.depositToken(prAddress, sendAmount(amount, decimals), true).send({
+    // let a = new BN("1000000000000000000", 10);
+    // let a = Web3.utils.toBN(1000000000000000000)
+    let a = amount +  'e' + config.decimal;
+    // console.log("Big number --> ", a); 10e18
+    const deposit = Contract.methods.depositWithdrawToken(prAddress, a, true).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
@@ -223,7 +233,7 @@ function* withdrawTokenRequest(params) {
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     let decimals = Web3.utils.toBN(config.decimal);
-    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +sendAmount(amount, decimals), false).send({
+    const withdrawAmount = Contract.methods.depositWithdrawToken(prAddress, +sendAmount(amount, decimals), false).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount});
