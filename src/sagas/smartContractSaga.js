@@ -5,7 +5,7 @@ import * as Constants from '../constants/constants';
 import {config, filterMarkets, contractList} from '../utilities/config';
 import Lodash from 'lodash';
 import Web3 from 'web3';
-import Bignumber from 'bignumber';
+// import Bignumber from 'bignumber';
 let data = [];
 
 const coinList = config.base.concat(config.trades);
@@ -149,29 +149,47 @@ function* placeSellOrder(params) {
 
 function* getBalance(params) {
     // const { prCode } = params;
-    console.log(params)
+    console.log("Get Balance Saga Params -> ", params)
     const { id } = params.payload;
     const Contract = createSmartContract();
+    let prCodesArray = [];
+    let tokenNames = [];
     for (let c of data) {
+        if(+c.prCode)
+            prCodesArray.push(+c.prCode);
+            tokenNames.push(c.product);
         // let x = yield c;
-        const config = coinList.find(coin => coin.productName === c.product);
-        let decimals = Web3.utils.toBN(config.decimal);
-        const res = yield call(Contract.methods.getBalance, +id,[c.prCode])
-        const balance = yield call(res.call, {
-            from:  Contract.givenProvider.selectedAddress
-        })
-        console.log("Balance from SC --> ", balance)
-        c["balance"] = {hold: recieveAmount(+balance.reserved, decimals), total: recieveAmount(+balance.reserved + +balance.available, decimals)};
-        // console.log("Balance of Token --====------==== >>> ", c)
-        // data.push({productInfo: x.data, product: c});
     }
-    yield put({type: Constants.default.Success.GET_BALANCE_SUCCESS, balance: data});
+
+
+    console.log("Data sent to contract --> ", prCodesArray, id);
+    // const config = coinList.find(coin => coin.productName === c.product);
+    // let decimals = Web3.utils.toBN(config.decimal);
+    const res = yield call(Contract.methods.getBalance, +id, Lodash.uniq(prCodesArray))
+    console.log("Res from SC --> ", res)
+    const balance = yield call(res.call, {
+        from:  Contract.givenProvider.selectedAddress
+    });
+    console.log("Balance from SC --> ", balance);
+    let _result = [];
+    balance.available.forEach( (obj, index) => {
+        _result.push({
+            name: tokenNames[index],
+            hold: +balance.reserved[index],
+            total: +obj + +balance.reserved[index]
+        });
+    });
+    // c["balance"] = {hold: recieveAmount(+balance.reserved, decimals), total: recieveAmount(+balance.reserved + +balance.available, decimals)};
+    // console.log("Balance of Token --====------==== >>> ", c)
+    // data.push({productInfo: x.data, product: c});
+    yield put({type: Constants.default.Success.GET_BALANCE_SUCCESS, balance: _result});
 }
 
 function* depositEthRequest(params) {
     console.log("We are here ===---->>>> ", params.payload);
 
     const Contract = createSmartContract();
+    console.log("Address --> ", Contract.givenProvider)
     const { amount } = params.payload;
     const deposit = Contract.methods.depositETH().send({
         from:  Contract.givenProvider.selectedAddress,

@@ -127,6 +127,20 @@ export const filterMarkets = () => {
 }
 
 
+export const contractList = [
+    {
+        name: "Latest",
+        address: "0xfdd4677237a7e9c111e2f9ce938dd4fafee486d0",
+        abifile: contractJson2.default
+    },
+    {
+        name: "Order",
+        address: "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0",
+        abifile: contractJson3.default
+    }
+]
+
+
 /* 
 export default {
     ownerId: 1,
@@ -312,16 +326,3 @@ export default {
 
 }
 */
-
-export const contractList = [
-    {
-        name: "Latest",
-        address: "0xa046bf58833f5477caab4e84c187fa1eaf251ccf",
-        abifile: contractJson2.default
-    },
-    {
-        name: "Order",
-        address: "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0",
-        abifile: contractJson3.default
-    }
-]

@@ -7,6 +7,7 @@ import "react-table/react-table.css";
 import Actions from '../actions/index';
 import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
+import Web3 from 'web3';
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class WalletContainer extends Component {
         this.state = {
             title: "",
             notice: true,
-            auth: false
+            auth: false,
+            balances: []
         };
 
         this.called = false
@@ -22,10 +24,25 @@ class WalletContainer extends Component {
 
     componentDidMount() {
         console.log("LANGUAGE CONFIG Wallet -------------------------------------->>>>>>>> ", this.props);
-
+        this.props.getMyAccountId();
     }
 
+    // componentDidUpdate = (prevProps) => {
+    //     if(this.props.balance !== prevProps.balance){
+    //         let _array = [];
+    //         this.props.balance.available.forEach( (o, i) => {
+    //             _array.push({
+    //                 name: o.,
+    //                 hold: "",
+    //                 total: ""
+    //             });
+    //         })
+    //         this.setState({balances: _array});
+    //     }
+    // }
+
     callFunction(id) {
+        console.log("Calling Get Balance", id);
         if(id && this.called === false){
             this.props.getMyOrders();
             this.props.getBalance(+id);
@@ -39,13 +56,13 @@ class WalletContainer extends Component {
         let tokenObj = cellInfo.original;
         console.log("Deposit Button Clicked --> ", cellInfo.original);
         
-        if(amount !== null && tokenObj.product === 'ETH'){
+        if(amount !== null && tokenObj.name === 'ETH'){
             console.log("Entered value --> ", amount);
             // let decimal = config.productList[0].decimal;
             // this.props.depositEth(Math.pow(amount, decimal));
             this.props.depositEth(amount);
             
-        }else if(amount !== null && tokenObj.product !== 'ETH'){
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
             console.log("Entered value --> ", amount);
             // let tokenInTradeList;
             // config.productList.forEach(obj => {
@@ -132,17 +149,17 @@ class WalletContainer extends Component {
                 {
                     Header: "Product",
                     id: "product",
-                    accessor: "product"
+                    accessor: "name"
                 },
                 {
                     Header: "Total Balance",
                     id: "total_balance",
-                    accessor: d => d.balance.total
+                    accessor: d => Web3.utils.fromWei(d.total.toString(), 'ether')
                 },
                 {
                     Header: "Hold",
                     id: "hold",
-                    accessor: d => d.balance.hold
+                    accessor: d => Web3.utils.fromWei(d.hold.toString(), 'ether')
                 },
                 {
                     Header: "Pending Deposits",
@@ -165,6 +182,7 @@ class WalletContainer extends Component {
         const { WALLET } = this.props.languageConfig;
         console.log(this.props.accountId, "<<<< My account Id");
         this.callFunction(this.props.accountId);
+
         return (
             <div>
                 <Wallet>
@@ -265,7 +283,7 @@ const mapDispatchToProps = (dispatch) => {
         depositToken: (address, amount) => dispatch(Actions.smartContract.placeDepositTokenRequest(address, amount)),
         withdrawToken: (address, amount) => dispatch(Actions.smartContract.placeWithdrawTokenRequest(address, amount)),
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
-
+        getMyAccountId : () => dispatch(Actions.smartContract.getMyAccountIdRequest())
     }
 }
 
