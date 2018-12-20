@@ -2,11 +2,15 @@ import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
 import store from '../store/reduxStore';
 import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants';
-import {config, filterMarkets} from '../utilities/config';
+import {config, filterMarkets, contractList} from '../utilities/config';
 import Lodash from 'lodash';
+import Web3 from 'web3';
+import Bignumber from 'bignumber';
 let data = [];
 
-config.trades.forEach( (obj, i) => {
+const coinList = config.base.concat(config.trades);
+
+coinList.forEach( (obj, i) => {
     data.push({
         product: obj.productName,
         prCode: obj.productId,
@@ -28,9 +32,11 @@ config.trades.forEach( (obj, i) => {
 console.log("Config data --> ", Lodash.uniq(data));
 
 function createSmartContract(){
-    const contract_address = "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0";
+    const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
+
+    const contract_address = selectedContract.address;
     const { GlobalWeb3Object } = store.getState().main;
-    const Contract = new GlobalWeb3Object.eth.Contract(contractJson.abi, contract_address);
+    const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
     return Contract;
 }
 
@@ -67,9 +73,40 @@ function* placeBuyOrder(params) {
     // })
 }
 
+function sendAmount(amount,decimal) {
+    const BNAmount = Web3.utils.toWei(amount, 'ether');
+    // const BNAmount = Web3.utils.toBN(+amount * Math.pow(10,decimal));
+    // console.log(+BNAmount, BNAmount)
+
+    // const Big = new Bignumber(amount);
+    // console.log(Big)
+    // const bigAmount = Big.multipliedBy(Math.pow(10,18));
+    // console.log(bigAmount)
+    console.log(BNAmount)
+    return BNAmount;
+}
+
+function recieveAmount(amount,decimal) {
+    return amount / Math.pow(10,decimal)
+}
+
+function* getMyAccountId() {
+    const Contract = createSmartContract();
+    // const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
+
+    const res = yield call(Contract.methods.GetMyAccountId)
+    const myAccountId = yield call(res.call, {
+        from:  Contract.givenProvider.selectedAddress
+    })
+
+    yield put({type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: myAccountId});
+}
+
 function* getOrderBook(params) {
     const Contract = createSmartContract();
     const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
+    const tradeDecimal = coinList.find(coin => coin.productId === prTrade).decimal;
+    const baseDecimal = coinList.find(coin => coin.productId === prBase).decimal;
    
     const res = yield call(Contract.methods.GetHoga, prTrade, prBase, numOfOrdersToFetch)
     const orderBook = yield call(res.call, {
@@ -110,17 +147,21 @@ function* placeSellOrder(params) {
     yield put({type: Constants.default.Success.PLACE_SELL_ORDER_SUCCESS, sellOrderStatus: orderHash});
 }
 
-function* getBalance() {
+function* getBalance(params) {
     // const { prCode } = params;
+    console.log(params)
+    const { id } = params.payload;
     const Contract = createSmartContract();
     for (let c of data) {
         // let x = yield c;
-        const res = yield call(Contract.methods.getBalance, c.prCode)
+        const config = coinList.find(coin => coin.productName === c.product);
+        let decimals = Web3.utils.toBN(config.decimal);
+        const res = yield call(Contract.methods.getBalance, +id,[c.prCode])
         const balance = yield call(res.call, {
             from:  Contract.givenProvider.selectedAddress
         })
         console.log("Balance from SC --> ", balance)
-        c["balance"] = {hold: +balance.reserved, total: +balance.reserved + +balance.available};
+        c["balance"] = {hold: recieveAmount(+balance.reserved, decimals), total: recieveAmount(+balance.reserved + +balance.available, decimals)};
         // console.log("Balance of Token --====------==== >>> ", c)
         // data.push({productInfo: x.data, product: c});
     }
@@ -129,11 +170,12 @@ function* getBalance() {
 
 function* depositEthRequest(params) {
     console.log("We are here ===---->>>> ", params.payload);
+
     const Contract = createSmartContract();
     const { amount } = params.payload;
     const deposit = Contract.methods.depositETH().send({
         from:  Contract.givenProvider.selectedAddress,
-        value: +amount
+        value: sendAmount(amount,18)
     });
     yield put({type: Constants.default.Success.DEPOSIT_ETH_SUCCESS, depositedEth: deposit});
 }
@@ -141,9 +183,8 @@ function* depositEthRequest(params) {
 function* withdrawEthRequest(params) {
     const Contract = createSmartContract();
     const { amount } = params.payload;
-    const withdrawAmount = Contract.methods.withdrawETH(+amount).send({
-        from:  Contract.givenProvider.selectedAddress,
-        value: amount
+    const withdrawAmount = Contract.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
+        from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.WITHDRAW_ETH_SUCCESS, withdrawnAmount: withdrawAmount});
 }
@@ -151,7 +192,9 @@ function* withdrawEthRequest(params) {
 function* depositTokenRequest(params) {
     const Contract = createSmartContract();
     const { prAddress, amount } = params.payload;
-    const deposit = Contract.methods.depositToken(prAddress, +amount, true).send({
+    const config = coinList.find(coin => coin.tokenAddress === prAddress);
+    let decimals = Web3.utils.toBN(config.decimal);
+    const deposit = Contract.methods.depositToken(prAddress, sendAmount(amount, decimals), true).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
@@ -160,7 +203,9 @@ function* depositTokenRequest(params) {
 function* withdrawTokenRequest(params) {
     const Contract = createSmartContract(); 
     const { prAddress, amount } = params.payload;
-    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +amount, false).send({
+    const config = coinList.find(coin => coin.tokenAddress === prAddress);
+    let decimals = Web3.utils.toBN(config.decimal);
+    const withdrawAmount = Contract.methods.withdrawToken(prAddress, +sendAmount(amount, decimals), false).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount});
@@ -181,6 +226,7 @@ function* actionWatcher() {
     yield takeEvery(Constants.default.Requests.WITHDRAW_TOKEN_REQUEST, withdrawTokenRequest)
 
     yield takeEvery(Constants.default.Requests.GET_BALANCE_REQUEST, getBalance)
+    yield takeEvery(Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST, getMyAccountId)
     
 }
 

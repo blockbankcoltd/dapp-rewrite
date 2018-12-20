@@ -5,6 +5,8 @@ import bitnaruLogo from '../../../src/assets/images/bitnaruLogo.png';
 import englishLangIcon from '../../../src/assets/images/icon/en.png';
 import koreanLangIcon from '../../../src/assets/images/icon/kr.png';
 import dexhiLogo from '../../../src/assets/images/Dexhi_white.png';
+import { contractList } from "../../utilities/config";
+
 
 export default class HeaderComponent extends React.Component {
     constructor(props) {
@@ -16,8 +18,9 @@ export default class HeaderComponent extends React.Component {
         }
     }
 
-    viewSide = (e) => {
-
+    changeContract(e) {
+        localStorage.setItem('contract', e.target.value);
+        window.location.reload();
     }
 
     render() {
@@ -42,6 +45,7 @@ export default class HeaderComponent extends React.Component {
                             }
                             return <Link key={r.path} to={r.path} >{r.name}</Link>
                         })}
+
                     </HeaderLinks>
                     
                     <div className="lang_navi">
@@ -54,6 +58,19 @@ export default class HeaderComponent extends React.Component {
                             <li className="lang_kr" onClick={(e) => { this.props.switchLanguage("kr") }}>KR</li>
                             <li className="lang_en" onClick={(e) => { this.props.switchLanguage("en") }}>EN</li>
                         </ul>
+                    </div>
+                    <div className="select_contract">
+                        <select onChange={this.changeContract} defaultValue={+localStorage.getItem('contract')}>
+                            {
+                                contractList.map((cont,idx) => {
+                                    return (
+                                        <option value={idx} key={cont.address}>
+                                            {cont.name} : {cont.address}
+                                        </option>
+                                    )
+                                })
+                            }
+                        </select>
                     </div>
 
                     <MobileBars>
