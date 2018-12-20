@@ -15,14 +15,23 @@ class WalletContainer extends Component {
             title: "",
             notice: true,
             auth: false
-
         };
+
+        this.called = false
     }
 
     componentDidMount() {
         console.log("LANGUAGE CONFIG Wallet -------------------------------------->>>>>>>> ", this.props);
-        this.props.getMyOrders();
-        this.props.getBalance();
+
+    }
+
+    callFunction(id) {
+        if(id && this.called === false){
+            this.props.getMyOrders();
+            this.props.getBalance(+id);
+            this.called = true;
+        }
+
     }
 
     deposit = (e, cellInfo) => {
@@ -154,6 +163,8 @@ class WalletContainer extends Component {
 
     render() {
         const { WALLET } = this.props.languageConfig;
+        console.log(this.props.accountId, "<<<< My account Id");
+        this.callFunction(this.props.accountId);
         return (
             <div>
                 <Wallet>
@@ -242,12 +253,13 @@ class WalletContainer extends Component {
 
 const mapStateToProps = (state) => ({
     balance: state.smartContract.balance,
-    myOrders: state.smartContract.myOrders
+    myOrders: state.smartContract.myOrders,
+    accountId: state.smartContract.accountId
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getBalance: () => dispatch(Actions.smartContract.getBalanceRequest()),
+        getBalance: (id) => dispatch(Actions.smartContract.getBalanceRequest(id)),
         depositEth: (amt) => dispatch(Actions.smartContract.placeDepositEthRequest(amt)),
         withdrawEth: (amt) => dispatch(Actions.smartContract.placeWithdrawEthRequest(amt)),
         depositToken: (address, amount) => dispatch(Actions.smartContract.placeDepositTokenRequest(address, amount)),

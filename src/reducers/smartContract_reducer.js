@@ -39,6 +39,11 @@ export default (state = {}, action) => {
                 ...state,
                 balance: action.balance
             }
+        case Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS:
+            return {
+                ...state,
+                accountId: action.accountId
+            }
         default:
             return state;
     }

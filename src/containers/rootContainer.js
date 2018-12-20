@@ -30,6 +30,7 @@ class RootContainer extends Component {
             localStorage.setItem('lang', 'kr');
             this.setState({activeLanguage: 'kr', languageConfig: koreanConfig});
         }
+        this.props.getAccoutId();
     }
 
     componentDidUpdate = (prevProps) => {
@@ -47,6 +48,7 @@ class RootContainer extends Component {
     }
     
     render() {
+        console.log(this.props);
         const switchLanguage = (code) => {
             localStorage.setItem('lang', code);
             return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
@@ -88,13 +90,15 @@ class RootContainer extends Component {
 
 const mapStateToProps = (state) => ({
     GlobalWeb3Object : state.main.GlobalWeb3Object,
-    GlobalSmartContractObject: state.smartContract.GlobalSmartContractObject
+    GlobalSmartContractObject: state.smartContract.GlobalSmartContractObject,
+    myAccountId : state.smartContract.accountId
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
         putWeb3ToStore: () => dispatch(Actions.global.putWeb3ToStore()),
-        putSmartContractObjectToStore: () => dispatch(Actions.smartContract.putSmartContractToStore())
+        putSmartContractObjectToStore: () => dispatch(Actions.smartContract.putSmartContractToStore()),
+        getAccoutId: () => dispatch(Actions.smartContract.getMyAccountIdRequest())
     }
 }
 

@@ -43,10 +43,10 @@ export const getMyOrdersRequest = () => {
     }
 };
 
-export const getBalanceRequest = (prCode) => {
+export const getBalanceRequest = (id) => {
     return {
         type: Constants.default.Requests.GET_BALANCE_REQUEST,
-        payload: { prCode }
+        payload: { id }
     }
 };
 
@@ -78,3 +78,9 @@ export const placeWithdrawTokenRequest = (prAddress, amount) => {
         payload: { prAddress, amount }
     }
 };
+
+export const getMyAccountIdRequest = () => {
+    return {
+        type: Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST
+    }
+}

@@ -72,6 +72,9 @@ export const config = {
             productId: 11,
             tokenAddress: "0x9a6f9b846d518162b549aa4d321a3e0de2daf1b4",
             logo: ""
+        },
+        {
+
         }
     ],
     base: [
@@ -313,7 +316,7 @@ export default {
 export const contractList = [
     {
         name: "Latest",
-        address: "0x893642e2308c51661b7fac421d9c4c550f609b59",
+        address: "0xa046bf58833f5477caab4e84c187fa1eaf251ccf",
         abifile: contractJson2.default
     },
     {
