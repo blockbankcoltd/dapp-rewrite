@@ -47,7 +47,10 @@ function createSmartContract() {
 
     const contract_address = selectedContract.address;
     const { GlobalWeb3Object } = store.getState().main;
+    
+    
     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
+    console.log("GlobalWeb3Object --> ", GlobalWeb3Object);
     return Contract;
 }
 
@@ -101,21 +104,30 @@ function recieveAmount(amount, decimal) {
     return amount / Math.pow(10, decimal)
 }
 
-const fetchAccountId = (Contract) => {
-    let x = Contract.methods.GetMyAccountId().call({
-        from: Contract.givenProvider.selectedAddress
-    });
-    return x;
-}
+// ( async () => {
+//     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
+
+//     const contract_address = selectedContract.address;
+//     const { GlobalWeb3Object } = store.getState().main;
+//     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
+//     const id = await Contract.methods.GetMyAccountId().call({
+//         from: Contract.givenProvider.selectedAddress
+//     });
+//     console.log(" ID FROM ASYNC IIFE -------------------------------------------------------------------------- ", id);
+// })();
+
+const _testarray = [];
 
 function* getMyAccountId() {
     const Contract = createSmartContract();
     const method = yield call(Contract.methods.GetMyAccountId);
-    
-    yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: yield call(method.call, {
-            from: Contract.givenProvider.selectedAddress
-        }) 
+    console.log(method)
+    const accountId = yield method.call({
+        from: Contract.givenProvider.selectedAddress
     });
+    _testarray.push(accountId);
+    console.log(_testarray);
+    yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId }); 
 }
 
 function* getOrderBook(params) {
@@ -128,7 +140,6 @@ function* getOrderBook(params) {
     const orderBook = yield call(res.call, {
         from: Contract.givenProvider.selectedAddress
     })
-    console.log("Order Book ----------->>> ", orderBook);
     yield put({
         type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
             priceA: orderBook.priceA,
@@ -165,7 +176,7 @@ function* placeSellOrder(params) {
 }
 
 function* getBalance(params) {
-    const { id } = params.payload;
+    // const { id } = params.payload;
     const Contract = createSmartContract();
     let prCodesArray = [];
     let tokens = [];
@@ -175,6 +186,7 @@ function* getBalance(params) {
         tokens.push({ name: c.product, address: c.tokenAddress, decimal: c.decimal });
         // let x = yield c;
     }
+
     const res = yield call(Contract.methods.getBalance, 2, Lodash.uniq(prCodesArray))
     const balance = yield call(res.call, {
         from: Contract.givenProvider.selectedAddress
@@ -195,10 +207,7 @@ function* getBalance(params) {
 }
 
 function* depositEthRequest(params) {
-    console.log("We are here ===---->>>> ", params.payload);
-
     const Contract = createSmartContract();
-    console.log("Address --> ", Contract.givenProvider)
     const { amount } = params.payload;
     const deposit = Contract.methods.depositETH().send({
         from: Contract.givenProvider.selectedAddress,
@@ -255,7 +264,7 @@ function* actionWatcher() {
     yield takeEvery(Constants.default.Requests.WITHDRAW_TOKEN_REQUEST, withdrawTokenRequest)
 
     yield takeEvery(Constants.default.Requests.GET_BALANCE_REQUEST, getBalance)
-    yield takeLatest(Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST, getMyAccountId)
+    yield takeEvery(Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST, getMyAccountId)
 
 }
 

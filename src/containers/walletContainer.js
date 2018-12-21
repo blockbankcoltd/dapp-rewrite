@@ -6,7 +6,6 @@ import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
-import Web3 from 'web3';
 import Actions from '../actions/index';
 
 class WalletContainer extends Component {
@@ -24,6 +23,16 @@ class WalletContainer extends Component {
 
     componentDidMount() {
         this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getMyAccountId();
+        this.props.getBalance();
     }
 
     // componentDidUpdate = (prevProps) => {
@@ -42,8 +51,8 @@ class WalletContainer extends Component {
 
     callFunction(id) {
         if(id && this.called === false){
-            this.props.getMyOrders();
-            this.props.getBalance(+id);
+            // this.props.getMyOrders();
+            // this.props.getBalance(+id);
             this.called = true;
         }
     }
@@ -129,7 +138,7 @@ class WalletContainer extends Component {
 
     render() {
         const { WALLET } = this.props.languageConfig;
-        this.callFunction(this.props.accountId);
+        // this.callFunction(this.props.accountId);
 
         return (
           <Wallet>

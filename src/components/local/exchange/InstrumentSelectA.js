@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import {isMobile} from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import updown_1 from "../../../assets/images/updown_1.png";
 import updown_2 from "../../../assets/images/updown_2.png";
 import updown_3 from "../../../assets/images/updown_3.png";
@@ -36,9 +36,9 @@ export default class InstrumentSelectA extends React.Component {
 
     selectSort(type) { //sortType change
         if (this.state.sortType === `up-${type}`) {
-            this.setState({sortType: `down-${type}`});
+            this.setState({ sortType: `down-${type}` });
         } else {
-            this.setState({sortType: `up-${type}`});
+            this.setState({ sortType: `up-${type}` });
         }
     }
 
@@ -67,18 +67,25 @@ export default class InstrumentSelectA extends React.Component {
         return [];
     }
 
-    // renderTabs = (obj) => {
-    //     let tabHeading = obj.productName;
-
-    //     return (
-
-    //     );
-    // }
-
     componentDidMount() {
-        let tradeData = this.props.data[0].market.trades;
-        this.setState({activeTabData: tradeData, activeBaseToken: this.props.data[0].market.productId})
-        this.props.handleTradeCurrencyChange(this.props.data[0].market.productId, tradeData[0].productId)
+        console.log("Data from HOC ----> ", this.props.data);
+        // let tradeData = this.props.data && this.props.data.length > 0 ? this.props.data[0].market.trades : [];
+        this.setState(function (state, props) {
+            return {
+                initialData: props.data,
+                activeTabData: props.data[0].market.trades,
+                activeBaseToken: props.data[0].market.productId
+            }
+        });
+
+        // this.props.handleTradeCurrencyChange(this.props.data[0].market.productId, tradeData[0].productId)
+        // this.props.handleTradeCurrencyChange(this.props.data[0].market.productId, tradeData[0].productId)
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.data !== this.props.data) {
+            console.log("Data on Component Update --> ", this.props.data);
+        }
     }
 
     makeData(arr) {
@@ -93,103 +100,222 @@ export default class InstrumentSelectA extends React.Component {
         return parsedArr;
     }
 
+
     render() {
         let timer = null;
-        const {INSTRUMENTS} = this.props.languageConfig;
-        const data = this.props.data;
+        const { INSTRUMENTS } = this.props.languageConfig;
         const sortedCoin = this.doSort(this.state.sortType, this.state.activeTabData);
         return (
-          <Selector className="mobileWrapper">
-
-            {this.state.isMobile ? (
-              <button className="setCoinMarket" onClick={this.onViewMarketList}>
-                <span className="marketSelector" />
-                <i className="xi-caret-down" />
-              </button>
-): ''}
-            <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
-              <div className="coinsTab">
-                {data.map((obj, idx) => {
+            <Selector className="mobileWrapper">
+                {this.state.isMobile ?
+                    (
+                        <button className="setCoinMarket" onClick={this.onViewMarketList}>
+                            <span className="marketSelector" />
+                            <i className="xi-caret-down" />
+                        </button>
+                    )
+                    : ''}
+                <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
+                    <div className="coinsTab">
+                        {this.props.data.map((obj, idx) => {
                             return (
-                              <button
-                                key={obj.market.productName}
-                                className={this.state.activeTab === idx ? "active" : ""}
-                                onClick={() => {
-                                            this.setState({
-                                                activeTabData: obj.market.trades,
-                                                activeBaseToken: obj.market.productId,
-                                                activeTab: idx
-                                            })
-                                        }}
-                              >
-                                {obj.market.productName}
-                              </button>
+                                <button
+                                    key={idx}
+                                    className={this.state.activeTab === idx ? "active" : ""}
+                                    onClick={() => {
+                                        this.setState({
+                                            activeTabData: obj.market.trades,
+                                            activeBaseToken: obj.market.productId,
+                                            activeTab: idx
+                                        })
+                                    }}
+                                >
+                                    {obj.market.productName}
+                                </button>
                             )
                         })}
-              </div>
-              <table className="coinTable">
-                <thead>
-                  <tr>
-                    <th
-                      width="34%"
-                      onClick={() => {
-                                this.selectSort('char');
-                            }}
-                    >
-                      {INSTRUMENTS.COIN_NAME}
-                      <img
-                        src={this.selectImage('char')}
-                      />
-                    </th>
-                    <th
-                      width="33%"
-                      onClick={() => {
-                                this.selectSort('bid');
-                            }}
-                    >
-                      {INSTRUMENTS.BEST_BID}
-                      <img
-                        src={this.selectImage('price')}
-                      />
-                    </th>
-                    <th
-                      width="33%"
-                      onClick={() => {
-                                this.selectSort('ask');
-                            }}
-                    >
-                      {INSTRUMENTS.BEST_ASK}
-                      <img
-                        src={this.selectImage('percent')}
-                      />
-                    </th>
+                    </div>
+                    <table className="coinTable">
+                        <thead>
+                            <tr>
+                                <th
+                                    width="34%"
+                                    onClick={() => {
+                                        this.selectSort('char');
+                                    }}
+                                >
+                                    {INSTRUMENTS.COIN_NAME}
+                                    <img
+                                        src={this.selectImage('char')}
+                                    />
+                                </th>
+                                <th
+                                    width="33%"
+                                    onClick={() => {
+                                        this.selectSort('bid');
+                                    }}
+                                >
+                                    {INSTRUMENTS.BEST_BID}
+                                    <img
+                                        src={this.selectImage('price')}
+                                    />
+                                </th>
+                                <th
+                                    width="33%"
+                                    onClick={() => {
+                                        this.selectSort('ask');
+                                    }}
+                                >
+                                    {INSTRUMENTS.BEST_ASK}
+                                    <img
+                                        src={this.selectImage('percent')}
+                                    />
+                                </th>
 
-                  </tr>
+                            </tr>
 
-                </thead>
-                <tbody>
-                  {sortedCoin.map((obj) => {
-                            return (
-                              <tr
-                                key={obj.productName}
-                                onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
-                                className="instrument-*coinSymbol"
-                                style={{border: "none", fontWeight: "bold", display: "table-row"}}
-                              >
-                                <td className="coinSymbol">{obj.productName}</td>
-                                <td className="up dataNumber">{obj.price}</td>
-                                <td className="up dataNumber">{obj.change}</td>
-                              </tr>
-                            )
-                        })}
-                </tbody>
+                        </thead>
+                        <tbody>
+                            {this.state.activeTabData.map( obj => {
+                                return (
+                                <tr
+                                    key={obj.productName}
+                                    // onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
+                                    onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
+                                    className="instrument-*coinSymbol"
+                                    style={{border: "none", fontWeight: "bold", display: "table-row"}}
+                                >
+                                    <td className="coinSymbol">{obj.productName}</td>
+                                    <td className="up dataNumber">{obj.price}</td>
+                                    <td className="up dataNumber">{obj.change}</td>
+                                </tr>
+                                )
+                            })}
+                        </tbody>
 
-              </table>
-            </div>
-          </Selector>
+                    </table>
+                </div>
+            </Selector>
         )
     }
 }
+
+
+
+
+// import * as React from 'react'
+// import styled from 'styled-components';
+// export default class InstrumentSelectA extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {isMobile: false}
+//     }
+
+//     componentDidMount() {
+//         console.log("Data Coming from HOC ---> ", this.props)
+//         this.setState( (state, props) => {
+//             return {tabData: props.data[0].market.trades}
+//         }) 
+//         console.log("Data Coming from HOC ---> ", this.props.data[0].market.productName)
+//     }
+
+//     render() {
+//         let timer = null;
+//         const { INSTRUMENTS } = this.props.languageConfig;
+//         return (
+//             <Selector className="mobileWrapper">
+//             {this.state.isMobile ? 
+//                 (
+//                 <button className="setCoinMarket" onClick={this.onViewMarketList}>
+//                     <span className="marketSelector" />
+//                     <i className="xi-caret-down" />
+//                 </button>
+//                 )
+//                 : ''}
+//             <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
+//               <div className="coinsTab">
+//                 {this.props.data.map((obj, idx) => {
+//                             return (
+//                               <button
+//                                 key={obj.market.productName}
+//                                 className={this.state.activeTab === idx ? "active" : ""}
+//                                 onClick={() => {
+//                                             this.setState({
+//                                                 activeTabData: obj.market.trades,
+//                                                 activeBaseToken: obj.market.productId,
+//                                                 activeTab: idx
+//                                             })
+//                                         }}
+//                               >
+//                                 {obj.market.productName}
+//                               </button>
+//                             )
+//                         })}
+//               </div>
+//               <table className="coinTable">
+//                 <thead>
+//                   <tr>
+//                     <th
+//                       width="34%"
+//                     //   onClick={() => {
+//                     //             this.selectSort('char');
+//                     //         }}
+//                     >
+//                       {INSTRUMENTS.COIN_NAME}
+//                       {/* <img
+//                         src={this.selectImage('char')}
+//                       /> */}
+//                     </th>
+//                     <th
+//                       width="33%"
+//                     //   onClick={() => {
+//                     //             this.selectSort('bid');
+//                     //         }}
+//                     >
+//                       {INSTRUMENTS.BEST_BID}
+//                       {/* <img
+//                         src={this.selectImage('price')}
+//                       /> */}
+//                     </th>
+//                     <th
+//                       width="33%"
+//                     //   onClick={() => {
+//                     //             this.selectSort('ask');
+//                     //         }}
+//                     >
+//                       {INSTRUMENTS.BEST_ASK}
+//                       {/* <img
+//                         src={this.selectImage('percent')}
+//                       /> */}
+//                     </th>
+
+//                   </tr>
+
+//                 </thead>
+//                 <tbody>
+//                   {this.props.data[0].market.trades.map( obj => {
+//                             return (
+//                               <tr
+//                                 key={obj.productName}
+//                                 // onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
+//                                 // onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
+//                                 className="instrument-*coinSymbol"
+//                                 style={{border: "none", fontWeight: "bold", display: "table-row"}}
+//                               >
+//                                 <td className="coinSymbol">{obj.productName}</td>
+//                                 <td className="up dataNumber">{obj.price}</td>
+//                                 <td className="up dataNumber">{obj.change}</td>
+//                               </tr>
+//                             )
+//                         })}
+//                 </tbody>
+
+//               </table>
+//             </div>
+//           </Selector>
+//         )
+//     }
+// }
 
 const Selector = styled.div`
     background: #fff;

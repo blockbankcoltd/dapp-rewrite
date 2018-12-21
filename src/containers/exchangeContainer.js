@@ -22,8 +22,9 @@ class ExchangeContainer extends Component {
             baseName: '',
             tradeName: '',
             price: 0,
+            marketsData: []
         };
-
+        this.filterMarkets = filterMarkets.bind(this);
     }
 
     componentDidMount() {
@@ -31,6 +32,9 @@ class ExchangeContainer extends Component {
         // dispatch Action to get data for Orderbook
         this.props.getOrderbook(2, 3, 10);
         this.props.getBalance();
+        const marketDataFromConfig = filterMarkets();
+        this.setState({marketsData: marketDataFromConfig});
+        console.log("STATE AT HOC ----------->>>>>>>>>>> ", this.state, marketDataFromConfig);
         // this.props.placeBuyOrder()
         // this.props.placeSellrder()
         // this.props.depositEth()
@@ -41,7 +45,7 @@ class ExchangeContainer extends Component {
 
     changeTradeCurrency = (base, trade) => {
         const baseName = filterMarkets().find(data => data.market.productId === base);
-         const prodName = baseName.market.trades.find(data => data.productId === trade);
+        const prodName = baseName.market.trades.find(data => data.productId === trade);
         this.setState({
             baseCurrency: base,
             tradeCurrency: trade,
