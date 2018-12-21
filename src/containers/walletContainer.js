@@ -98,12 +98,12 @@ class WalletContainer extends Component {
                 {
                     Header: WALLET.TOTAL,
                     id: "total_balance",
-                    accessor: d => Web3.utils.fromWei(d.total.toString(), 'ether')
+                    accessor: d => d.total.toString()
                 },
                 {
                     Header: WALLET.AVAILABLE,
                     id: "hold",
-                    accessor: d => Web3.utils.fromWei(d.hold.toString(), 'ether')
+                    accessor: d => d.hold.toString()
                 },
                 {
                     Header: WALLET.IN,

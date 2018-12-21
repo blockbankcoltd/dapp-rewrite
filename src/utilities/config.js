@@ -130,7 +130,7 @@ export const filterMarkets = () => {
 export const contractList = [
     {
         name: "Latest",
-        address: "0x31b84d572616cde8ab53f9e42654028c7ac4ad59",
+        address: "0xaa28c310cb063cf964b718801f55437989616223",
         abifile: contractJson2.default
     },
     {

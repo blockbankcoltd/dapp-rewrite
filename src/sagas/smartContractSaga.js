@@ -22,7 +22,8 @@ coinList.forEach( (obj, i) => {
     data.push({
         product: obj.productName,
         prCode: obj.productId,
-        tokenAddress: obj.tokenAddress
+        tokenAddress: obj.tokenAddress,
+        decimal: obj.decimal
     });
     if(i === 0){
         if (obj.prTrade && obj.prTrade.length > 0) {
@@ -30,7 +31,8 @@ coinList.forEach( (obj, i) => {
                 data.push({
                     product: o.productName,
                     prCode: o.productId,
-                    tokenAddress: o.tokenAddress
+                    tokenAddress: o.tokenAddress,
+                    decimal: o.decimal
                 });
             })
         }
@@ -166,23 +168,35 @@ function* getBalance(params) {
         // let x = yield c;
     }
 
+    console.log("Tokens array --> ", tokens);
 
-    console.log("Data sent to contract --> ", prCodesArray, id);
-    const res = yield call(Contract.methods.getBalance, +id, Lodash.uniq(prCodesArray))
+
+    const res = yield call(Contract.methods.getBalance, 2, Lodash.uniq(prCodesArray))
     const balance = yield call(res.call, {
         from:  Contract.givenProvider.selectedAddress
     });
     console.log("Balance from SC --> ", balance);
     let _result = [];
-    balance.available.forEach( (obj, index) => {
-        let dec = 1 + 'e' + tokens[index];
-        _result.push({
-            name: tokens[index].name,
-            hold: Web3.utils.BN(balance.reserved[index]),
-            total: (Web3.utils.BN(obj) + Web3.utils.BN(balance.reserved[index])) / Web3.utils.BN(dec),
-            tokenAddress: tokens[index].address
+    // if(balance && balance.available && balance.available.length > 0){
+        balance.available.forEach( (obj, index) => {
+            let dec = 1 + 'e' + tokens[index].decimal;
+            _result.push({
+                name: tokens[index].name,
+                hold: Web3.utils.toBN(balance.reserved[index]),
+                total: (Web3.utils.toBN(obj) + Web3.utils.toBN(balance.reserved[index])) / Web3.utils.toBN(dec),
+                tokenAddress: tokens[index].address
+            });
         });
-    });
+    // }else{
+    //     for (let c of data) {
+    //         _result.push({
+    //             name: c.product,
+    //             hold: 0,
+    //             total: 0,
+    //             tokenAddress: c.tokenAddress
+    //         })
+    //     }
+    // }
     // c["balance"] = {hold: recieveAmount(+balance.reserved, decimals), total: recieveAmount(+balance.reserved + +balance.available, decimals)};
     // console.log("Balance of Token --====------==== >>> ", c)
     // data.push({productInfo: x.data, product: c});
@@ -221,9 +235,9 @@ function* depositTokenRequest(params) {
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     // let a = new BN("1000000000000000000", 10);
     // let a = Web3.utils.toBN(1000000000000000000)
-    let a = amount +  'e' + config.decimal;
-    // console.log("Big number --> ", a); 10e18
-    const deposit = Contract.methods.depositWithdrawToken(prAddress, a, true).send({
+   // let a = amount +  'e' + config.decimal;
+   //  console.log("Big number --> ", a);// 10e18
+    const deposit = Contract.methods.depositWithdrawToken(prAddress, amount*1e18, true).send({
         from:  Contract.givenProvider.selectedAddress
     });
     yield put({type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit});
