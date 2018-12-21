@@ -1,9 +1,9 @@
 import * as React from 'react'
 import styled from 'styled-components';
 import {isMobile} from 'react-device-detect';
-import updown_1 from '../../../../src/assets/images/updown_1.png';
-import updown_2 from '../../../../src/assets/images/updown_2.png';
-import updown_3 from '../../../../src/assets/images/updown_3.png';
+import updown_1 from "../../../assets/images/updown_1.png";
+import updown_2 from "../../../assets/images/updown_2.png";
+import updown_3 from "../../../assets/images/updown_3.png";
 
 
 export default class InstrumentSelectA extends React.Component {
@@ -99,66 +99,94 @@ export default class InstrumentSelectA extends React.Component {
         const data = this.props.data;
         const sortedCoin = this.doSort(this.state.sortType, this.state.activeTabData);
         return (
-            <Selector className="mobileWrapper">
+          <Selector className="mobileWrapper">
 
-                {this.state.isMobile ?
-                    <button className="setCoinMarket" onClick={this.onViewMarketList}>
-                        <span className="marketSelector"
-                        />
-                        <i className="xi-caret-down"/>
-                    </button> : ''}
-                <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
-                    <div className="coinsTab">
-                        {data.map((obj, idx) => {
+            {this.state.isMobile ? (
+              <button className="setCoinMarket" onClick={this.onViewMarketList}>
+                <span className="marketSelector" />
+                <i className="xi-caret-down" />
+              </button>
+): ''}
+            <div id="mobileInst" className={this.state.isMobile ? 'coinsWrap mobile' : 'coinsWrap'}>
+              <div className="coinsTab">
+                {data.map((obj, idx) => {
                             return (
-                                <button key={obj.market.productName} className={this.state.activeTab === idx ? "active" : ""}
-                                        onClick={() => {
+                              <button
+                                key={obj.market.productName}
+                                className={this.state.activeTab === idx ? "active" : ""}
+                                onClick={() => {
                                             this.setState({
                                                 activeTabData: obj.market.trades,
                                                 activeBaseToken: obj.market.productId,
                                                 activeTab: idx
                                             })
-                                        }}>{obj.market.productName}</button>
+                                        }}
+                              >
+                                {obj.market.productName}
+                              </button>
                             )
                         })}
-                    </div>
-                    <table className="coinTable">
-                        <thead>
-                        <tr>
-                            <th width="34%" onClick={() => {
+              </div>
+              <table className="coinTable">
+                <thead>
+                  <tr>
+                    <th
+                      width="34%"
+                      onClick={() => {
                                 this.selectSort('char');
-                            }}>{INSTRUMENTS.COIN_NAME}<img
-                                src={this.selectImage('char')}/></th>
-                            <th width="33%" onClick={() => {
+                            }}
+                    >
+                      {INSTRUMENTS.COIN_NAME}
+                      <img
+                        src={this.selectImage('char')}
+                      />
+                    </th>
+                    <th
+                      width="33%"
+                      onClick={() => {
                                 this.selectSort('bid');
-                            }}>{INSTRUMENTS.BEST_BID}<img
-                                src={this.selectImage('price')}/></th>
-                            <th width="33%" onClick={() => {
+                            }}
+                    >
+                      {INSTRUMENTS.BEST_BID}
+                      <img
+                        src={this.selectImage('price')}
+                      />
+                    </th>
+                    <th
+                      width="33%"
+                      onClick={() => {
                                 this.selectSort('ask');
-                            }}>{INSTRUMENTS.BEST_ASK}<img
-                                src={this.selectImage('percent')}/></th>
+                            }}
+                    >
+                      {INSTRUMENTS.BEST_ASK}
+                      <img
+                        src={this.selectImage('percent')}
+                      />
+                    </th>
 
-                        </tr>
+                  </tr>
 
-                        </thead>
-                        <tbody>
-                        {sortedCoin.map((obj) => {
+                </thead>
+                <tbody>
+                  {sortedCoin.map((obj) => {
                             return (
-                                <tr key={obj.productName}
-                                    onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
-                                    className={`instrument-*coinSymbol`}
-                                    style={{border: "none", fontWeight: "bold", display: "table-row"}}>
-                                    <td className={`coinSymbol`}>{obj.productName}</td>
-                                    <td className={`up dataNumber`}>{obj.price}</td>
-                                    <td className={`up dataNumber`}>{obj.change}</td>
-                                </tr>
+                              <tr
+                                key={obj.productName}
+                                onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
+                                className="instrument-*coinSymbol"
+                                style={{border: "none", fontWeight: "bold", display: "table-row"}}
+                              >
+                                <td className="coinSymbol">{obj.productName}</td>
+                                <td className="up dataNumber">{obj.price}</td>
+                                <td className="up dataNumber">{obj.change}</td>
+                              </tr>
                             )
                         })}
-                        </tbody>
+                </tbody>
 
-                    </table>
-                </div>
-            </Selector>
+              </table>
+            </div>
+          </Selector>
         )
     }
 }

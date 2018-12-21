@@ -14,21 +14,21 @@ class Routes extends Component {
         const attachPropsToContainers = (Container, props) => {
             return (
               <Container
-                languageConfig = {props}
+                languageConfig={props}
               />
             );
           }
         const { navLinks, language } = this.props;
         return (
-            <Switch>
-                {navLinks.map( r => {
+          <Switch>
+            {navLinks.map( r => {
                     let container = () => attachPropsToContainers(r.component, language);
-                    return <Route key={r.path} exact={true} path={r.path} render={container}/>
+                    return <Route key={r.path} exact path={r.path} render={container} />
                 })}
-            </Switch>
+          </Switch>
         )
     }
-};
+}
 
 const mapStateToProps = (state) => ({
 

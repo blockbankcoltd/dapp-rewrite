@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom'
-import dexhiLogo from '../../../src/assets/images/Dexhi_white.png';
+import dexhiLogo from "../../assets/images/Dexhi_white.png";
 
 
 export default class FooterComponent extends React.Component {
@@ -9,114 +9,131 @@ export default class FooterComponent extends React.Component {
         const {language, FooterData} = this.props;
         const {FOOTER} = language;
         return (
-            <Footer className="footer">
-                <FooterNavi>
-                    <FooterNaviInner>
-                        <ListItem>
-                            <Link to="/">
-                                {FOOTER.NOTICE}
-                            </Link>
-                        </ListItem>
-                        <ListItem>
-                            <Link to="/">
-                                {FOOTER.GUIDE}
-                            </Link>
-                        </ListItem>
-                        <ListItem>
-                            <Link to="/">
-                                {FOOTER.FEE}
-                            </Link>
-                        </ListItem>
-                        <ListItem>
-                            <Link to="/">
-                                {FOOTER.TERMS}
-                            </Link>
-                        </ListItem>
-                        <ListItem>
-                            <Link to="/">
-                                {FOOTER.PRIVACY}
-                            </Link>
-                        </ListItem>
-                        <ListItem>
-                            <Link to="/">
-                                {FOOTER.LISTING}
-                            </Link>
-                        </ListItem>
-                    </FooterNaviInner>
-                </FooterNavi>
-                <Contents>
-                    <ContentsInner>
-                        <Title>
-                            <Link to="/" className="titleLink">
-                                <TitleImage src={dexhiLogo} alt={FOOTER.MENU_TEXT_HOME}/>
-                            </Link>
-                        </Title>
-                        <FooterInfo>
-                            <InfoBox>
-                                <Item><strong>{FOOTER.ABOUT_TEXT}</strong></Item>
-                                <Item dangerouslySetInnerHTML={{__html: FOOTER.CEO}}/>
-                                <Item>{FOOTER.ADDRESS}</Item>
-                                <Item dangerouslySetInnerHTML={{__html: FOOTER.FOT_NUM1}}/>
-                            </InfoBox>
-                            <InfoBox>
-                                <InfoBoxTitle>{FOOTER.CSCENTER}</InfoBoxTitle>
-                                <InfoBoxContents>
-                                    <div className="separate">
-                                        <InfoBoxItem dangerouslySetInnerHTML={{__html: FOOTER.TIME}}/>
-                                        <strong style={{marginLeft: '-3px'}}><Link
-                                            to="/coinInfo">{FOOTER.INFO}</Link></strong>
-                                        <strong><a className="listing"
-                                                   href={`/static/cloudflare/listing_${localStorage.getItem("lang")}.html`}
-                                                   target="_blank">{FOOTER.LISTING}</a></strong>
+          <Footer className="footer">
+            <FooterNavi>
+              <FooterNaviInner>
+                <ListItem>
+                  <Link to="/">
+                    {FOOTER.NOTICE}
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/">
+                    {FOOTER.GUIDE}
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/">
+                    {FOOTER.FEE}
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/">
+                    {FOOTER.TERMS}
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/">
+                    {FOOTER.PRIVACY}
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/">
+                    {FOOTER.LISTING}
+                  </Link>
+                </ListItem>
+              </FooterNaviInner>
+            </FooterNavi>
+            <Contents>
+              <ContentsInner>
+                <Title>
+                  <Link to="/" className="titleLink">
+                    <TitleImage src={dexhiLogo} alt={FOOTER.MENU_TEXT_HOME} />
+                  </Link>
+                </Title>
+                <FooterInfo>
+                  <InfoBox>
+                    <Item><strong>{FOOTER.ABOUT_TEXT}</strong></Item>
+                    <Item dangerouslySetInnerHTML={{__html: FOOTER.CEO}} />
+                    <Item>{FOOTER.ADDRESS}</Item>
+                    <Item dangerouslySetInnerHTML={{__html: FOOTER.FOT_NUM1}} />
+                  </InfoBox>
+                  <InfoBox>
+                    <InfoBoxTitle>{FOOTER.CSCENTER}</InfoBoxTitle>
+                    <InfoBoxContents>
+                      <div className="separate">
+                        <InfoBoxItem dangerouslySetInnerHTML={{__html: FOOTER.TIME}} />
+                        <strong style={{marginLeft: '-3px'}}>
+                          <Link
+                            to="/coinInfo"
+                          >{FOOTER.INFO}
+                          </Link>
+                        </strong>
+                        <strong>
+                          <a
+                            className="listing"
+                            href={`/static/cloudflare/listing_${localStorage.getItem("lang")}.html`}
+                            target="_blank"
+                          >{FOOTER.LISTING}
+                          </a>
+                        </strong>
 
-                                    </div>
-                                    <div className="separate">
-                                        <InfoBoxItem dangerouslySetInnerHTML={{__html: FOOTER.TEL}}/>
-                                        <InfoBoxItem>
-                                            <strong>Email :</strong> <a
-                                            href="mailto:support@bitnaru.com">support@bitnaru.com</a>
-                                        </InfoBoxItem>
-                                        <InfoBoxItem className="sns">
+                      </div>
+                      <div className="separate">
+                        <InfoBoxItem dangerouslySetInnerHTML={{__html: FOOTER.TEL}} />
+                        <InfoBoxItem>
+                          <strong>Email :</strong> 
+                          {' '}
+                          <a
+                            href="mailto:support@bitnaru.com"
+                          >support@bitnaru.com
+                          </a>
+                        </InfoBoxItem>
+                        <InfoBoxItem className="sns">
 
-                                            <a href="javascript:void(0)"
-                                               onClick={() => window.open(FooterData.chatUrl)}>
-                                                <i className="xi-kakaotalk"></i>
-                                                {FOOTER.CHAT}
-                                            </a>
-                                            <strong style={{marginLeft: '20px'}}>SNS : </strong>
-                                            <ul className="sns-list">
-                                                <li>
-                                                    <a href="javascript:void(0)"
-                                                       onClick={() => window.open(FooterData.chatUrl)}>
-                                                        <i className="xi-kakaotalk"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href={FooterData.sns.telegram.link} target="_blank">
-                                                        <i className="xi-telegram"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href={FooterData.sns.naver.link} target="_blank">
-                                                        <i className="xi-naver-square"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href={FooterData.sns.twitter.link} target="_blank">
-                                                        <i className="xi-twitter"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </InfoBoxItem>
-                                    </div>
-                                </InfoBoxContents>
-                            </InfoBox>
+                          <a
+                            href="javascript:void(0)"
+                            onClick={() => window.open(FooterData.chatUrl)}
+                          >
+                            <i className="xi-kakaotalk" />
+                            {FOOTER.CHAT}
+                          </a>
+                          <strong style={{marginLeft: '20px'}}>SNS : </strong>
+                          <ul className="sns-list">
+                            <li>
+                                <a
+                                    href="javascript:void(0)"
+                                    onClick={() => window.open(FooterData.chatUrl)}
+                                  >
+                                    <i className="xi-kakaotalk" />
+                                  </a>
+                              </li>
+                            <li>
+                                <a href={FooterData.sns.telegram.link} target="_blank">
+                                    <i className="xi-telegram" />
+                                  </a>
+                              </li>
+                            <li>
+                                <a href={FooterData.sns.naver.link} target="_blank">
+                                    <i className="xi-naver-square" />
+                                  </a>
+                              </li>
+                            <li>
+                                <a href={FooterData.sns.twitter.link} target="_blank">
+                                    <i className="xi-twitter" />
+                                  </a>
+                              </li>
+                          </ul>
+                        </InfoBoxItem>
+                      </div>
+                    </InfoBoxContents>
+                  </InfoBox>
 
-                            <CopyRight>Copyright 2018 LinkerKorea Co., Ltd. All Rights Reserved.</CopyRight>
-                        </FooterInfo>
-                    </ContentsInner>
-                </Contents>
-            </Footer>
+                  <CopyRight>Copyright 2018 LinkerKorea Co., Ltd. All Rights Reserved.</CopyRight>
+                </FooterInfo>
+              </ContentsInner>
+            </Contents>
+          </Footer>
         )
     }
 }

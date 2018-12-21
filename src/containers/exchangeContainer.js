@@ -89,136 +89,161 @@ class ExchangeContainer extends Component {
         ];
 
         return (
-            <Exchange id="wrap">
-                <ExchangeColumn1>
-                    <div id="ticker">
-                        <TickerA languageConfig={this.props.languageConfig}
-                                 baseName={this.state.baseName}
-                                 tradeName={this.state.tradeName}/>
-                    </div>
-                    <div className="example-grow">
-                        <div className="parent">
-                            <div className="item">
-                                {
-                                    !isMobile &&
-
+          <Exchange id="wrap">
+            <ExchangeColumn1>
+              <div id="ticker">
+                <TickerA
+                  languageConfig={this.props.languageConfig}
+                  baseName={this.state.baseName}
+                  tradeName={this.state.tradeName}
+                />
+              </div>
+              <div className="example-grow">
+                <div className="parent">
+                  <div className="item">
+                    {
+                                    !isMobile && (
                                     <div className="chart-wrap">
-                                        <form className="module-trigger chart-trigger">
-                                            <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked/>
-                                            <label htmlFor="chart-trigger-1" className="price-ch-btn">Price
-                                                chart</label>
-                                            <div className="clear"></div>
+                                      <form className="module-trigger chart-trigger">
+                                        <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
+                                        <label htmlFor="chart-trigger-1" className="price-ch-btn">
+Price
+                                                chart
+                                        </label>
+                                        <div className="clear" />
 
-                                            <div className="trigger-content">
-                                                <div id="chart-trigger-content-1">
-                                                    <div>*Chart Area</div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                }
-
-                                <div className="quotation">
-
-                                    <OrderbookA languageConfig={this.props.languageConfig} data={this.props.orderBook}
-                                                handleChangePrice={this.handleBuySellPrice}/>
-                                </div>
-
-
-                                <div className="orderPanel">
-                                    <div className="account-overview">
-                                        <BalanceA languageConfig={this.props.languageConfig}
-                                                  baseName={this.state.baseName}
-                                                  tradeName={this.state.tradeName}
-                                                  balance={this.props.balance}/>
-
-                                        <div className="order-entry-head">
-                                            <form>
-                                                <div className="trigger-content">
-                                                    <div id="trigger-content-1">
-
-                                                        <div className="order-entry">
-                                                            <OrderentryA languageConfig={this.props.languageConfig}
-                                                                         buyOrder={this.placeBuyOrder}
-                                                                         sellOrder={this.placeSellOrder}
-                                                                         price={this.state.price}
-                                                                         baseName={this.state.baseName}
-                                                                         tradeName={this.state.tradeName}/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                        <div className="trigger-content">
+                                          <div id="chart-trigger-content-1">
+                                            <div>*Chart Area</div>
+                                          </div>
                                         </div>
-
+                                      </form>
                                     </div>
-                                </div>
+)}
 
-                                <div className="publicTrades">
-                                    <PublicTradesA languageConfig={this.props.languageConfig}
-                                                   baseName={this.state.baseName}
-                                                   tradeName={this.state.tradeName}/>
-                                </div>
+                    <div className="quotation">
 
-                                <div className="open-order-head">
-                                    <div className="tab_list">
-                                        <ul>
-                                            {
+                      <OrderbookA
+                        languageConfig={this.props.languageConfig}
+                        data={this.props.orderBook}
+                        handleChangePrice={this.handleBuySellPrice}
+                      />
+                    </div>
+
+
+                    <div className="orderPanel">
+                      <div className="account-overview">
+                        <BalanceA
+                          languageConfig={this.props.languageConfig}
+                          baseName={this.state.baseName}
+                          tradeName={this.state.tradeName}
+                          balance={this.props.balance}
+                        />
+
+                        <div className="order-entry-head">
+                          <form>
+                            <div className="trigger-content">
+                                <div id="trigger-content-1">
+
+                                    <div className="order-entry">
+                                        <OrderentryA
+                                            languageConfig={this.props.languageConfig}
+                                            buyOrder={this.placeBuyOrder}
+                                            sellOrder={this.placeSellOrder}
+                                            price={this.state.price}
+                                            baseName={this.state.baseName}
+                                            tradeName={this.state.tradeName}
+                                          />
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div className="publicTrades">
+                      <PublicTradesA
+                        languageConfig={this.props.languageConfig}
+                        baseName={this.state.baseName}
+                        tradeName={this.state.tradeName}
+                      />
+                    </div>
+
+                    <div className="open-order-head">
+                      <div className="tab_list">
+                        <ul>
+                          {
                                                 list.map((item, index) => {
-                                                    return <li key={index}
-                                                               className={this.state.tabSelected === index ? "active" : ""}
-                                                               data-tab={item.tabName}
-                                                               onClick={(e) => {
+                                                    return (
+                                                      <li
+                                                        key={index}
+                                                        className={this.state.tabSelected === index ? "active" : ""}
+                                                        data-tab={item.tabName}
+                                                        onClick={(e) => {
                                                                    this.setState({
                                                                        tabSelected: index
                                                                    })
                                                                }}
-                                                    >{item.text}</li>
+                                                      >
+                                                        {item.text}
+                                                      </li>
+)
                                                 })
                                             }
-                                        </ul>
-                                    </div>
-                                    <div className="tab_container">
-                                        <div id="historyTab"
-                                             className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}>
-                                            <OpenOrdersA languageConfig={this.props.languageConfig}/>
-                                        </div>
-                                        <div id="tradesTab"
-                                             className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}>
-                                            <PrivateTradesA languageConfig={this.props.languageConfig}/>
-                                        </div>
-                                    </div>
-                                </div>
+                        </ul>
+                      </div>
+                      <div className="tab_container">
+                        <div
+                          id="historyTab"
+                          className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}
+                        >
+                          <OpenOrdersA languageConfig={this.props.languageConfig} />
+                        </div>
+                        <div
+                          id="tradesTab"
+                          className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
+                        >
+                          <PrivateTradesA languageConfig={this.props.languageConfig} />
+                        </div>
+                      </div>
+                    </div>
 
+                  </div>
+
+
+                </div>
+              </div>
+
+              {
+                        isMobile && (
+                        <div className="chart-wrap">
+                          <form className="module-trigger chart-trigger">
+                            <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
+                            <label htmlFor="chart-trigger-1" className="price-ch-btn">Price chart</label>
+                            <div className="clear" />
+
+                            <div className="trigger-content">
+                              <div id="chart-trigger-content-1" />
                             </div>
-
-
+                          </form>
                         </div>
-                    </div>
-
-                    {
-                        isMobile && <div className="chart-wrap">
-                            <form className="module-trigger chart-trigger">
-                                <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked/>
-                                <label htmlFor="chart-trigger-1" className="price-ch-btn">Price chart</label>
-                                <div className="clear"></div>
-
-                                <div className="trigger-content">
-                                    <div id="chart-trigger-content-1">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+)
                     }
-                </ExchangeColumn1>
-                <ExchangeColumn2>
-                    <div id="inst">
-                        <InstrumentSelectA handleTradeCurrencyChange={this.changeTradeCurrency}
-                                           languageConfig={this.props.languageConfig} data={filterMarkets()}/>
+            </ExchangeColumn1>
+            <ExchangeColumn2>
+              <div id="inst">
+                <InstrumentSelectA
+                  handleTradeCurrencyChange={this.changeTradeCurrency}
+                  languageConfig={this.props.languageConfig}
+                  data={filterMarkets()}
+                />
 
-                    </div>
-                </ExchangeColumn2>
+              </div>
+            </ExchangeColumn2>
 
-            </Exchange>
+          </Exchange>
         )
     }
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'
-import bitnaruLogo from '../../../src/assets/images/bitnaruLogo.png';
-import englishLangIcon from '../../../src/assets/images/icon/en.png';
-import koreanLangIcon from '../../../src/assets/images/icon/kr.png';
-import dexhiLogo from '../../../src/assets/images/Dexhi_white.png';
+import bitnaruLogo from "../../assets/images/bitnaruLogo.png";
+import englishLangIcon from "../../assets/images/icon/en.png";
+import koreanLangIcon from "../../assets/images/icon/kr.png";
+import dexhiLogo from "../../assets/images/Dexhi_white.png";
 import { contractList } from "../../utilities/config";
 
 
@@ -31,64 +31,75 @@ export default class HeaderComponent extends React.Component {
         const { MENU_TEXT_HOME } = language.HEADER;
         const {HEADER} = this.props.language
         return (
-            <Header className={this.state.headerAdd ? 'header scr_on' : 'header'}>
-                <HeaderContents>
-                    <Title>
-                        <Link to="/">
-                           <TitleImage onClick={this.viewSide} id="logo" src={dexhiLogo} alt={MENU_TEXT_HOME}/>
-                           {/* <TitleImage onClick={this.viewSide} id="logo" src={titleSrc} alt={MENU_TEXT_HOME} /> */}
-                        </Link>
-                    </Title>
-                    <HeaderLinks>
-                        {navLinks.map(r => {
+          <Header className={this.state.headerAdd ? 'header scr_on' : 'header'}>
+            <HeaderContents>
+              <Title>
+                <Link to="/">
+                  <TitleImage onClick={this.viewSide} id="logo" src={dexhiLogo} alt={MENU_TEXT_HOME} />
+                  {/* <TitleImage onClick={this.viewSide} id="logo" src={titleSrc} alt={MENU_TEXT_HOME} /> */}
+                </Link>
+              </Title>
+              <HeaderLinks>
+                {navLinks.map(r => {
                             if(r.name === "Home") {
                                 return null;
                             }
-                            return <Link key={r.path} to={r.path} >{HEADER[r.langname]}</Link>
+                            return <Link key={r.path} to={r.path}>{HEADER[r.langname]}</Link>
                         })}
 
-                    </HeaderLinks>
+              </HeaderLinks>
                     
-                    <div className="lang_navi">
-                        <p className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"} onClick={(e) => { this.setState({ langActive: !this.state.langActive }) }}>
-                            <span>{localStorage.getItem('lang') === "kr" ? "KR" : "EN"}
-                                <i className="xi-caret-down-min"></i>
-                            </span>
-                        </p>
-                        <ul id="langSelect" className={"lang_" + (this.state.langActive ? "on" : "off")}>
-                            <li className="lang_kr" onClick={(e) => { this.props.switchLanguage("kr") }}>KR</li>
-                            <li className="lang_en" onClick={(e) => { this.props.switchLanguage("en") }}>EN</li>
-                        </ul>
-                    </div>
-                    <div className="select_contract">
-                        <select onChange={this.changeContract} defaultValue={+localStorage.getItem('contract')}>
-                            {
+              <div className="lang_navi">
+                <p className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"} onClick={(e) => { this.setState({ langActive: !this.state.langActive }) }}>
+                  <span>
+                    {localStorage.getItem('lang') === "kr" ? "KR" : "EN"}
+                    <i className="xi-caret-down-min" />
+                  </span>
+                </p>
+                <ul id="langSelect" className={"lang_" + (this.state.langActive ? "on" : "off")}>
+                  <li className="lang_kr" onClick={(e) => { this.props.switchLanguage("kr") }}>KR</li>
+                  <li className="lang_en" onClick={(e) => { this.props.switchLanguage("en") }}>EN</li>
+                </ul>
+              </div>
+              <div className="select_contract">
+                <select onChange={this.changeContract} defaultValue={+localStorage.getItem('contract')}>
+                  {
                                 contractList.map((cont,idx) => {
                                     return (
-                                        <option value={idx} key={cont.address}>
-                                            {cont.name} : {cont.address}
-                                        </option>
+                                      <option value={idx} key={cont.address}>
+                                        {cont.name}
+                                        {' '}
+:
+                                        {cont.address}
+                                      </option>
                                     )
                                 })
                             }
-                        </select>
-                    </div>
+                </select>
+              </div>
 
-                    <MobileBars>
-                        <i className={this.state.side ? 'xi-close' : 'xi-bars'} onClick={this.viewSide}></i>
-                    </MobileBars>
-                    <MobileMenu className={this.state.side ? 'on mSlide' : 'mSlide'}>
-                        <div className="lang_navi">
-                            <p className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"}
-                                onClick={(e) => { this.setState({ langActive: !this.state.langActive }) }}><span>{localStorage.getItem('lang') === "kr" ? "KR" : "EN"}<i className="xi-caret-down-min"></i></span></p>
-                            <ul id="langSelect" className={"lang_" + (this.state.langActive ? "on" : "off")}>
-                                <li className="lang_kr" onClick={(e) => { this.props.switchLanguage("kr") }}>KR</li>
-                                <li className="lang_en" onClick={(e) => { this.props.switchLanguage("en") }}>EN</li>
-                            </ul>
-                        </div>
-                    </MobileMenu>
-                </HeaderContents>
-            </Header>
+              <MobileBars>
+                <i className={this.state.side ? 'xi-close' : 'xi-bars'} onClick={this.viewSide} />
+              </MobileBars>
+              <MobileMenu className={this.state.side ? 'on mSlide' : 'mSlide'}>
+                <div className="lang_navi">
+                  <p
+                    className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"}
+                    onClick={(e) => { this.setState({ langActive: !this.state.langActive }) }}
+                  >
+                    <span>
+                      {localStorage.getItem('lang') === "kr" ? "KR" : "EN"}
+                      <i className="xi-caret-down-min" />
+                    </span>
+                  </p>
+                  <ul id="langSelect" className={"lang_" + (this.state.langActive ? "on" : "off")}>
+                    <li className="lang_kr" onClick={(e) => { this.props.switchLanguage("kr") }}>KR</li>
+                    <li className="lang_en" onClick={(e) => { this.props.switchLanguage("en") }}>EN</li>
+                  </ul>
+                </div>
+              </MobileMenu>
+            </HeaderContents>
+          </Header>
         )
     }
 }

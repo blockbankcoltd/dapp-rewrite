@@ -16,9 +16,10 @@ export default class OpenOrdersB extends React.Component{
         const {TRANSACTION, OPEN_ORDERS} = this.props.languageConfig;
 
         return this.state.isLogin ? (
-            <OpenOrder>
-                <div className="table table-hover">
-                    <ReactTable  columns={[
+          <OpenOrder>
+            <div className="table table-hover">
+              <ReactTable
+                columns={[
                         {
                             Header: OPEN_ORDERS.INSTRUMENT_TEXT,
                             id: OPEN_ORDERS.INSTRUMENT_TEXT,
@@ -57,10 +58,13 @@ export default class OpenOrdersB extends React.Component{
                             accessor: OPEN_ORDERS.CANCEL
                         },
 
-                    ]} defaultPageSize={10} className="-striped -highlight" />
+                    ]}
+                defaultPageSize={10}
+                className="-striped -highlight"
+              />
 
-                </div>
-            </OpenOrder>
+            </div>
+          </OpenOrder>
         ) : <div className="no-data-wrap"><p>{TRANSACTION.LOGIN_REQUIRED}</p></div>;
     }
 }

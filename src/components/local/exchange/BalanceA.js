@@ -35,42 +35,42 @@ export default class BalanceA extends React.Component {
         const balances = this.getBalance(this.props.balance);
         const {ACCOUNT_BALANCES} = this.props.languageConfig;
         return (
-            <Balance>
-                <table className="ap-list">
-                    <colgroup>
-                        <col width="96" />
-                        <col width="177" />
-                        <col width="160" />
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>{ACCOUNT_BALANCES.PRODUCT}</th>
-                        <th>{ACCOUNT_BALANCES.AVAIL_BALANCE_TEXT}</th>
-                        <th>{ACCOUNT_BALANCES.TOTAL_BALANCE_TEXT}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr className="first-row">
-                        <td className="symbol">{this.props.baseName}</td>
-                        <td className="able">
-                            <p>{balances.baseAmount - balances.baseHold}</p>
-                        </td>
-                        <td className="total">
-                            <p>{balances.baseAmount}</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="symbol">{this.props.tradeName}</td>
-                        <td className="able">
-                            <p>{balances.tradeAmount-balances.tradeHold}</p>
-                        </td>
-                        <td className="total">
-                            <p>{balances.tradeAmount}</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </Balance>
+          <Balance>
+            <table className="ap-list">
+              <colgroup>
+                <col width="96" />
+                <col width="177" />
+                <col width="160" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>{ACCOUNT_BALANCES.PRODUCT}</th>
+                  <th>{ACCOUNT_BALANCES.AVAIL_BALANCE_TEXT}</th>
+                  <th>{ACCOUNT_BALANCES.TOTAL_BALANCE_TEXT}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="first-row">
+                  <td className="symbol">{this.props.baseName}</td>
+                  <td className="able">
+                    <p>{balances.baseAmount - balances.baseHold}</p>
+                  </td>
+                  <td className="total">
+                    <p>{balances.baseAmount}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="symbol">{this.props.tradeName}</td>
+                  <td className="able">
+                    <p>{balances.tradeAmount-balances.tradeHold}</p>
+                  </td>
+                  <td className="total">
+                    <p>{balances.tradeAmount}</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </Balance>
         )
     }
 }

@@ -14,9 +14,10 @@ export default class PrivateTradesB extends React.Component{
         const {TRANSACTION, TRADES} = this.props.languageConfig;
 
         return this.state.isLogin ? (
-            <PrivateOrder>
-                <div className="table table-hover">
-                    <ReactTable  columns={[
+          <PrivateOrder>
+            <div className="table table-hover">
+              <ReactTable
+                columns={[
                         {
                             Header: TRADES.INSTRUMENT_TEXT,
                             id: TRADES.INSTRUMENT_TEXT,
@@ -60,10 +61,13 @@ export default class PrivateTradesB extends React.Component{
                             accessor: TRADES.STATUS
                         },
 
-                    ]} defaultPageSize={10} className="-striped -highlight" />
+                    ]}
+                defaultPageSize={10}
+                className="-striped -highlight"
+              />
 
-                </div>
-            </PrivateOrder>
+            </div>
+          </PrivateOrder>
         ) : <div className="no-data-wrap"><p>{TRANSACTION.LOGIN_REQUIRED}</p></div>;
     }
 }

@@ -1,4 +1,5 @@
 import * as Constants from '../constants/constants';
+
 export const getActivelanguage = () => ({
     type: Constants.default.Requests.FETCH_ACTIVE_LANGUAGE
 });

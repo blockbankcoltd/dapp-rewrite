@@ -79,11 +79,11 @@ class RootContainer extends Component {
         }
         
         return (
-            <div className="App">
-                <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig}/>
-                <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links}/>
-                <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig}/>
-            </div>
+          <div className="App">
+            <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+            <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
+            <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+          </div>
         )
     }
 }

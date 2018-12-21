@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-#### NOTE - Keep the web3 version to 1.0.0-beta.35. the updated version have an issue with calculating Bignumbers
+#### NOTE - Keep the web3 version to 1.0.0-beta.35. the higher versions have an issue with calculating Bignumbers
 
 ## Available Scripts
 

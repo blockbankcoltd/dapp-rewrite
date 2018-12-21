@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bn.js": "^4.11.8",
+    "decimal.js": "^10.0.2",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "mathjs": "^5.4.0",
@@ -38,5 +39,13 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "pre-commit": "^1.2.2"
+  }
 }
+

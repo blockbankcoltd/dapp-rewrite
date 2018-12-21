@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import Actions from '../actions/index';
 import { Link } from 'react-router-dom';
+import Actions from '../actions/index';
 import OpenOrdersB from '../components/local/transaction/OpenOrdersB';
 import PrivateTradesB from '../components/local/transaction/PrivateTradesB';
 import TransactionsB from '../components/local/transaction/TransactionsB';
@@ -29,21 +29,26 @@ class TransactionContainer extends Component {
     render() {
         const { WALLET, TRANSACTION } = this.props.languageConfig;
         return (
-                <Transaction>
-                    <section className="main" role="">
-                        <div id="transactionDetails" className="wallet_wrap">
-                            <div className="container">
-                                <div className="page_link">
-                                    <ul>
-                                        <li><Link to="/wallet">{WALLET.DEPOSIT}</Link></li>
-                                        <li className="active"><Link
-                                            to="/transactionDetails">{WALLET.ORDERS}</Link></li>
-                                    </ul>
-                                </div>
-                                <div className={`tab_container ${this.state.container}`}>
-                                    <div className="tab_list">
-                                        <ul>
-                                            {
+          <Transaction>
+            <section className="main" role="">
+              <div id="transactionDetails" className="wallet_wrap">
+                <div className="container">
+                  <div className="page_link">
+                    <ul>
+                      <li><Link to="/wallet">{WALLET.DEPOSIT}</Link></li>
+                      <li className="active">
+                        <Link
+                          to="/transactionDetails"
+                        >
+{WALLET.ORDERS}
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className={`tab_container ${this.state.container}`}>
+                    <div className="tab_list">
+                      <ul>
+                        {
                                                 [
                                                     {
                                                         text: "Filled Orders",
@@ -58,34 +63,40 @@ class TransactionContainer extends Component {
                                                         ap: TRANSACTION.TRANSHISTORY
                                                     }
                                                 ].map((item, index) => {
-                                                    return <li key={index} onClick={() => {
+                                                    return (
+                                                      <li
+                                                        key={index}
+                                                        onClick={() => {
                                                         this.setState({
                                                             container: "tab_container tab" + index,
                                                             selectedTab: index
                                                         })
                                                     }}
-                                                               className={`trans_tab ${this.state.selectedTab === index ? "active" : ""}`}
-                                                    >{item.ap}</li>
+                                                        className={`trans_tab ${this.state.selectedTab === index ? "active" : ""}`}
+                                                      >
+                                                        {item.ap}
+                                                      </li>
+)
                                                 })
                                             }
-                                        </ul>
-                                    </div>
-                                    <div className={`tab_content tab${this.state.selectedTab}`}>
-                                        <div id="tab0" className="tab_cont">
-                                            <PrivateTradesB languageConfig={this.props.languageConfig}/>
-                                        </div>
-                                        <div id="tab1" className="tab_cont">
-                                            <OpenOrdersB languageConfig={this.props.languageConfig}/>
-                                        </div>
-                                        <div id="tab2" className="tab_cont">
-                                            <TransactionsB languageConfig={this.props.languageConfig}/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </Transaction>
+                      </ul>
+                    </div>
+                    <div className={`tab_content tab${this.state.selectedTab}`}>
+                      <div id="tab0" className="tab_cont">
+                        <PrivateTradesB languageConfig={this.props.languageConfig} />
+                      </div>
+                      <div id="tab1" className="tab_cont">
+                        <OpenOrdersB languageConfig={this.props.languageConfig} />
+                      </div>
+                      <div id="tab2" className="tab_cont">
+                        <TransactionsB languageConfig={this.props.languageConfig} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </Transaction>
         )
     }
 }

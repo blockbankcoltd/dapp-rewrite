@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import Actions from '../actions/index';
 import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
 import Web3 from 'web3';
+import Actions from '../actions/index';
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -89,7 +89,9 @@ class WalletContainer extends Component {
     renderTable() {
         const { WALLET } = this.props.languageConfig;
         return(
-            <ReactTable data={this.props.balance} columns={[
+          <ReactTable
+            data={this.props.balance}
+            columns={[
                 {
                     Header: WALLET.COIN_NAME,
                     id: "product",
@@ -114,11 +116,14 @@ class WalletContainer extends Component {
                 {
                     // Header: "Pending Deposits",
                     id: "withdraw_buttons",
-                    accessor: d => <div><button type="button" >Withdraw</button></div>,
+                    accessor: d => <div><button type="button">Withdraw</button></div>,
                     Cell: (d) => this.renderEditable(d, "withdraw")
                 }
 
-            ]} defaultPageSize={10} className="-striped -highlight" />
+            ]}
+            defaultPageSize={10}
+            className="-striped -highlight"
+          />
         );
     }
 
@@ -127,65 +132,65 @@ class WalletContainer extends Component {
         this.callFunction(this.props.accountId);
 
         return (
-                <Wallet>
-                    <section className="main" role="">
-                        <div id="wallet" className="wallet_wrap">
-                            <div className="container">
-                                <div className="page_link">
-                                    <ul>
-                                        <li className="active"><Link to="/wallet">{WALLET.DEPOSIT}</Link>
-                                        </li>
-                                        <li><Link to="/transactionDetails">{WALLET.ORDERS}</Link></li>
-                                    </ul>
-                                </div>
+          <Wallet>
+            <section className="main" role="">
+              <div id="wallet" className="wallet_wrap">
+                <div className="container">
+                  <div className="page_link">
+                    <ul>
+                      <li className="active">
+                        <Link to="/wallet">{WALLET.DEPOSIT}</Link>
+                      </li>
+                      <li><Link to="/transactionDetails">{WALLET.ORDERS}</Link></li>
+                    </ul>
+                  </div>
 
-                                <div className="asset_balance">
+                  <div className="asset_balance">
 
-                                    <div>
-                                        <div className="tab_list" />
-                                        <div className="wallet_info">
-                                            <h3>
+                    <div>
+                      <div className="tab_list" />
+                      <div className="wallet_info">
+                        <h3>
 
-                                                <div className="first">{WALLET.TOTAL_ASSET}</div>
+                          <div className="first">{WALLET.TOTAL_ASSET}</div>
 
-                                                <div className="second">
-                                                    <strong id="balanceTxt">
+                          <div className="second">
+                            <strong id="balanceTxt">
                                                         0
-                                                    </strong>
-                                                    <span className="krw"> KRW</span>
-                                                </div>
-                                            </h3>
+                                  </strong>
+                            <span className="krw"> KRW</span>
+                          </div>
+                        </h3>
 
-                                        </div>
-                                        {this.renderTable()}
-                                    </div>
+                      </div>
+                      {this.renderTable()}
+                    </div>
 
-                                    {/* onClick={(e) => {
+                    {/* onClick={(e) => {
                                                 e.target.className.indexOf('market-button') !== -1 && e.target.className.indexOf('marketLOCUS') === -1
                                                 && setTimeout(() => {Router.push('/exchange');
                                                     document.body.scrollTop = document.documentElement.scrollTop = 0;
                                                 }, 500)
                                             }} */}
-                                    <div className="balances_list">
-                                        <div className="total_balance"></div>
-                                        <div className="products_list_balances">
-                                            <div className="row2">
-                                                <div className="balance">
-                                                    <div
-                                                        className="balances_name"
-                                                        onMouseEnter={() => this.mouseEnter('name')}
-                                                        onMouseLeave={this.mouseLeave}
-                                                    >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="balances_list">
+                      <div className="total_balance" />
+                      <div className="products_list_balances">
+                        <div className="row2">
+                          <div className="balance">
+                            <div
+                                    className="balances_name"
+                                    onMouseEnter={() => this.mouseEnter('name')}
+                                    onMouseLeave={this.mouseLeave}
+                                  />
+                          </div>
                         </div>
-                    </section>
-                </Wallet>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </Wallet>
         )
     }
 }

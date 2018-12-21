@@ -1,9 +1,9 @@
 
 import { put, takeLatest, all } from 'redux-saga/effects';
+import Web3 from 'web3';
 import store from '../store/reduxStore';
 import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants'
-import Web3 from 'web3';
 
 const CheckProvider = () => {
     return window.web3 && window.web3.currentProvider ? window.web3.currentProvider : (Web3.givenProvider ? Web3.givenProvider : null);
