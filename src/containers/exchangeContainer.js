@@ -668,7 +668,7 @@ const ExchangeColumn1 = styled.div`
                                 //color:#f33;
                                 font-weight:bold;
                                 background: rgba(0, 102, 204, 0.1);
-                             
+
                                 .bookViewBorder{
                                     width:100%;
                                     height:100%;
@@ -676,7 +676,7 @@ const ExchangeColumn1 = styled.div`
                                     border:2px solid black;
                                     box-sizing: border-box;
                                     z-index: 2;
-                                 
+
                                 }
                             }
                             .CellMyOrders {
@@ -722,7 +722,7 @@ const ExchangeColumn1 = styled.div`
                                 //color:#06c;
                                 font-weight:bold;
                                 background: rgba(255, 51, 51, 0.1);
-                                
+
                                 .bookViewBorder{
                                     width:100%;
                                     height:100%;
@@ -730,7 +730,7 @@ const ExchangeColumn1 = styled.div`
                                     border:2px solid black;
                                     box-sizing: border-box;
                                     z-index: 2;
-                                 
+
                                 }
                             }
                             .CellMyOrders {
@@ -815,11 +815,11 @@ const ExchangeColumn1 = styled.div`
                         }
                     }
                 }
-                
+
                 .emptyOrderEntry{
                     height:345px;line-height:345px;margin:11px 0 0 0;text-align:center;background:#fff;
                 }
-                
+
                 .order-entry-head {
                     height: 340px;
                     margin:11px 0 0 0;
@@ -939,20 +939,20 @@ const ExchangeColumn1 = styled.div`
                                         height:10px;
                                         width:10px;
                                         background:url('/static/images/icon/top.png') 0 0 no-repeat;
-                                        background-size:10px 10px; 
-                                        cursor : pointer;    
+                                        background-size:10px 10px;
+                                        cursor : pointer;
                                     }
                                     .bottom_arrow{
                                         height:10px;
                                         width:10px;
                                         background:url('/static/images/icon/bottom.png') 0 0 no-repeat;
                                         background-size:10px 10px;
-                                        margin-top :5px; 
-                                        cursor: pointer;   
+                                        margin-top :5px;
+                                        cursor: pointer;
                                     }
                                 }
                                 label.error {
-                                    
+
                                 }
                             }
                         }
@@ -1273,12 +1273,12 @@ const ExchangeColumn1 = styled.div`
                 }
             }
         }
-    } 
+    }
     @media(max-width: 1024px) {
         width: 100%;
         max-width: 100%;
         .chart-wrap {
-            //display: none;  
+            //display: none;
             .module-trigger{
                 height:400px;
             }
@@ -1339,7 +1339,7 @@ const ExchangeColumn1 = styled.div`
                                 padding:5px 10px 0 0;
                                 font-size:1.2rem;
                                 box-sizing:border-box;
-                            }                        
+                            }
                         }
                     }
                     .priceStatus, .volStatus {
@@ -1374,7 +1374,7 @@ const ExchangeColumn1 = styled.div`
                         h4 {
                             font-size: 1rem;
                         }
-                    }                
+                    }
                 }
                 &.normal {
                     .cuKrw {
@@ -1428,7 +1428,7 @@ const ExchangeColumn1 = styled.div`
                             line-height:2rem;
                         }
                     }
-                    
+
                 }
                 .orderPanel {
                     float:left;
@@ -1510,7 +1510,7 @@ const ExchangeColumn1 = styled.div`
                                     line-height: 2.5rem;
                                 }
                             }
-                           
+
                         }
                     }
                 }
@@ -1572,7 +1572,7 @@ const ExchangeColumn1 = styled.div`
                 }
             }
         }
-        
+
         .chart-wrap{
             margin:1rem 0 0 0;
             border-top:2px solid #036;
@@ -1696,7 +1696,7 @@ const ExchangeColumn2 = styled.div`
         width:100%;
         max-width: 100%;
 
-        
+
         .mobileWrapper {
             position:relative;
             .setCoinMarket {

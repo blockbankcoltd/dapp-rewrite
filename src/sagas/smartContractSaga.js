@@ -39,8 +39,8 @@ function createSmartContract() {
 
     const contract_address = selectedContract.address;
     const { GlobalWeb3Object } = store.getState().main;
-    
-    
+
+
     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
     return Contract;
 }
@@ -111,12 +111,26 @@ function* getOrderBook(params) {
     const orderBook = yield call(res.call, {
         from: Contract.givenProvider.selectedAddress
     })
+
+    const convertPrice = (arr) => {
+        return arr.map( obj => {
+          return new Decimal(obj).div(new Decimal(config.basePrice)).toString(10)
+        })
+    }
+
+    const convertVolume = (arr, trade) => {
+        const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
+        return arr.map( obj => {
+          return new Decimal(obj).div(new Decimal(tradeDecimal)).toString(10)
+        })
+    }
+
     yield put({
         type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
-            priceA: orderBook.priceA,
-            priceB: orderBook.priceB,
-            volumeA: orderBook.volumeA,
-            volumeB: orderBook.volumeB
+            priceA:  convertPrice(orderBook.priceA),
+            priceB:  convertPrice(orderBook.priceB),
+            volumeA: convertVolume(orderBook.volumeA, prTrade),
+            volumeB: convertVolume(orderBook.volumeB, prTrade)
         }
     });
 }
@@ -148,13 +162,14 @@ function* placeBuyOrder(params) {
     const { price, amount, base, trade } = params.payload;
     const isSell = false;
     const ownerId = config.ownerId; // get the ownerId from the config
+    const basePrice = config.basePrice;
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
-    const baseDecimal = coinList.find(coin => coin.productId === base).decimal;
+    //const baseDecimal = coinList.find(coin => coin.productId === base).decimal;
 
-    let calculated_price = new Decimal(price).mul( new Decimal(baseDecimal) );
+    let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
     let BN_Price = new BN(calculated_price.toString(10));
-    
+
     let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal) );
     let BN_Amount = new BN(calculated_amount.toString(10));
 
@@ -184,16 +199,17 @@ function* placeSellOrder(params) {
     const { price, amount, base, trade } = params.payload;
     const isSell = true;
     const ownerId = config.ownerId; // get the ownerId from the config
+    const basePrice = config.basePrice;
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade);
-    const baseDecimal = coinList.find(coin => coin.productId === base);
+    //const baseDecimal = coinList.find(coin => coin.productId === base);
 
-    let calculated_price = new Decimal(price).mul( new Decimal(baseDecimal.decimal) );
+    let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
     let BN_Price = new BN(calculated_price.toString(10));
-    
+
     let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal.decimal) );
     let BN_Amount = new BN(calculated_amount.toString(10));
-    
+
 
     const orderHash = Contract.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
         from: Contract.givenProvider.selectedAddress
@@ -214,23 +230,32 @@ function* getBalance(params) {
         // let x = yield c;
     }
 
-    const fetchAccountBalancePromise = (accountId, prCodesArray) => {
-        return new Promise((resolve, reject) => {
-            Contract.methods.getBalance(accountId, prCodesArray).call({
-                from: Contract.givenProvider.selectedAddress
-            }).then(data => resolve(data)).catch(err => reject(err));
-        })
-    }
+    //  const fetchAccountBalancePromise = (accountId, prCodesArray) => {
+    //     return new Promise((resolve, reject) => {
+    //         Contract.methods.getBalance(prCodesArray).call({
+    //             from: Contract.givenProvider.selectedAddress
+    //         }).then(data => resolve(data)).catch(err => reject(err));
+    //     })
+    // }
+    //
+    // let productArray = Lodash.uniq(prCodesArray)
+    // const balance = yield call(fetchAccountBalancePromise, productArray)
 
-    const balance = yield call(fetchAccountBalancePromise, 2, Lodash.uniq(prCodesArray))
+    let productArray = Lodash.uniq(prCodesArray);
+    const res = yield call(Contract.methods.getBalance, productArray)
+    const balance = yield call(res.call, {
+       from: Contract.givenProvider.selectedAddress
+     });
+     console.log("balance from SC", balance);
     let _result = [];
     balance.available.forEach((obj, index) => {
-        let dec = Math.pow(10, tokens[index].decimal);
+        //let dec = Math.pow(tokens[index].decimal);
         let n = new Decimal(obj.toString());
-        let d = new Decimal(dec.toString());
+        let h = new Decimal (balance.reserved[index]);
+        let d = new Decimal(tokens[index].decimal);
         _result.push({
             name: tokens[index].name,
-            hold: (balance.reserved[index]).toString(),
+            hold: h.dividedBy(d).toString(10),
             total: n.dividedBy(d).toString(10),
             tokenAddress: tokens[index].address
         });
