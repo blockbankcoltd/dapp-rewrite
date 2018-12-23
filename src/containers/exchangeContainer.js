@@ -51,7 +51,6 @@ class ExchangeContainer extends Component {
             tradeName: prodName.productName
         });
         this.props.getOrderbook(trade, base, 10);
-        console.log("Calling best bid & ask --------------->>> ", tradesForBase, [baseName.market.productId])
         this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
     }
 
@@ -88,9 +87,7 @@ class ExchangeContainer extends Component {
             <Exchange id="wrap">
                 <ExchangeColumn1>
                     <div id="ticker">
-                    <pre>
-                        {JSON.stringify(this.props.bestBidBestAsk)}
-                    </pre>
+                    
                         <TickerA
                             languageConfig={this.props.languageConfig}
                             baseName={this.state.baseName}
