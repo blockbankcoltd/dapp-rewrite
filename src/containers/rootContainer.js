@@ -9,6 +9,8 @@ import HeaderComponent from '../components/global/header';
 import store from '../store/reduxStore';
 import Actions from '../actions/index';
 import FooterComponent from "../components/global/footer";
+import { Web3Provider } from '../components/global/web3provider';
+import { fetchAccounts, fetchNetwork } from '../utilities/helpers';
 
 class RootContainer extends Component {
     constructor(props) {
@@ -48,7 +50,6 @@ class RootContainer extends Component {
     }
     
     render() {
-        console.log(this.props);
         const switchLanguage = (code) => {
             localStorage.setItem('lang', code);
             return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
@@ -80,6 +81,7 @@ class RootContainer extends Component {
         
         return (
           <div className="App">
+            <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
             <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
             <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
             <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />

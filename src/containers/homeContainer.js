@@ -9,163 +9,166 @@ import thum_icon4 from "../assets/images/dexhi_icon_4.png";
 import thum_icon5 from "../assets/images/dexhi_icon_5.png";
 
 class HomeContainer extends Component {
-    state = {
-        exchangeAdd: false,
-        featureAdd: false,
-        isLogin: false,
-        use2FA: false,
-        instrumentTicks: []
-    };
     constructor(props) {
         super(props);
         this.state = {
-
+            exchangeAdd: false,
+            featureAdd: false,
+            isLogin: false,
+            use2FA: false,
+            instrumentTicks: []
         };
         this.EXCHANGETOP_ref = React.createRef();
+        this.onWindowScroll = this.onWindowScroll.bind(this); //bind function once
 
     }
-    componentDidMount(){
-        console.log("LANGUAGE CONFIG Home -------------------------------------->>>>>>>> ", this.props);
-        const EXCHANGETOP = this.EXCHANGETOP_ref.current.offsetTop * 0.5;
 
+    onWindowScroll = () => {
+        const EXCHANGETOP = this.EXCHANGETOP_ref.current.offsetTop * 0.5;
         let scrollOn = {
             exchange: true,
             feature: true
         };
-        let txtEffect = null;
-        window.onscroll = () => {
-            let windowTop = window.scrollY;
-            if (windowTop > EXCHANGETOP && scrollOn.exchange) {
-                this.setState({exchageAdd: true});
-                scrollOn.exchange = false;
-            }
-            if (windowTop > 100) {
-                this.setState({headerAdd: true});
-                scrollOn.header = false;
-            } else {
-                this.setState({headerAdd: false});
-                scrollOn.header = true;
-            }
+        let windowTop = window.scrollY;
+        if (windowTop > EXCHANGETOP && scrollOn.exchange) {
+            this.setState({ exchageAdd: true });
+            scrollOn.exchange = false;
         }
+        if (windowTop > 100) {
+            this.setState({ headerAdd: true });
+            scrollOn.header = false;
+        } else {
+            this.setState({ headerAdd: false });
+            scrollOn.header = true;
+        }
+    }
+    componentDidMount() {
+        // let txtEffect = null;
+        window.addEventListener('scroll', this.onWindowScroll, false);
+    }
+
+    componentWillUnmount() {
+        // you need to unbind the same listener that was binded.
+        window.removeEventListener('scroll', this.onWindowScroll, false);
     }
 
     render() {
         const { INDEX } = this.props.languageConfig;
         return (
-          <div>
-            <MainVisual id="mainVisual">
-              <div className="container">
-                <div className="main_wrap">
-                  <div className="login_wrap">
-                    <VisualText>
-                      <h3>DECENTRALIZED FINANCE</h3>
-                      <p>{INDEX.TITLE_TEXT}</p>
-                    </VisualText>
-                    {this.LoginArea}
-                  </div>
-                  <div className="coin_wrap">
-                    <div className="head_cont">
-                      <table className="coin_table">
-                        <thead>
-                          <tr>
-                            <th className="coinName">{INDEX.NAME}</th>
-                            <th>{INDEX.PRICE}</th>
-                            <th>{INDEX.PXCHANGE}</th>
-                          </tr>
-                        </thead>
-                      </table>
+            <div>
+                <MainVisual id="mainVisual">
+                    <div className="container">
+                        <div className="main_wrap">
+                            <div className="login_wrap">
+                                <VisualText>
+                                    <h3>DECENTRALIZED FINANCE</h3>
+                                    <p>{INDEX.TITLE_TEXT}</p>
+                                </VisualText>
+                                {this.LoginArea}
+                            </div>
+                            <div className="coin_wrap">
+                                <div className="head_cont">
+                                    <table className="coin_table">
+                                        <thead>
+                                            <tr>
+                                                <th className="coinName">{INDEX.NAME}</th>
+                                                <th>{INDEX.PRICE}</th>
+                                                <th>{INDEX.PXCHANGE}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div className="price_cont">
+                                    <table>
+                                        <tbody />
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="price_cont">
-                      <table>
-                        <tbody />
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </MainVisual>
-            <Content id="content">
+                </MainVisual>
+                <Content id="content">
 
 
-              <ExchangeInfo id="exchangeInfo">
-                <div className="container_title">
-                  <dl>
-                    <dt>{INDEX.EXCHANGE_TITLE2}</dt>
-                    <dd>{INDEX.EXCHANGE_TITLE3}</dd>
-                    <dd>{INDEX.EXCHANGE_TITLE4}</dd>
-                  </dl>
-                </div>
-                <div className="container">
-                  <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                    <span className="thumb">
-                      <img
-                        src=""
-                        alt=""
-                      />
-                    </span>
-                    <div className="txt_cont">
-                      <dl>
-                        <dt>{INDEX.EXCHANGE5_TIT}</dt>
-                      </dl>
-                      <dl className="txt_cont_dl_2">
-                        <dd>{INDEX.EXCHANGE5_TXT}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                  <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                    <span className="thumb">
-                      <img
-                        src=""
-                        alt=""
-                      />
-                    </span>
-                    <div className="txt_cont">
-                      <dl>
-                        <dt>{INDEX.EXCHANGE6_TIT}</dt>
-                      </dl>
-                      <dl className="txt_cont_dl_2">
-                        <dd>{INDEX.EXCHANGE6_TXT}</dd>
-                      </dl>
-                    </div>
-                  </div>
+                    <ExchangeInfo id="exchangeInfo">
+                        <div className="container_title">
+                            <dl>
+                                <dt>{INDEX.EXCHANGE_TITLE2}</dt>
+                                <dd>{INDEX.EXCHANGE_TITLE3}</dd>
+                                <dd>{INDEX.EXCHANGE_TITLE4}</dd>
+                            </dl>
+                        </div>
+                        <div className="container">
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb">
+                                    <img
+                                        src=""
+                                        alt=""
+                                    />
+                                </span>
+                                <div className="txt_cont">
+                                    <dl>
+                                        <dt>{INDEX.EXCHANGE5_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE5_TXT}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb">
+                                    <img
+                                        src=""
+                                        alt=""
+                                    />
+                                </span>
+                                <div className="txt_cont">
+                                    <dl>
+                                        <dt>{INDEX.EXCHANGE6_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE6_TXT}</dd>
+                                    </dl>
+                                </div>
+                            </div>
 
-                  <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                    <span className="thumb">
-                      <img
-                        src=""
-                        alt=""
-                      />
-                    </span>
-                    <div className="txt_cont">
-                      <dl>
-                        <dt>{INDEX.EXCHANGE7_TIT}</dt>
-                      </dl>
-                      <dl className="txt_cont_dl_2">
-                        <dd>{INDEX.EXCHANGE7_TXT}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                  <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
-                    <span className="thumb">
-                      <img
-                        src=""
-                        alt=""
-                      />
-                    </span>
-                    <div className="txt_cont">
-                      <dl>
-                        <dt>{INDEX.EXCHANGE8_TIT}</dt>
-                      </dl>
-                      <dl className="txt_cont_dl_2">
-                        <dd>{INDEX.EXCHANGE8_TXT}</dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              </ExchangeInfo>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb">
+                                    <img
+                                        src=""
+                                        alt=""
+                                    />
+                                </span>
+                                <div className="txt_cont">
+                                    <dl>
+                                        <dt>{INDEX.EXCHANGE7_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE7_TXT}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
+                                <span className="thumb">
+                                    <img
+                                        src=""
+                                        alt=""
+                                    />
+                                </span>
+                                <div className="txt_cont">
+                                    <dl>
+                                        <dt>{INDEX.EXCHANGE8_TIT}</dt>
+                                    </dl>
+                                    <dl className="txt_cont_dl_2">
+                                        <dd>{INDEX.EXCHANGE8_TXT}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </ExchangeInfo>
 
-            </Content>
-          </div>
+                </Content>
+            </div>
         )
     }
 }
@@ -174,11 +177,9 @@ const mapStateToProps = (state) => ({
 
 })
 
-const mapDispatchToProps = (dispatch) => {
-    return {
+const mapDispatchToProps = (dispatch) => ({
 
-    }
-}
+})
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HomeContainer));
 

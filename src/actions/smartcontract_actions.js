@@ -13,19 +13,19 @@ export const putSmartContractToStore = () => ({
     type: Constants.default.Requests.SMARTCONTRACT_OBJECT_REQUEST
 });
 
-export const placeBuyOrderRequest = (price, total) => {
-    console.log("Actions SC", price, total);
+export const placeBuyOrderRequest = (price, amount, base, trade) => {
+    console.log("Actions SC", price, amount, base, trade);
     return {
         type: Constants.default.Requests.PLACE_BUY_ORDER_REQUEST,
-        payload: {price, total}
+        payload: {price, amount, base, trade}
     }
 };
 
-export const placeSellOrderRequest = (price, total) => {
-    console.log("Actions SC", price, total);
+export const placeSellOrderRequest = (price, amount, base, trade) => {
+    console.log("Actions SC", price, amount, base, trade);
     return {
         type: Constants.default.Requests.PLACE_SELL_ORDER_REQUEST,
-        payload: { price, total }
+        payload: { price, amount, base, trade }
     }
 };
 

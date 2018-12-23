@@ -1,5 +1,6 @@
 import { bindActionCreators } from "redux";
 import Constants, * as Constant from '../constants/constants';
+import {fetchAccounts, fetchNetwork} from '../utilities/helpers';
 // import { FETCH_DATA, RECEIVED_DATA } from '../actions/types';
 
 // const setLang = async (type) => {
@@ -16,6 +17,18 @@ import Constants, * as Constant from '../constants/constants';
 export default (state = {}, action) => {
     switch (action.type) {
         /* REACT-WEB3 Actions */
+        case "FETCH_ACCOUNTS_FROM_WEB3":
+        console.log("Caught fetch accounts");
+        return {
+            ...state,
+            accounts: fetchAccounts()
+        };
+        case "FETCH_NETWORK_FROM_WEB3":
+        console.log("Caught fetch Network");
+            return {
+                ...state,
+                network: fetchNetwork()
+            };
         case "web3/RECEIVE_ACCOUNT":
             return {
                 ...state,

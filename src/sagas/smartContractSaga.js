@@ -61,13 +61,21 @@ function createSmartContract() {
 
 function* placeBuyOrder(params) {
     const Contract = createSmartContract();
-    const { price, total } = params.payload;
+    const { price, amount, base, trade } = params.payload;
     const isSell = false;
-    const ownerId = 1;
-    const prTrade = 2;
-    const prBase = 3;
+    const ownerId = 1; // get the ownerId from the config
 
-    const orderHash = Contract.methods.LimitOrder(ownerId, prTrade, prBase, isSell, price, total).send({
+    const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
+    const baseDecimal = coinList.find(coin => coin.productId === base).decimal;
+
+    let calculated_price = new Decimal(price).mul( new Decimal(baseDecimal) );
+    let BN_Price = new BN(calculated_price.toString(10));
+    
+    let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal) );
+    let BN_Amount = new BN(calculated_amount.toString(10));
+
+
+    const orderHash = Contract.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
         from: Contract.givenProvider.selectedAddress
     });
     yield put({ type: Constants.default.Success.PLACE_BUY_ORDER_SUCCESS, buyOrderStatus: orderHash });
@@ -163,13 +171,22 @@ function* getMyOrders() {
 
 function* placeSellOrder(params) {
     const Contract = createSmartContract();
-    const { price, total } = params.payload;
+    console.log(params);
+    const { price, amount, base, trade } = params.payload;
     const isSell = true;
-    const ownerId = 1;
-    const prTrade = 2;
-    const prBase = 3;
+    const ownerId = 1; // get the ownerId from the config
 
-    const orderHash = Contract.methods.LimitOrder(ownerId, prTrade, prBase, isSell, price, total).send({
+    const tradeDecimal = coinList.find(coin => coin.productId === trade);
+    const baseDecimal = coinList.find(coin => coin.productId === base);
+
+    let calculated_price = new Decimal(price).mul( new Decimal(baseDecimal.decimal) );
+    let BN_Price = new BN(calculated_price.toString(10));
+    
+    let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal.decimal) );
+    let BN_Amount = new BN(calculated_amount.toString(10));
+    
+
+    const orderHash = Contract.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
         from: Contract.givenProvider.selectedAddress
     });
     yield put({ type: Constants.default.Success.PLACE_SELL_ORDER_SUCCESS, sellOrderStatus: orderHash });
@@ -195,7 +212,7 @@ function* getBalance(params) {
     balance.available.forEach((obj, index) => {
         let dec = Math.pow(10, tokens[index].decimal);
         let n = new Decimal(obj.toString());
-        let d = new Decimal(dec.toString())
+        let d = new Decimal(dec.toString());
         _result.push({
             name: tokens[index].name,
             hold: (balance.reserved[index]).toString(),

@@ -23,15 +23,6 @@ class WalletContainer extends Component {
 
     componentDidMount() {
         this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
-        this.props.getMyAccountId();
         this.props.getBalance();
     }
 
@@ -164,9 +155,7 @@ class WalletContainer extends Component {
                           <div className="first">{WALLET.TOTAL_ASSET}</div>
 
                           <div className="second">
-                            <strong id="balanceTxt">
-                                                        0
-                                  </strong>
+                            <strong id="balanceTxt">0</strong>
                             <span className="krw"> KRW</span>
                           </div>
                         </h3>

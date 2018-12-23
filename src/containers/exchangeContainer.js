@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import TickerA from '../components/local/exchange/TickerA';
 import OrderbookA from '../components/local/exchange/OrderbookA';
 import OrderentryA from '../components/local/exchange/OrderentryA';
@@ -11,7 +11,7 @@ import BalanceA from '../components/local/exchange/BalanceA';
 import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
 import Actions from '../actions/index';
-import {config, filterMarkets} from '../utilities/config';
+import { config, filterMarkets } from '../utilities/config';
 
 class ExchangeContainer extends Component {
     constructor(props) {
@@ -24,23 +24,16 @@ class ExchangeContainer extends Component {
             price: 0,
             marketsData: []
         };
-        this.filterMarkets = filterMarkets.bind(this);
+        // this.filterMarkets = filterMarkets.bind(this);
     }
 
     componentDidMount() {
-        console.log("LANGUAGE CONFIG Exchange -------------------------------------->>>>>>>> ", this.props);
         // dispatch Action to get data for Orderbook
         this.props.getOrderbook(2, 3, 10);
         this.props.getBalance();
         const marketDataFromConfig = filterMarkets();
-        this.setState({marketsData: marketDataFromConfig});
-        console.log("STATE AT HOC ----------->>>>>>>>>>> ", this.state, marketDataFromConfig);
-        // this.props.placeBuyOrder()
-        // this.props.placeSellrder()
-        // this.props.depositEth()
-        // this.props.withdrawEth()
-        // this.props.depositToken()
-        // this.props.withdrawToken()
+        this.setState({ marketsData: marketDataFromConfig });
+        console.log("STATE AT Exchange Container HOC ----------->>>>>>>>>>> ", this.state, marketDataFromConfig);
     }
 
     changeTradeCurrency = (base, trade) => {
@@ -62,21 +55,21 @@ class ExchangeContainer extends Component {
 
 
     handleBuySellPrice = (val) => {
-        this.setState({price: val});
+        this.setState({ price: val });
     }
 
-    placeBuyOrder = (price, total) => {
-        console.log("Received values from child component + Buy Order --> ", price, total);
-        this.props.placeBuyOrder(price, total);
+    placeBuyOrder = (price, amount) => {
+        console.log("Received values from child component + Buy Order --> ", price, amount);
+        this.props.placeBuyOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
     }
 
-    placeSellOrder = (price, total) => {
-        console.log("Received values from child component + Sell Order --> ", price, total);
-        this.props.placeSellOrder(price, total);
+    placeSellOrder = (price, amount) => {
+        console.log("Received values from child component + Sell Order --> ", price, amount);
+        this.props.placeSellOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
     }
 
     render() {
-        const {ORDER_HISTORY, TRADES} = this.props.languageConfig;
+        const { ORDER_HISTORY, TRADES } = this.props.languageConfig;
 
         const isMobile = false;
         const list = [
@@ -93,161 +86,159 @@ class ExchangeContainer extends Component {
         ];
 
         return (
-          <Exchange id="wrap">
-            <ExchangeColumn1>
-              <div id="ticker">
-                <TickerA
-                  languageConfig={this.props.languageConfig}
-                  baseName={this.state.baseName}
-                  tradeName={this.state.tradeName}
-                />
-              </div>
-              <div className="example-grow">
-                <div className="parent">
-                  <div className="item">
-                    {
-                                    !isMobile && (
-                                    <div className="chart-wrap">
-                                      <form className="module-trigger chart-trigger">
-                                        <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
-                                        <label htmlFor="chart-trigger-1" className="price-ch-btn">
-Price
-                                                chart
-                                        </label>
-                                        <div className="clear" />
-
-                                        <div className="trigger-content">
-                                          <div id="chart-trigger-content-1">
-                                            <div>*Chart Area</div>
-                                          </div>
-                                        </div>
-                                      </form>
-                                    </div>
-)}
-
-                    <div className="quotation">
-
-                      <OrderbookA
-                        languageConfig={this.props.languageConfig}
-                        data={this.props.orderBook}
-                        handleChangePrice={this.handleBuySellPrice}
-                      />
-                    </div>
-
-
-                    <div className="orderPanel">
-                      <div className="account-overview">
-                        <BalanceA
-                          languageConfig={this.props.languageConfig}
-                          baseName={this.state.baseName}
-                          tradeName={this.state.tradeName}
-                          balance={this.props.balance}
+            <Exchange id="wrap">
+                <ExchangeColumn1>
+                    <div id="ticker">
+                        <TickerA
+                            languageConfig={this.props.languageConfig}
+                            baseName={this.state.baseName}
+                            tradeName={this.state.tradeName}
                         />
+                    </div>
+                    <div className="example-grow">
+                        <div className="parent">
+                            <div className="item">
+                                { !isMobile && (
+                                        <div className="chart-wrap">
+                                            <form className="module-trigger chart-trigger">
+                                                <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
+                                                <label htmlFor="chart-trigger-1" className="price-ch-btn">
+                                                    Price chart
+                                                </label>
+                                                <div className="clear" />
 
-                        <div className="order-entry-head">
-                          <form>
-                            <div className="trigger-content">
-                                <div id="trigger-content-1">
+                                                <div className="trigger-content">
+                                                    <div id="chart-trigger-content-1">
+                                                        <div>*Chart Area</div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                )}
 
-                                    <div className="order-entry">
-                                        <OrderentryA
+                                <div className="quotation">
+
+                                    <OrderbookA
+                                        languageConfig={this.props.languageConfig}
+                                        data={this.props.orderBook}
+                                        handleChangePrice={this.handleBuySellPrice}
+                                    />
+                                </div>
+
+
+                                <div className="orderPanel">
+                                    <div className="account-overview">
+                                        <BalanceA
                                             languageConfig={this.props.languageConfig}
-                                            buyOrder={this.placeBuyOrder}
-                                            sellOrder={this.placeSellOrder}
-                                            price={this.state.price}
                                             baseName={this.state.baseName}
                                             tradeName={this.state.tradeName}
-                                          />
-                                      </div>
-                                  </div>
-                              </div>
-                          </form>
-                        </div>
+                                            balance={this.props.balance}
+                                        />
 
-                      </div>
-                    </div>
+                                        <div className="order-entry-head">
+                                            <form>
+                                                <div className="trigger-content">
+                                                    <div id="trigger-content-1">
 
-                    <div className="publicTrades">
-                      <PublicTradesA
-                        languageConfig={this.props.languageConfig}
-                        baseName={this.state.baseName}
-                        tradeName={this.state.tradeName}
-                      />
-                    </div>
+                                                        <div className="order-entry">
+                                                            <OrderentryA
+                                                                languageConfig={this.props.languageConfig}
+                                                                buyOrder={this.placeBuyOrder}
+                                                                sellOrder={this.placeSellOrder}
+                                                                price={this.state.price}
+                                                                baseName={this.state.baseName}
+                                                                tradeName={this.state.tradeName}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
 
-                    <div className="open-order-head">
-                      <div className="tab_list">
-                        <ul>
-                          {
+                                    </div>
+                                </div>
+
+                                <div className="publicTrades">
+                                    <PublicTradesA
+                                        languageConfig={this.props.languageConfig}
+                                        baseName={this.state.baseName}
+                                        tradeName={this.state.tradeName}
+                                    />
+                                </div>
+
+                                <div className="open-order-head">
+                                    <div className="tab_list">
+                                        <ul>
+                                            {
                                                 list.map((item, index) => {
                                                     return (
-                                                      <li
-                                                        key={index}
-                                                        className={this.state.tabSelected === index ? "active" : ""}
-                                                        data-tab={item.tabName}
-                                                        onClick={(e) => {
-                                                                   this.setState({
-                                                                       tabSelected: index
-                                                                   })
-                                                               }}
-                                                      >
-                                                        {item.text}
-                                                      </li>
-)
+                                                        <li
+                                                            key={index}
+                                                            className={this.state.tabSelected === index ? "active" : ""}
+                                                            data-tab={item.tabName}
+                                                            onClick={(e) => {
+                                                                this.setState({
+                                                                    tabSelected: index
+                                                                })
+                                                            }}
+                                                        >
+                                                            {item.text}
+                                                        </li>
+                                                    )
                                                 })
                                             }
-                        </ul>
-                      </div>
-                      <div className="tab_container">
-                        <div
-                          id="historyTab"
-                          className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}
-                        >
-                          <OpenOrdersA languageConfig={this.props.languageConfig} />
+                                        </ul>
+                                    </div>
+                                    <div className="tab_container">
+                                        <div
+                                            id="historyTab"
+                                            className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}
+                                        >
+                                            <OpenOrdersA languageConfig={this.props.languageConfig} />
+                                        </div>
+                                        <div
+                                            id="tradesTab"
+                                            className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
+                                        >
+                                            <PrivateTradesA languageConfig={this.props.languageConfig} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
                         </div>
-                        <div
-                          id="tradesTab"
-                          className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
-                        >
-                          <PrivateTradesA languageConfig={this.props.languageConfig} />
-                        </div>
-                      </div>
                     </div>
 
-                  </div>
-
-
-                </div>
-              </div>
-
-              {
+                    {
                         isMobile && (
-                        <div className="chart-wrap">
-                          <form className="module-trigger chart-trigger">
-                            <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
-                            <label htmlFor="chart-trigger-1" className="price-ch-btn">Price chart</label>
-                            <div className="clear" />
+                            <div className="chart-wrap">
+                                <form className="module-trigger chart-trigger">
+                                    <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
+                                    <label htmlFor="chart-trigger-1" className="price-ch-btn">Price chart</label>
+                                    <div className="clear" />
 
-                            <div className="trigger-content">
-                              <div id="chart-trigger-content-1" />
+                                    <div className="trigger-content">
+                                        <div id="chart-trigger-content-1" />
+                                    </div>
+                                </form>
                             </div>
-                          </form>
-                        </div>
-)
+                        )
                     }
-            </ExchangeColumn1>
-            <ExchangeColumn2>
-              <div id="inst">
-                <InstrumentSelectA
-                  handleTradeCurrencyChange={this.changeTradeCurrency}
-                  languageConfig={this.props.languageConfig}
-                  data={filterMarkets()}
-                />
+                </ExchangeColumn1>
+                <ExchangeColumn2>
+                    <div id="inst">
+                        <InstrumentSelectA
+                            handleTradeCurrencyChange={this.changeTradeCurrency}
+                            languageConfig={this.props.languageConfig}
+                            data={filterMarkets()}
+                        />
 
-              </div>
-            </ExchangeColumn2>
+                    </div>
+                </ExchangeColumn2>
 
-          </Exchange>
+            </Exchange>
         )
     }
 }
@@ -260,8 +251,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        placeBuyOrder: (x, y) => dispatch(Actions.smartContract.placeBuyOrderRequest(x, y)),
-        placeSellOrder: (x, y) => dispatch(Actions.smartContract.placeSellOrderRequest(x, y)),
+        placeBuyOrder: (x, y, z, k) => dispatch(Actions.smartContract.placeBuyOrderRequest(x, y, z, k)),
+        placeSellOrder: (x, y, z, k) => dispatch(Actions.smartContract.placeSellOrderRequest(x, y, z, k)),
         getOrderbook: (x, y, z) => dispatch(Actions.smartContract.getOrderBookRequest(x, y, z)),
         getBalance: () => dispatch(Actions.smartContract.getBalanceRequest()),
 
