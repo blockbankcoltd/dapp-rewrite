@@ -24,7 +24,6 @@ class ExchangeContainer extends Component {
             price: 0,
             marketsData: []
         };
-        // this.filterMarkets = filterMarkets.bind(this);
     }
 
     componentDidMount() {
@@ -33,7 +32,6 @@ class ExchangeContainer extends Component {
         this.props.getBalance();
         const marketDataFromConfig = filterMarkets();
         this.setState({ marketsData: marketDataFromConfig });
-        console.log("STATE AT Exchange Container HOC ----------->>>>>>>>>>> ", this.state, marketDataFromConfig);
     }
 
     changeTradeCurrency = (base, trade) => {
@@ -45,26 +43,18 @@ class ExchangeContainer extends Component {
             baseName: baseName.market.productName,
             tradeName: prodName.productName
         });
-        console.log("Changing Default Trading Tokens ------>>> ", this.state, base, trade);
         this.props.getOrderbook(base, trade, 10);
     }
-
-    // changeBaseCurrency = (value) => {
-    //     this.setState({baseCurrency: value});
-    // }
-
 
     handleBuySellPrice = (val) => {
         this.setState({ price: val });
     }
 
     placeBuyOrder = (price, amount) => {
-        console.log("Received values from child component + Buy Order --> ", price, amount);
         this.props.placeBuyOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
     }
 
     placeSellOrder = (price, amount) => {
-        console.log("Received values from child component + Sell Order --> ", price, amount);
         this.props.placeSellOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
     }
 

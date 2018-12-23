@@ -1,19 +1,12 @@
-import { call, put, takeEvery, takeLatest, all } from 'redux-saga/effects'
+import { call, put, takeEvery, takeLatest, all, fork, spawn } from 'redux-saga/effects'
 import Lodash from 'lodash';
 import Web3 from 'web3';
 import BN from 'bn.js';
 import { Decimal } from 'decimal.js';
-import * as mathLib from 'mathjs'
 import store from '../store/reduxStore';
-import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants';
 import { config, filterMarkets, contractList } from '../utilities/config';
 
-mathLib.config({
-    number: 'BigNumber', // Default type of number:
-    // 'number' (default), 'BigNumber', or 'Fraction'
-    precision: 18        // Number of significant digits for BigNumbers
-})
 // import Bignumber from 'bignumber';
 let data = [];
 
@@ -40,7 +33,6 @@ coinList.forEach((obj, i) => {
     }
 });
 
-console.log("Config data --> ", Lodash.uniq(data));
 
 function createSmartContract() {
     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
@@ -50,7 +42,6 @@ function createSmartContract() {
     
     
     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
-    console.log("GlobalWeb3Object --> ", GlobalWeb3Object);
     return Contract;
 }
 
@@ -59,11 +50,90 @@ function createSmartContract() {
 //     yield put({type: Constants.default.Success.SMARTCONTRACT_OBJECT_SUCCESS, GlobalSmartContractObject: Contract});
 // }
 
+function sendAmount(amount, decimal) {
+    const BNAmount = Web3.utils.toWei(amount, 'ether');
+    // const BNAmount = Web3.utils.toBN(+amount * Math.pow(10,decimal));
+    // console.log(+BNAmount, BNAmount)
+
+    // const Big = new Bignumber(amount);
+    // console.log(Big)
+    // const bigAmount = Big.multipliedBy(Math.pow(10,18));
+    // console.log(bigAmount)
+    console.log(BNAmount)
+    return BNAmount;
+}
+
+function recieveAmount(amount, decimal) {
+    return amount / Math.pow(10, decimal)
+}
+
+// ( async () => {
+//     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
+
+//     const contract_address = selectedContract.address;
+//     const { GlobalWeb3Object } = store.getState().main;
+//     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
+//     const id = await Contract.methods.GetMyAccountId().call({
+//         from: Contract.givenProvider.selectedAddress
+//     });
+//     console.log(" ID FROM ASYNC IIFE -------------------------------------------------------------------------- ", id);
+// })();
+
+function* getMyAccountId() {
+    const Contract = createSmartContract();
+    // const method = yield call(Contract.methods.GetMyAccountId);
+    // const accountId = yield call(method.call({
+    //     from: Contract.givenProvider.selectedAddress
+    // }));
+
+    const fetchAccountIdPromise = () => {
+        return new Promise((resolve, reject) => {
+            Contract.methods.GetMyAccountId().call({
+                from: Contract.givenProvider.selectedAddress
+            }).then(data => resolve(data)).catch(err => reject(err));
+        })
+    }
+    // fetchAccountIdPromise().then( id => {
+    //     console.log(id);
+    // }).catch( err => console.log(err));
+    const id = yield call(fetchAccountIdPromise);
+    yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id }); 
+    return id;
+}
+
+function* getOrderBook(params) {
+    const Contract = createSmartContract();
+    const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
+    const res = yield call(Contract.methods.GetHoga, prTrade, prBase, numOfOrdersToFetch)
+    const orderBook = yield call(res.call, {
+        from: Contract.givenProvider.selectedAddress
+    })
+    yield put({
+        type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
+            priceA: orderBook.priceA,
+            priceB: orderBook.priceB,
+            volumeA: orderBook.volumeA,
+            volumeB: orderBook.volumeB
+        }
+    });
+}
+
+function* getMyOrders() {
+    const Contract = createSmartContract();
+
+    const res = yield call(Contract.methods.GetMyOrders)
+    const myOrders = yield call(res.call, {
+        from: Contract.givenProvider.selectedAddress
+    })
+
+    yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders: myOrders });
+}
+
 function* placeBuyOrder(params) {
     const Contract = createSmartContract();
     const { price, amount, base, trade } = params.payload;
     const isSell = false;
-    const ownerId = 1; // get the ownerId from the config
+    const ownerId = config.ownerId; // get the ownerId from the config
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
     const baseDecimal = coinList.find(coin => coin.productId === base).decimal;
@@ -95,86 +165,11 @@ function* placeBuyOrder(params) {
     // })
 }
 
-function sendAmount(amount, decimal) {
-    const BNAmount = Web3.utils.toWei(amount, 'ether');
-    // const BNAmount = Web3.utils.toBN(+amount * Math.pow(10,decimal));
-    // console.log(+BNAmount, BNAmount)
-
-    // const Big = new Bignumber(amount);
-    // console.log(Big)
-    // const bigAmount = Big.multipliedBy(Math.pow(10,18));
-    // console.log(bigAmount)
-    console.log(BNAmount)
-    return BNAmount;
-}
-
-function recieveAmount(amount, decimal) {
-    return amount / Math.pow(10, decimal)
-}
-
-// ( async () => {
-//     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
-
-//     const contract_address = selectedContract.address;
-//     const { GlobalWeb3Object } = store.getState().main;
-//     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
-//     const id = await Contract.methods.GetMyAccountId().call({
-//         from: Contract.givenProvider.selectedAddress
-//     });
-//     console.log(" ID FROM ASYNC IIFE -------------------------------------------------------------------------- ", id);
-// })();
-
-const _testarray = [];
-
-function* getMyAccountId() {
-    const Contract = createSmartContract();
-    const method = yield call(Contract.methods.GetMyAccountId);
-    console.log(method)
-    const accountId = yield method.call({
-        from: Contract.givenProvider.selectedAddress
-    });
-    _testarray.push(accountId);
-    console.log(_testarray);
-    yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId }); 
-}
-
-function* getOrderBook(params) {
-    const Contract = createSmartContract();
-    const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
-    const tradeDecimal = coinList.find(coin => coin.productId === prTrade).decimal;
-    const baseDecimal = coinList.find(coin => coin.productId === prBase).decimal;
-
-    const res = yield call(Contract.methods.GetHoga, prTrade, prBase, numOfOrdersToFetch)
-    const orderBook = yield call(res.call, {
-        from: Contract.givenProvider.selectedAddress
-    })
-    yield put({
-        type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
-            priceA: orderBook.priceA,
-            priceB: orderBook.priceB,
-            volumeA: orderBook.volumeA,
-            volumeB: orderBook.volumeB
-        }
-    });
-}
-
-function* getMyOrders() {
-    const Contract = createSmartContract();
-
-    const res = yield call(Contract.methods.GetMyOrders)
-    const myOrders = yield call(res.call, {
-        from: Contract.givenProvider.selectedAddress
-    })
-
-    yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders: myOrders });
-}
-
 function* placeSellOrder(params) {
     const Contract = createSmartContract();
-    console.log(params);
     const { price, amount, base, trade } = params.payload;
     const isSell = true;
-    const ownerId = 1; // get the ownerId from the config
+    const ownerId = config.ownerId; // get the ownerId from the config
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade);
     const baseDecimal = coinList.find(coin => coin.productId === base);
@@ -198,16 +193,22 @@ function* getBalance(params) {
     let prCodesArray = [];
     let tokens = [];
     for (let c of data) {
-        if (+c.prCode)
+        if (+c.prCode){
             prCodesArray.push(+c.prCode);
+        }
         tokens.push({ name: c.product, address: c.tokenAddress, decimal: c.decimal });
         // let x = yield c;
     }
 
-    const res = yield call(Contract.methods.getBalance, 2, Lodash.uniq(prCodesArray))
-    const balance = yield call(res.call, {
-        from: Contract.givenProvider.selectedAddress
-    });
+    const fetchAccountBalancePromise = (accountId, prCodesArray) => {
+        return new Promise((resolve, reject) => {
+            Contract.methods.getBalance(accountId, prCodesArray).call({
+                from: Contract.givenProvider.selectedAddress
+            }).then(data => resolve(data)).catch(err => reject(err));
+        })
+    }
+
+    const balance = yield call(fetchAccountBalancePromise, 2, Lodash.uniq(prCodesArray))
     let _result = [];
     balance.available.forEach((obj, index) => {
         let dec = Math.pow(10, tokens[index].decimal);

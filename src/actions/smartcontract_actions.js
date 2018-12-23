@@ -1,12 +1,3 @@
-// export const getProductInfo = (owner, product) => ({
-//     type: "FETCH_PRODUCT_INFO",
-//     payload:  {owner, product}
-// });
-
-// export const depositETH = (owner, product) => ({
-//     type: "DEPOSIT_ETH",
-//     payload:  {owner, product}
-// });
 import * as Constants from '../constants/constants';
 
 export const putSmartContractToStore = () => ({
@@ -14,7 +5,6 @@ export const putSmartContractToStore = () => ({
 });
 
 export const placeBuyOrderRequest = (price, amount, base, trade) => {
-    console.log("Actions SC", price, amount, base, trade);
     return {
         type: Constants.default.Requests.PLACE_BUY_ORDER_REQUEST,
         payload: {price, amount, base, trade}
@@ -22,7 +12,6 @@ export const placeBuyOrderRequest = (price, amount, base, trade) => {
 };
 
 export const placeSellOrderRequest = (price, amount, base, trade) => {
-    console.log("Actions SC", price, amount, base, trade);
     return {
         type: Constants.default.Requests.PLACE_SELL_ORDER_REQUEST,
         payload: { price, amount, base, trade }
@@ -30,7 +19,6 @@ export const placeSellOrderRequest = (price, amount, base, trade) => {
 };
 
 export const getOrderBookRequest = (prTrade, prBase, numOfRecordsToFetch) => {
-    console.log("Actions SC", prTrade, prBase, numOfRecordsToFetch);
     return {
         type: Constants.default.Requests.GET_ORDERBOOK_REQUEST,
         payload: { prTrade, prBase, numOfRecordsToFetch }
