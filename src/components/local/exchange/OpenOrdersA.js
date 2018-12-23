@@ -5,12 +5,17 @@ export default class OpenOrdersA extends React.Component{
 
     constructor(props) {
         super(props);
+        this.state = {
+            isLogin: true,
+            page : 0
+        }
 
     }
 
-    state = {
-        isLogin: true,
-        page : 0
+    componentDidUpdate = (prevProps) => {
+      if(prevProps.data !== this.props.data){
+        console.log("DATA FOR OPEN ORDERS ---->>> ", this.props.data);
+      }
     }
 
     gotoPage (page) {

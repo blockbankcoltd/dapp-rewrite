@@ -28,14 +28,21 @@ class ExchangeContainer extends Component {
 
     componentDidMount() {
         // dispatch Action to get data for Orderbook
-        this.props.getOrderbook(2, 3, 10);
-        this.props.getBalance();
+        const baseName = filterMarkets().find(data => data.market.productId === 1);
+        const defaultTrade = config.trades.find(data => data.productId === 3);
+        const tradesForBase = baseName.market.trades.map( x => x.productId);
+        
         const marketDataFromConfig = filterMarkets();
-        this.setState({ marketsData: marketDataFromConfig });
+        this.setState((state, props) =>{ return  { marketsData: marketDataFromConfig, baseName: baseName.market.productName, tradeName: defaultTrade.productName}});
+        this.props.getOrderbook(1, 3, 10);
+        this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
+        this.props.getBalance();
+        this.props.getMyOrders();
     }
 
     changeTradeCurrency = (base, trade) => {
         const baseName = filterMarkets().find(data => data.market.productId === base);
+        const tradesForBase = baseName.market.trades.map( x => x.productId);
         const prodName = baseName.market.trades.find(data => data.productId === trade);
         this.setState({
             baseCurrency: base,
@@ -43,7 +50,9 @@ class ExchangeContainer extends Component {
             baseName: baseName.market.productName,
             tradeName: prodName.productName
         });
-        this.props.getOrderbook(base, trade, 10);
+        this.props.getOrderbook(trade, base, 10);
+        console.log("Calling best bid & ask --------------->>> ", tradesForBase, [baseName.market.productId])
+        this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
     }
 
     handleBuySellPrice = (val) => {
@@ -79,6 +88,9 @@ class ExchangeContainer extends Component {
             <Exchange id="wrap">
                 <ExchangeColumn1>
                     <div id="ticker">
+                    <pre>
+                        {JSON.stringify(this.props.bestBidBestAsk)}
+                    </pre>
                         <TickerA
                             languageConfig={this.props.languageConfig}
                             baseName={this.state.baseName}
@@ -184,7 +196,7 @@ class ExchangeContainer extends Component {
                                             id="historyTab"
                                             className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <OpenOrdersA languageConfig={this.props.languageConfig} />
+                                            <OpenOrdersA languageConfig={this.props.languageConfig} data={this.props.myOpenOrders}/>
                                         </div>
                                         <div
                                             id="tradesTab"
@@ -237,6 +249,8 @@ const mapStateToProps = (state) => {
     return {
         orderBook: state.smartContract.orderBook,
         balance: state.smartContract.balance,
+        myOpenOrders: state.smartContract.myOrders,
+        bestBidBestAsk: state.smartContract.bestBidBestAsk
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -245,8 +259,8 @@ const mapDispatchToProps = (dispatch) => {
         placeSellOrder: (x, y, z, k) => dispatch(Actions.smartContract.placeSellOrderRequest(x, y, z, k)),
         getOrderbook: (x, y, z) => dispatch(Actions.smartContract.getOrderBookRequest(x, y, z)),
         getBalance: () => dispatch(Actions.smartContract.getBalanceRequest()),
-
-
+        getBestBidBestAsk: (x, y) => dispatch(Actions.smartContract.getBestBidBestAsk(x, y)),
+        getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
     }
 }
 

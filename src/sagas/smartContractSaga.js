@@ -96,14 +96,17 @@ function* getMyAccountId() {
     // fetchAccountIdPromise().then( id => {
     //     console.log(id);
     // }).catch( err => console.log(err));
-    const id = yield call(fetchAccountIdPromise);
+    // const id = yield call(fetchAccountIdPromise);
+    const id = yield Contract.methods.GetMyAccountId().call({
+        from: Contract.givenProvider.selectedAddress
+    });
     yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id }); 
     return id;
 }
 
 function* getOrderBook(params) {
     const Contract = createSmartContract();
-    const { prTrade = 2, prBase = 3, numOfOrdersToFetch = 10 } = params.payload;
+    const { prTrade, prBase, numOfOrdersToFetch = 10 } = params.payload;
     const res = yield call(Contract.methods.GetHoga, prTrade, prBase, numOfOrdersToFetch)
     const orderBook = yield call(res.call, {
         from: Contract.givenProvider.selectedAddress
@@ -121,12 +124,23 @@ function* getOrderBook(params) {
 function* getMyOrders() {
     const Contract = createSmartContract();
 
-    const res = yield call(Contract.methods.GetMyOrders)
-    const myOrders = yield call(res.call, {
+    // const res = yield call(Contract.methods.GetMyOrders)
+    // const myOrders = yield call(res.call, {
+    //     from: Contract.givenProvider.selectedAddress
+    // })
+    const myOrders = Contract.methods.GetMyOrders().call({
         from: Contract.givenProvider.selectedAddress
     })
+    yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders });
+}
 
-    yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders: myOrders });
+function* getBestBidBestAsk(params) {
+    const {base, trade} = params.payload;
+    const Contract = createSmartContract();
+    const bestBidBestAsk = yield Contract.methods.getOrderBookInfo(trade, base).call({
+        from: Contract.givenProvider.selectedAddress
+    });
+    yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk });
 }
 
 function* placeBuyOrder(params) {
@@ -283,6 +297,8 @@ function* actionWatcher() {
 
     yield takeEvery(Constants.default.Requests.GET_BALANCE_REQUEST, getBalance)
     yield takeEvery(Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST, getMyAccountId)
+    
+    yield takeEvery(Constants.default.Requests.GET_BESTBID_BESTASK_REQUEST, getBestBidBestAsk)
 
 }
 

@@ -44,6 +44,11 @@ export default (state = {}, action) => {
                 ...state,
                 accountId: action.accountId
             }
+        case Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS:
+            return {
+                ...state,
+                bestBidBestAsk: action.bestBidBestAsk
+            }
         default:
             return state;
     }

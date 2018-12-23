@@ -15,7 +15,9 @@ class WalletContainer extends Component {
             title: "",
             notice: true,
             auth: false,
-            balances: []
+            balances: [],
+            depositAmount: 0,
+            showPrompt: false
         };
 
         this.called = false
@@ -110,13 +112,13 @@ class WalletContainer extends Component {
                 {
                     Header: WALLET.IN,
                     id: "deposit_buttons",
-                    accessor: d => <div><button type="button">Deposit</button></div>,
+                    // accessor: d => <div><button type="button">Deposit</button></div>,
                     Cell: (d) => this.renderEditable(d, "deposit")
                 },
                 {
                     // Header: "Pending Deposits",
                     id: "withdraw_buttons",
-                    accessor: d => <div><button type="button">Withdraw</button></div>,
+                    // accessor: d => <div><button type="button">Withdraw</button></div>,
                     Cell: (d) => this.renderEditable(d, "withdraw")
                 }
 

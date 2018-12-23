@@ -72,3 +72,10 @@ export const getMyAccountIdRequest = () => {
         type: Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST
     }
 }
+
+export const getBestBidBestAsk = (trade, base) => {
+    return {
+        type: Constants.default.Requests.GET_BESTBID_BESTASK_REQUEST,
+        payload: { trade, base }
+    }
+}
