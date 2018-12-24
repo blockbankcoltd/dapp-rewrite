@@ -31,16 +31,6 @@ export default class OpenOrdersB extends React.Component {
 
     }
 
-    /* 
-        orderId:[""]
-        prBase:[""]
-        prTrade:[""]
-        prices: [""]
-        qtys: [""]
-        sells: [false]
-    */
-
-
     render() {
         const { TRANSACTION, OPEN_ORDERS } = this.props.languageConfig;
 

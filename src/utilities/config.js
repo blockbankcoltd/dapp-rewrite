@@ -116,13 +116,13 @@ export const filterMarkets = () => {
         });
 
         markets.push({
-            market: {
+            market: Object.assign({},{
                 productName: base.productName,
                 productId: base.productId,
                 tokenAddress: base.tokenAddress,
                 decimal: base.decimal,
                 trades: trades
-            }
+            })
         });
     });
     return markets;

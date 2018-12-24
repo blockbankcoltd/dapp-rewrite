@@ -36,8 +36,19 @@ class ExchangeContainer extends Component {
         const marketDataFromConfig = filterMarkets();
         this.props.getOrderbook(1, 3, 10);
         this.props.getBalance();
-        this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
+        this.changeTabData(1);
         this.props.getMyOrders();
+
+
+        // marketDataFromConfig.forEach( obj => {
+        //     if(obj.market.productId === this.state.baseCurrency){
+        //         this.props.bestBidBestAsk.bestBidPrice.forEach( (x, index) => {
+        //             obj.market.trades[index]["bestBid"] = x;
+        //             obj.market.trades[index]["bestAsk"] = this.props.bestBidBestAsk.bestAskPrice[index];
+        //         })
+        //     }
+        // })
+        // this.setState({marketsData: this.state.marketsData})
 
         this.setState((state, props) => {
             return {
@@ -72,18 +83,24 @@ class ExchangeContainer extends Component {
 
         if(prevProps.bestBidBestAsk !== this.props.bestBidBestAsk){
             
-            let _copyOfMarketsData = [].concat(this.state.marketsData);
+            // let _copyOfMarketsData = [].concat(this.state.marketsData);
 
-            _copyOfMarketsData.forEach( obj => {
-                if(obj.market.productId == this.state.baseCurrency){
+            this.state.marketsData.forEach( obj => {
+                if(obj.market.productId === this.state.baseCurrency){
                     this.props.bestBidBestAsk.bestBidPrice.forEach( (x, index) => {
                         obj.market.trades[index]["bestBid"] = x;
                         obj.market.trades[index]["bestAsk"] = this.props.bestBidBestAsk.bestAskPrice[index];
                     })
                 }
             })
-            this.setState({marketsData: _copyOfMarketsData})
+            this.setState({marketsData: this.state.marketsData})
         }
+    }
+
+    changeTabData = (base) => {
+        const baseObj = filterMarkets().find(data => data.market.productId === base);
+        const tradesForBase = baseObj.market.trades.map(x => x.productId);
+        this.props.getBestBidBestAsk(tradesForBase, [baseObj.market.productId]);
     }
 
     changeTradeCurrency = (base, trade) => {
@@ -113,7 +130,7 @@ class ExchangeContainer extends Component {
             openOrders: _array
         });
         this.props.getOrderbook(trade, base, 10);
-        this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
+        // this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
 
     }
 
@@ -295,6 +312,7 @@ class ExchangeContainer extends Component {
                             handleTradeCurrencyChange={this.changeTradeCurrency}
                             languageConfig={this.props.languageConfig}
                             data={this.state.marketsData}
+                            changeTabData={this.changeTabData}
                         />
 
                     </div>
