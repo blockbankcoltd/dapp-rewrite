@@ -100,7 +100,7 @@ function* getMyAccountId() {
     const id = yield Contract.methods.GetMyAccountId().call({
         from: Contract.givenProvider.selectedAddress
     });
-    yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id }); 
+    return yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id });
     return id;
 }
 
@@ -138,18 +138,24 @@ function* getOrderBook(params) {
 function* getMyOrders() {
     const Contract = createSmartContract();
 
-    // const res = yield call(Contract.methods.GetMyOrders)
-    // const myOrders = yield call(res.call, {
-    //     from: Contract.givenProvider.selectedAddress
-    // })
-    const myOrders = Contract.methods.GetMyOrders().call({
+    const res = yield call(Contract.methods.GetMyOrders)
+    const myOrders = yield call(res.call, {
         from: Contract.givenProvider.selectedAddress
     })
+    // const myOrders = yield Contract.methods.GetMyOrders().call({
+    //     from: Contract.givenProvider.selectedAddress
+    // })
     yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders });
+    return myOrders;
 }
 
 function* getBestBidBestAsk(params) {
-    const {base, trade} = params.payload;
+    const {trade, base} = params.payload;
+    trade.forEach( (o, i) => {
+        if(i < (trade.length -1) )
+            base.push(base[0]);
+    })
+    console.log(base, trade);
     const Contract = createSmartContract();
     const bestBidBestAsk = yield Contract.methods.getOrderBookInfo(trade, base).call({
         from: Contract.givenProvider.selectedAddress

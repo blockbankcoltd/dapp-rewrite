@@ -186,8 +186,8 @@ export default class InstrumentSelectA extends React.Component {
                                     style={{border: "none", fontWeight: "bold", display: "table-row"}}
                                 >
                                     <td className="coinSymbol">{obj.productName}</td>
-                                    <td className="up dataNumber">{obj.price}</td>
-                                    <td className="up dataNumber">{obj.change}</td>
+                                    <td className="up dataNumber">{obj.bestBid}</td>
+                                    <td className="up dataNumber">{obj.bestAsk}</td>
                                 </tr>
                                 )
                             })}
