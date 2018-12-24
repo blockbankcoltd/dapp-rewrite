@@ -950,7 +950,7 @@
     "NICKNAME": "Nickname"
   },
   "FEEINFORMATION": {
-    "FEE_TIT": "Fee structure on BitNaru",
+    "FEE_TIT": "Fee structure on DexHI",
     "FEE_TIT01": "1. Transaction fee",
     "FEE_CON01": "Thank you to the customers, BitNaru has changed Maker fee for <b>",
     "FEE_CON01_2": "</b> to all customers. <br/>Also for Taker fee, BitNaru has dramaticaly reduced to <b>",
@@ -1262,7 +1262,7 @@
     "DUTY02": "Effective date: May 30th 2018"
   },
   "INFO_USE": {
-    "INFOUSE_TIT": "User Guide at BitNaru Exchange",
+    "INFOUSE_TIT": "User Guide at DexHI Exchange",
     "MARKET_TIT": "1.   Market Classification",
     "MARKET_CON01": "KRW Market : ",
     "MARKET_CON02": "Cryptocurrencies tradable with Korean Won (KRW)",
