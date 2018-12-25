@@ -39,17 +39,6 @@ class ExchangeContainer extends Component {
         this.changeTabData(1);
         this.props.getMyOrders();
 
-
-        // marketDataFromConfig.forEach( obj => {
-        //     if(obj.market.productId === this.state.baseCurrency){
-        //         this.props.bestBidBestAsk.bestBidPrice.forEach( (x, index) => {
-        //             obj.market.trades[index]["bestBid"] = x;
-        //             obj.market.trades[index]["bestAsk"] = this.props.bestBidBestAsk.bestAskPrice[index];
-        //         })
-        //     }
-        // })
-        // this.setState({marketsData: this.state.marketsData})
-
         this.setState((state, props) => {
             return {
                 marketsData: marketDataFromConfig,
@@ -59,7 +48,6 @@ class ExchangeContainer extends Component {
                 tradeCurrency: defaultTrade.productId,
             }
         });
-
     }
 
     componentDidUpdate(prevProps) {
@@ -81,10 +69,12 @@ class ExchangeContainer extends Component {
             this.setState({ openOrders: _array });
         }
 
+        if(prevProps.orderBook !== this.props.orderBook){
+            this.setState({orderBook: this.props.orderBook});
+        }
+
         if(prevProps.bestBidBestAsk !== this.props.bestBidBestAsk){
             
-            // let _copyOfMarketsData = [].concat(this.state.marketsData);
-
             this.state.marketsData.forEach( obj => {
                 if(obj.market.productId === this.state.baseCurrency){
                     this.props.bestBidBestAsk.bestBidPrice.forEach( (x, index) => {
@@ -199,7 +189,7 @@ class ExchangeContainer extends Component {
 
                                     <OrderbookA
                                         languageConfig={this.props.languageConfig}
-                                        data={this.props.orderBook}
+                                        data={this.state.orderBook}
                                         handleChangePrice={this.handleBuySellPrice}
                                     />
                                 </div>

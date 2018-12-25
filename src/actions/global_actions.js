@@ -9,6 +9,10 @@ export const putWeb3ToStore = () => {
     return {type: Constants.default.Requests.WEB3_OBJECT_REQUEST}
 };
 
+export const putSmartContractToStore = () => {
+    return {type: Constants.default.Requests.SMARTCONTRACT_OBJECT_REQUEST}
+};
+
 export const fetchAccounts = () => {
     console.log("Fetching accounts. Global Event Triggered.");
     return {type: "FETCH_ACCOUNTS_FROM_WEB3"}
