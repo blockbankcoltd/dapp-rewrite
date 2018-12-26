@@ -7,6 +7,7 @@ import "react-table/react-table.css";
 import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
 import Actions from '../actions/index';
+import ModalA from "../components/local/wallet/ModalA";
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -17,11 +18,22 @@ class WalletContainer extends Component {
             auth: false,
             balances: [],
             depositAmount: 0,
-            showPrompt: false
+            showPrompt: false,
+            open : false
         };
 
         this.called = false
     }
+
+
+    onOpenModal = () => {
+        this.setState({ open: true });
+    };
+
+    onCloseModal = () => {
+        this.setState({ open: false });
+    };
+
 
     componentDidMount() {
         this.props.getMyAccountId();
@@ -137,6 +149,10 @@ class WalletContainer extends Component {
           <Wallet>
             <section className="main" role="">
               <div id="wallet" className="wallet_wrap">
+                  <button type="button" onClick={this.onOpenModal}>모달test</button>
+                  <ModalA open={this.state.open} onClose={this.onCloseModal}>
+                      <div>test modal</div>
+                  </ModalA>
                 <div className="container">
                   <div className="page_link">
                     <ul>
