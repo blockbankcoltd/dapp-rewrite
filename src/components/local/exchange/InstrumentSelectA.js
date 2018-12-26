@@ -176,10 +176,10 @@ export default class InstrumentSelectA extends React.Component {
 
                         </thead>
                         <tbody>
-                            {this.state.activeTabData.map( obj => {
+                            {this.state.activeTabData.map( (obj, i) => {
                                 return (
                                 <tr
-                                    key={obj.productName}
+                                    key={i}
                                     // onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
                                     onClick={() => this.props.handleTradeCurrencyChange(this.state.activeBaseToken, obj.productId)}
                                     className="instrument-*coinSymbol"

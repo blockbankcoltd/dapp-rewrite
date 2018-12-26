@@ -19,8 +19,6 @@ export default class BalanceA extends React.Component {
         }
         const baseBalance = bal.find(data => data.name === this.props.baseName);
         const tradeBalance = bal.find(data => data.name === this.props.tradeName);
-        console.log("baseBalance ==> ", baseBalance, bal, this.props.baseName, this.props.tradeName);
-        console.log("tradeBalance ==> ", tradeBalance);
         if(!baseBalance || !tradeBalance) {
             return balance;
         } else {

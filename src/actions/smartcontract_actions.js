@@ -38,6 +38,13 @@ export const getBalanceRequest = (id) => {
     }
 };
 
+export const getDWRecordsRequest = (id) => {
+    return {
+        type: Constants.default.Requests.GET_DEPOSIT_WITHDRAWL_RECORDS_REQUEST,
+        payload: { id }
+    }
+};
+
 export const placeDepositEthRequest = (amount) => {
     return {
         type: Constants.default.Requests.DEPOSIT_ETH_REQUEST,

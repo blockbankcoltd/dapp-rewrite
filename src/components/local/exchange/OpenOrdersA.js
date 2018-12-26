@@ -56,39 +56,40 @@ export default class OpenOrdersA extends React.Component {
                 Header: OPEN_ORDERS.INSTRUMENT_TEXT,
                 id: OPEN_ORDERS.INSTRUMENT_TEXT,
                 class: "headerW",
-                accessor: (d) => `${transformToTokenName(+d.prTrade).productName}/${transformToTokenName(+d.prBase).productName}`
+                accessor: (d) => d.instrumentPair
               },
               {
                 Header: OPEN_ORDERS.TYPE_TEXT,
                 id: OPEN_ORDERS.TYPE_TEXT,
                 class: "headerW",
-                accessor: (d) => d.isSell ? "Sell" : "Buy"
+                accessor: (d) => d.sells ? "Sell" : "Buy"
               }, {
                 Header: OPEN_ORDERS.PRICE_TEXT,
                 id: OPEN_ORDERS.PRICE_TEXT,
                 class: "headerW",
-                accessor: "price"
+                accessor: "prices"
               }, {
                 Header: OPEN_ORDERS.TOTAL_TEXT,
                 id: OPEN_ORDERS.TOTAL_TEXT,
                 class: "headerW",
-                accessor: "qty"
-              }, {
-                Header: OPEN_ORDERS.REMAINING_TEXT,
-                id: OPEN_ORDERS.REMAINING_TEXT,
-                class: "headerW",
-                accessor: OPEN_ORDERS.REMAINING_TEXT
-              }, {
-                Header: OPEN_ORDERS.TIME_TEXT,
-                id: OPEN_ORDERS.TIME_TEXT,
-                class: "headerW",
-                accessor: OPEN_ORDERS.TIME_TEXT
-              }, {
-                Header: OPEN_ORDERS.CANCEL,
-                id: OPEN_ORDERS.CANCEL,
-                class: "headerW",
-                accessor: OPEN_ORDERS.CANCEL
-              },
+                accessor: "qtys"
+              }, 
+              // {
+              //   Header: OPEN_ORDERS.REMAINING_TEXT,
+              //   id: OPEN_ORDERS.REMAINING_TEXT,
+              //   class: "headerW",
+              //   accessor: OPEN_ORDERS.REMAINING_TEXT
+              // }, {
+              //   Header: OPEN_ORDERS.TIME_TEXT,
+              //   id: OPEN_ORDERS.TIME_TEXT,
+              //   class: "headerW",
+              //   accessor: OPEN_ORDERS.TIME_TEXT
+              // }, {
+              //   Header: OPEN_ORDERS.CANCEL,
+              //   id: OPEN_ORDERS.CANCEL,
+              //   class: "headerW",
+              //   accessor: OPEN_ORDERS.CANCEL
+              // },
 
             ]}
             defaultPageSize={10}

@@ -1,22 +1,39 @@
 import * as React from 'react'
 import styled from 'styled-components';
+import { transformToTokenName } from '../../../utilities/helpers';
 
 export default class PrivateTradesA extends React.Component{
 
     constructor(props) {
         super(props);
+        this.state = {
+            page : 0
+        }
 
     }
 
-    state = {
-        page : 0
+    componentDidUpdate(prevProps){
+      // if(prevProps.records !== this.props.records){
+      //   let _array = [];
+      //   this.props.records.isDeposit.forEach( (o, i) => {
+      //     _array.push({
+      //       isDeposit: o,
+      //       prCode: this.props.records.prCode[i],
+      //       qty: this.props.records.qty[i],
+      //       timestamp: new Date(this.props.records.timestamp[i] * 1000).toDateString()
+      //     });
+      //   })
+      //   this.setState((state, props) => { 
+      //     return {data: _array}
+      //   });
+      // }
     }
+
 
     gotoPage = (page) => this.setState({ page });
 
     render() {
         const {TRADES, TRANSACTION} = this.props.languageConfig;
-        const rows = [];
         return (
           <Private>
             <div className="table-responsive">
@@ -30,15 +47,26 @@ export default class PrivateTradesA extends React.Component{
                 </colgroup>
                 <thead>
                   <tr>
+                    <th className="headerW">Token</th>
                     <th className="headerW">{TRADES.TIME_TEXT}</th>
                     <th className="headerW">{TRADES.SIDE_TEXT}</th>
-                    <th className="headerW">{TRADES.PRICE_TEXT}</th>
+                    {/* <th className="headerW">{TRADES.PRICE_TEXT}</th> */}
                     <th className="headerW">{TRADES.QUANTITY_TEXT}</th>
-                    <th className="headerW">{TRADES.TOTAL_TEXT}</th>
+                    {/* <th className="headerW">{TRADES.TOTAL_TEXT}</th> */}
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.length !== 0  ? rows : <tr><td colSpan={5} className="no-data">{TRANSACTION.NO_TRANSACTION_DATA}</td></tr>}
+                  {/* {this.state.page} */}
+                  {this.state.data && this.state.data.length > 0 ? this.state.data.map( (o, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{transformToTokenName(+o.prCode)}</td>
+                        <td>{o.timestamp}</td>
+                        <td>{o.isDeposit ? "Deposit" : "Withdrawl"}</td>
+                        <td>{o.qty}</td>
+                      </tr>
+                    )
+                  }) : <tr><td colSpan={5} className="no-data">{TRANSACTION.NO_TRANSACTION_DATA}</td></tr>}
                 </tbody>
               </table>
             </div>

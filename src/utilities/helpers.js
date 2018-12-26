@@ -31,7 +31,7 @@ export const transformToTokenName = (tokenId) => {
 		markets.some(m => {
 			tokenIndex = m.market.trades.findIndex(x => x.productId === tokenId);
 			token = m.market.trades[tokenIndex];
-      if(tokenIndex > -1) return true;
+			if(tokenIndex > -1) return true;
 		})
 	}
 	return token;
