@@ -95,7 +95,13 @@ function* getBestBidBestAsk(params) {
     const bestBidBestAsk = yield GlobalSmartContractObject.methods.getOrderBookInfo(trade, base).call({
         from: selectedAddress
     });
-    yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk });
+    let result = {
+        bestAskPrice: convertPriceArray(bestBidBestAsk.bestAskPrice),
+        bestBidPrice: convertPriceArray(bestBidBestAsk.bestBidPrice)
+    }
+    
+
+    yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk: result });
 }
 
 function* GetDepositWithdrawlRecords(params) {

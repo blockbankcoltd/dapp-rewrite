@@ -85,11 +85,12 @@ class ExchangeContainer extends Component {
             
             this.state.marketsData.forEach( obj => {
                 if(obj.market.productId === this.state.baseCurrency){
-                    this.props.bestBidBestAsk.bestBidPrice.forEach( (x, index) => {
+                    obj.market.trades.forEach( (x, index) => {
                         // obj.market.trades[index] x;
-                        obj.market.trades[index] = { ...obj.market.trades[index], bestBid: x, bestAsk: this.props.bestBidBestAsk.bestAskPrice[index]};
-                    })
+                        obj.market.trades[index] = { ...obj.market.trades[index], bestBid: this.props.bestBidBestAsk.bestBidPrice[index], bestAsk: this.props.bestBidBestAsk.bestAskPrice[index]};
+                    });
                 }
+                console.log("__________________++++++++++++++++++++", this.state.marketsData)
             })
             this.setState({marketsData: this.state.marketsData})
         }
