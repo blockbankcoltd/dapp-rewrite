@@ -5,48 +5,31 @@ import BN from 'bn.js';
 import { Decimal } from 'decimal.js';
 import store from '../store/reduxStore';
 import * as Constants from '../constants/constants';
-import { config } from '../utilities/config';
+import { config, filterMarkets, contractList } from '../utilities/config';
+import {divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName} from '../utilities/helpers.js';
 
 let data = [];
 const coinList = config.base.concat(config.trades);
 coinList.forEach((obj, i) => {
-    data.push({
-        product: obj.productName,
-        prCode: obj.productId,
-        tokenAddress: obj.tokenAddress,
-        decimal: obj.decimal
-    });
-    if (i === 0) {
-        if (obj.prTrade && obj.prTrade.length > 0) {
-            obj.prTrade.forEach(o => {
-                data.push({
-                    product: o.productName,
-                    prCode: o.productId,
-                    tokenAddress: o.tokenAddress,
-                    decimal: o.decimal
-                });
-            })
-        }
+  data.push({
+    product: obj.productName,
+    prCode: obj.productId,
+    tokenAddress: obj.tokenAddress,
+    decimal: obj.decimal
+  });
+  if (i === 0) {
+    if (obj.prTrade && obj.prTrade.length > 0) {
+      obj.prTrade.forEach(o => {
+        data.push({
+          product: o.productName,
+          prCode: o.productId,
+          tokenAddress: o.tokenAddress,
+          decimal: o.decimal
+        });
+      })
     }
+  }
 });
-
-
-function sendAmount(amount, decimal) {
-    const BNAmount = Web3.utils.toWei(amount, 'ether');
-    // const BNAmount = Web3.utils.toBN(+amount * Math.pow(10,decimal));
-    // console.log(+BNAmount, BNAmount)
-
-    // const Big = new Bignumber(amount);
-    // console.log(Big)
-    // const bigAmount = Big.multipliedBy(Math.pow(10,18));
-    // console.log(bigAmount)
-    console.log(BNAmount)
-    return BNAmount;
-}
-
-function recieveAmount(amount, decimal) {
-    return amount / Math.pow(10, decimal)
-}
 
 function* getMyAccountId() {
 
@@ -65,25 +48,14 @@ function* getOrderBook(params) {
     const orderBook = yield call(res.call, {
         from: selectedAddress
     })
-    const convertPrice = (arr) => {
-        return arr.map( obj => {
-          return new Decimal(obj).div(new Decimal(config.basePrice)).toString(10)
-        })
-    }
 
-    const convertVolume = (arr, trade) => {
-        const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
-        return arr.map( obj => {
-          return new Decimal(obj).div(new Decimal(tradeDecimal)).toString(10)
-        })
-    }
-
+    const tradeDecimal = transformToTokenName(prTrade).decimal; // coinList.find(coin => coin.productId === prTrade).decimal;
     yield put({
         type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
-            priceA:  convertPrice(orderBook.priceA),
-            priceB:  convertPrice(orderBook.priceB),
-            volumeA: convertVolume(orderBook.volumeA, prTrade),
-            volumeB: convertVolume(orderBook.volumeB, prTrade)
+            priceA:  convertPriceArray(orderBook.priceA),
+            priceB:  convertPriceArray(orderBook.priceB),
+            volumeA: convertVolumeArray(orderBook.volumeA, tradeDecimal),
+            volumeB: convertVolumeArray(orderBook.volumeB, tradeDecimal)
         }
     });
 }
@@ -95,6 +67,17 @@ function* getMyOrders() {
     const myOrders = yield call(res.call, {
         from: selectedAddress
     })
+    let result = [];
+    myOrders.orderId.forEach((obj, i) => {
+      let token = transformToTokenName(+myOrders.prTrade[i]);
+      result.push({
+      orderID: obj,
+      prices: convertPriceArray(myOrders.prices),
+      qtys: convertVolumeArray(myOrders.qtys, transformToTokenName(myOrders.prTrade[i]).decimal),
+      sells: myOrders.sells[i] });
+    });
+    console.log(result);
+
     yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders });
 }
 
@@ -120,11 +103,11 @@ function* placeBuyOrder(params) {
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
 
-    let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
-    let BN_Price = new BN(calculated_price.toString(10));
+    //let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
+    let BN_Price = multiplyBigNumbers(price, basePrice);  //new BN(calculated_price.toString(10));
 
-    let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal) );
-    let BN_Amount = new BN(calculated_amount.toString(10));
+  //  let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal) );
+    let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
 
 
     const orderHash = GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
@@ -154,13 +137,14 @@ function* placeSellOrder(params) {
     const ownerId = config.ownerId; // get the ownerId from the config
     const basePrice = config.basePrice;
 
-    const tradeDecimal = coinList.find(coin => coin.productId === trade);
+    const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
 
-    let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
-    let BN_Price = new BN(calculated_price.toString(10));
+    // let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
+    // let BN_Price = new BN(calculated_price.toString(10));
+    let BN_Price = multiplyBigNumbers(price, basePrice);
 
-    let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal.decimal) );
-    let BN_Amount = new BN(calculated_amount.toString(10));
+    //let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal.decimal) );
+    let BN_Amount =  multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
 
 
     const orderHash = GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
@@ -170,7 +154,7 @@ function* placeSellOrder(params) {
 }
 
 function* getBalance(params) {
-    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     let prCodesArray = [];
     let tokens = [];
     for (let c of data) {
@@ -187,13 +171,10 @@ function* getBalance(params) {
     });
     let _result = [];
     balance.available.forEach((obj, index) => {
-        let n = new Decimal(obj.toString());
-        let h = new Decimal (balance.reserved[index]);
-        let d = new Decimal(tokens[index].decimal);
         _result.push({
             name: tokens[index].name,
-            hold: h.dividedBy(d).toString(10),
-            total: n.dividedBy(d).toString(10),
+            hold:  divideBigNumbers(balance.reserved[index], tokens[index].decimal),
+            total: divideBigNumbers(obj.toString(), tokens[index].decimal),
             tokenAddress: tokens[index].address
         });
     });
@@ -205,7 +186,7 @@ function* depositEthRequest(params) {
     const { amount } = params.payload;
     const deposit = GlobalSmartContractObject.methods.depositETH().send({
         from: selectedAddress,
-        value: sendAmount(amount, 18)
+        value: Web3.utils.toWei(amount, 'ether')
     });
     yield put({ type: Constants.default.Success.DEPOSIT_ETH_SUCCESS, depositedEth: deposit });
 }
@@ -223,8 +204,7 @@ function* depositTokenRequest(params) {
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
-    let num = new Decimal(amount.toString()).mul( new Decimal(config.decimal) );
-    let BN_Amount = new BN(num.toString(10));
+    let BN_Amount = multiplyBigNumbers(amount.toString(), config.decimal)
     const deposit = GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, true).send({
         from: selectedAddress
     });
@@ -235,8 +215,7 @@ function* withdrawTokenRequest(params) {
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
-    let num = new Decimal(amount.toString()).mul( new Decimal(config.decimal) );
-    let BN_Amount = new BN(num.toString(10));
+    let BN_Amount = multiplyBigNumbers(amount.toString(), config.decimal)
     const withdrawAmount = GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, false).send({
         from: selectedAddress
     });
@@ -258,7 +237,7 @@ function* actionWatcher() {
 
     yield takeEvery(Constants.default.Requests.GET_BALANCE_REQUEST, getBalance)
     yield takeEvery(Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST, getMyAccountId)
-    
+
     yield takeEvery(Constants.default.Requests.GET_BESTBID_BESTASK_REQUEST, getBestBidBestAsk)
 
 }

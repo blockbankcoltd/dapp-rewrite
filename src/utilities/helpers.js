@@ -1,5 +1,7 @@
 import isEmpty from 'lodash/isEmpty';
 import { config } from './config';
+import { Decimal } from 'decimal.js';
+import BN from 'bn.js';
 
 export const fetchNetwork = () => {
 	console.log("Inside network")
@@ -18,19 +20,21 @@ export const fetchNetwork = () => {
 };
 
 export const transformToTokenName = (tokenId) => {
-	const markets = filterMarkets();
+  tokenId = +tokenId;
+  const markets = filterMarkets();
 	let tokenIndex = markets.findIndex(x => x.market.productId === tokenId);
-	let tokenName;
+	let token;
 	if (tokenIndex > -1) {
-		tokenName = markets[tokenIndex].market.productName;
+		token = markets[tokenIndex].market;
 	}
 	else {
 		markets.some(m => {
 			tokenIndex = m.market.trades.findIndex(x => x.productId === tokenId);
-			tokenName = m.market.trades[tokenIndex].productName;
+			token = m.market.trades[tokenIndex];
+      if(tokenIndex > -1) return true;
 		})
 	}
-	return tokenName;
+	return token;
 }
 
 export const filterMarkets = () => {
@@ -76,11 +80,46 @@ export const fetchAccounts = () => {
 };
 
 function getAccounts() {
-	try {
-		const { web3 } = window;
-		// throws if no account selected
-		return web3.eth.accounts;
-	} catch (e) {
-		return [];
-	}
+
+  try {
+    const { web3 } = window;
+    // throws if no account selected
+    return web3.eth.accounts;
+  } catch (e) {
+    return [];
+  }
+}
+//BN Does not handle fractions, move to BN when it supports so.
+//https://github.com/indutny/bn.js/issues/182
+export const divideBigNumbers = (number, divisor) => {
+  try {
+    let numerator = new Decimal(number); //BN.js does not handle deciaml places.
+    let denominator = new Decimal(divisor);
+    return ((numerator).dividedBy(denominator)).toString(10);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+//BN Does not handle fractions, move to BN when it supports so.
+//https://github.com/indutny/bn.js/issues/182
+export const multiplyBigNumbers = (num, mul) => {
+  try {
+    let result = new Decimal(num).mul(new Decimal(mul));
+    return new BN(result.toString(10));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export const convertPriceArray = (arr) => {
+    return arr.map( obj => {
+         return divideBigNumbers(obj, config.basePrice);
+    })
+}
+
+export const convertVolumeArray = (arr, prTradeDecimal) => {
+    return arr.map( obj => {
+      return divideBigNumbers(obj, prTradeDecimal);
+    })
 }

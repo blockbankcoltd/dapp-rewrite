@@ -17,7 +17,7 @@ export default class OpenOrdersA extends React.Component {
 
   componentDidUpdate(prevProps) {
     console.log("Received the data here from props --> ", this.props.data);
-    
+
 
   }
 
@@ -56,7 +56,7 @@ export default class OpenOrdersA extends React.Component {
                 Header: OPEN_ORDERS.INSTRUMENT_TEXT,
                 id: OPEN_ORDERS.INSTRUMENT_TEXT,
                 class: "headerW",
-                accessor: (d) => `${transformToTokenName(+d.prTrade)}/${transformToTokenName(+d.prBase)}`
+                accessor: (d) => `${transformToTokenName(+d.prTrade).productName}/${transformToTokenName(+d.prBase).productName}`
               },
               {
                 Header: OPEN_ORDERS.TYPE_TEXT,
@@ -142,5 +142,5 @@ export default class OpenOrdersA extends React.Component {
 }
 
 const OpenOrder = styled.div`
-  
+
 `
