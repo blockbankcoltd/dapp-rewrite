@@ -73,9 +73,9 @@ class ExchangeContainer extends Component {
             this.setState({orderBook: this.props.orderBook});
         }
 
-        // if(prevProps.myAccountId !== this.props.myAccountId){
-        //     this.props.getDWRecords(this.props.myAccountId);
-        // }
+        if(prevProps.myAccountId !== this.props.myAccountId){
+            this.props.fetchTradeHistory(this.props.myAccountId, 2, 3);
+        }
 
         // if(prevProps.dwRecords !== this.props.dwRecords){
         //     this.setState({dwRecords: this.props.dwRecords});
@@ -126,7 +126,7 @@ class ExchangeContainer extends Component {
         const tradesForBase = baseObj.market.trades.map(x => x.productId);
         const tradeObj = baseObj.market.trades.find(data => data.productId === trade);
         console.log("Set BASE AND TRADE --> ", this.props.myOrders);
-
+        this.props.fetchTradeHistory(this.props.myAccountId, trade, base);
         /* 
             orderID: obj,
             instrumentPair: transformToTokenName(myOrders.prTrade[i]).productName + '/'+ transformToTokenName(myOrders.prBase[i]).productName,
@@ -204,7 +204,6 @@ class ExchangeContainer extends Component {
             <Exchange id="wrap">
                 <ExchangeColumn1>
                     <div id="ticker">
-
                         <TickerA
                             languageConfig={this.props.languageConfig}
                             baseName={this.state.baseName}
@@ -281,6 +280,7 @@ class ExchangeContainer extends Component {
                                         languageConfig={this.props.languageConfig}
                                         baseName={this.state.baseName}
                                         tradeName={this.state.tradeName}
+                                        data={this.props.tradeHistory}
                                     />
                                 </div>
 
@@ -318,7 +318,7 @@ class ExchangeContainer extends Component {
                                             id="tradesTab"
                                             className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <PrivateTradesA languageConfig={this.props.languageConfig} />
+                                            <PrivateTradesA languageConfig={this.props.languageConfig}  />
                                             {/* <PrivateTradesA languageConfig={this.props.languageConfig} records={this.state.dwRecords} /> */}
                                         </div>
                                     </div>
@@ -370,7 +370,8 @@ const mapStateToProps = (state) => {
         myOrders: state.smartContract.myOrders,
         bestBidBestAsk: state.smartContract.bestBidBestAsk,
         dwRecords: state.smartContract.depositWithdrawlRecords,
-        myAccountId: state.smartContract.accountId
+        myAccountId: state.smartContract.accountId,
+        tradeHistory: state.main.tradeHistory
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -382,7 +383,8 @@ const mapDispatchToProps = (dispatch) => {
         getBestBidBestAsk: (x, y) => dispatch(Actions.smartContract.getBestBidBestAsk(x, y)),
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
         getDWRecords: (x) => dispatch(Actions.smartContract.getDWRecordsRequest(x)),
-        getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest())
+        getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest()),
+        fetchTradeHistory: (x, y, z) => dispatch(Actions.global.fetchTradeHistory(x, y, z)),
     }
 }
 

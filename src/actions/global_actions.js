@@ -13,6 +13,13 @@ export const putSmartContractToStore = () => {
     return {type: Constants.default.Requests.SMARTCONTRACT_OBJECT_REQUEST}
 };
 
+export const fetchTradeHistory = (accountId, trade, base) => {
+    return {
+        type: Constants.default.Requests.FETCH_TRADE_HISTORY_REQUEST, 
+        payload: {accountId, trade, base}
+    }
+};
+
 export const fetchAccounts = () => {
     console.log("Fetching accounts. Global Event Triggered.");
     return {type: "FETCH_ACCOUNTS_FROM_WEB3"}

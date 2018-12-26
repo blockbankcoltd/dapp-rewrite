@@ -68,15 +68,17 @@ function* getMyOrders() {
         from: selectedAddress
     })
     let result = [];
+    const prices = convertPriceArray(myOrders.prices);
     myOrders.orderId.forEach((obj, i) => {
+        const qtys = convertVolumeArray(myOrders.qtys, transformToTokenName(myOrders.prTrade[i]).decimal);
         let token = transformToTokenName(+myOrders.prTrade[i]);
         result.push({
             orderID: obj,
             prTrade: myOrders.prTrade[i],
             prBase: myOrders.prBase[i],
             instrumentPair: transformToTokenName(myOrders.prTrade[i]).productName + '/'+ transformToTokenName(myOrders.prBase[i]).productName,
-            prices: convertPriceArray(myOrders.prices),
-            qtys: convertVolumeArray(myOrders.qtys, transformToTokenName(myOrders.prTrade[i]).decimal),
+            prices: prices[i],
+            qtys: qtys,
             sells: myOrders.sells[i]
         });
     });
