@@ -85,6 +85,21 @@ class ExchangeContainer extends Component {
             })
             this.setState({marketsData: this.state.marketsData})
         }
+        if(prevProps.balance !== this.props.balance){
+            const baseObj = filterMarkets().find(data => data.market.productId === this.state.baseCurrency);
+            const tradeObj = baseObj.market.trades.find(data => data.productId === this.state.tradeCurrency);
+            let selectedTokensBalances = [];
+            this.props.balance.forEach( x => {
+                if(x.name === baseObj.market.productName){
+                    selectedTokensBalances.push(x);
+                }
+                if(x.name === tradeObj.productName){
+                    selectedTokensBalances.push(x);
+                }
+            });
+
+            this.setState({ selectedTokensBalances });
+        }
     }
 
     changeTabData = (base) => {
@@ -95,10 +110,12 @@ class ExchangeContainer extends Component {
 
     changeTradeCurrency = (base, trade) => {
 
-        console.log("Set BASE AND TRADE --> ", base, trade);
-        const baseName = filterMarkets().find(data => data.market.productId === base);
-        const tradesForBase = baseName.market.trades.map(x => x.productId);
-        const prodName = baseName.market.trades.find(data => data.productId === trade);
+        const baseObj = filterMarkets().find(data => data.market.productId === base);
+        const tradesForBase = baseObj.market.trades.map(x => x.productId);
+        const tradeObj = baseObj.market.trades.find(data => data.productId === trade);
+        console.log("Set BASE AND TRADE --> ", base, baseObj, trade, tradeObj, this.props.balance);
+
+
         let _array = [];
         this.props.myOrders.orderId.forEach((o, i) => {
             if(Number(this.props.myOrders.prBase[i]) === base && Number(this.props.myOrders.prTrade[i]) === trade){
@@ -112,12 +129,24 @@ class ExchangeContainer extends Component {
                 })
             }
         });
+
+        const selectedTokensBalances = [];
+        this.props.balance.forEach( x => {
+            if(x.name === baseObj.market.productName){
+                selectedTokensBalances.push(x);
+            }
+            if(x.name === tradeObj.productName){
+                selectedTokensBalances.push(x);
+            }
+        })
+
         this.setState({
             baseCurrency: base,
             tradeCurrency: trade,
-            baseName: baseName.market.productName,
-            tradeName: prodName.productName,
-            openOrders: _array
+            baseName: baseObj.market.productName,
+            tradeName: tradeObj.productName,
+            openOrders: _array,
+            selectedTokensBalances
         });
         this.props.getOrderbook(trade, base, 10);
         // this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
@@ -202,6 +231,7 @@ class ExchangeContainer extends Component {
                                             baseName={this.state.baseName}
                                             tradeName={this.state.tradeName}
                                             balance={this.props.balance}
+                                            selectedTokensBalances={this.state.selectedTokensBalances}
                                         />
 
                                         <div className="order-entry-head">
@@ -217,6 +247,7 @@ class ExchangeContainer extends Component {
                                                                 price={this.state.price}
                                                                 baseName={this.state.baseName}
                                                                 tradeName={this.state.tradeName}
+                                                                
                                                             />
                                                         </div>
                                                     </div>

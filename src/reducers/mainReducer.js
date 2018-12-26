@@ -1,18 +1,5 @@
-import { bindActionCreators } from "redux";
-import Constants, * as Constant from '../constants/constants';
+import Constants from '../constants/constants';
 import {fetchAccounts, fetchNetwork} from '../utilities/helpers';
-// import { FETCH_DATA, RECEIVED_DATA } from '../actions/types';
-
-// const setLang = async (type) => {
-//     const language = type || (localStorage && localStorage.getItem('lang') || 'en');
-//     localStorage.setItem('lang', language);
-//     this.lang = language === 'en' ? en : kr;
-// }
-
-// const getLang = () => {
-//     return toJS(this.lang);
-// }
-
 
 export default (state = {}, action) => {
     switch (action.type) {

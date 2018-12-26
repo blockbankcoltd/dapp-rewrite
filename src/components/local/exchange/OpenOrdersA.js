@@ -1,6 +1,8 @@
 import * as React from 'react'
 import styled from 'styled-components';
 import ReactTable from 'react-table';
+import { transformToTokenName } from '../../../utilities/helpers';
+
 
 export default class OpenOrdersA extends React.Component {
 
@@ -54,7 +56,7 @@ export default class OpenOrdersA extends React.Component {
                 Header: OPEN_ORDERS.INSTRUMENT_TEXT,
                 id: OPEN_ORDERS.INSTRUMENT_TEXT,
                 class: "headerW",
-                accessor: (d) => `${d.prTrade}/${d.prBase}`
+                accessor: (d) => `${transformToTokenName(+d.prTrade)}/${transformToTokenName(+d.prBase)}`
               },
               {
                 Header: OPEN_ORDERS.TYPE_TEXT,

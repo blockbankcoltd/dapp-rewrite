@@ -1,17 +1,14 @@
-import { call, put, takeEvery, takeLatest, all, fork, spawn } from 'redux-saga/effects'
+import { call, put, takeEvery, all } from 'redux-saga/effects'
 import Lodash from 'lodash';
 import Web3 from 'web3';
 import BN from 'bn.js';
 import { Decimal } from 'decimal.js';
 import store from '../store/reduxStore';
 import * as Constants from '../constants/constants';
-import { config, filterMarkets, contractList } from '../utilities/config';
+import { config } from '../utilities/config';
 
-// import Bignumber from 'bignumber';
 let data = [];
-
 const coinList = config.base.concat(config.trades);
-
 coinList.forEach((obj, i) => {
     data.push({
         product: obj.productName,
@@ -34,25 +31,6 @@ coinList.forEach((obj, i) => {
 });
 
 
-function createSmartContract() {
-    const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
-
-    const contract_address = selectedContract.address;
-    const { GlobalWeb3Object } = store.getState().main;
-
-
-    const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
-    return Contract;
-}
-
-// function* generateSmartContractObject() {
-//     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
-//     const contract_address = selectedContract.address;
-//     const { GlobalWeb3Object } = store.getState().main;
-//     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
-//     yield put({type: Constants.default.Success.SMARTCONTRACT_OBJECT_SUCCESS, GlobalSmartContractObject: Contract});
-// }
-
 function sendAmount(amount, decimal) {
     const BNAmount = Web3.utils.toWei(amount, 'ether');
     // const BNAmount = Web3.utils.toBN(+amount * Math.pow(10,decimal));
@@ -70,50 +48,23 @@ function recieveAmount(amount, decimal) {
     return amount / Math.pow(10, decimal)
 }
 
-// ( async () => {
-//     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
-
-//     const contract_address = selectedContract.address;
-//     const { GlobalWeb3Object } = store.getState().main;
-//     const Contract = new GlobalWeb3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
-//     const id = await Contract.methods.GetMyAccountId().call({
-//         from: Contract.givenProvider.selectedAddress
-//     });
-//     console.log(" ID FROM ASYNC IIFE -------------------------------------------------------------------------- ", id);
-// })();
-
 function* getMyAccountId() {
-//     const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
-    // const method = yield call(Contract.methods.GetMyAccountId);
-    // const accountId = yield call(method.call({
-    //     from: Contract.givenProvider.selectedAddress
-    // }));
 
-    // const id = yield Contract.methods.GetMyAccountId().call({
-    //     from: "0xEcE27B8E018Fd5b5A52621cfa1e0e1a399874dA2"
-    // });
-    console.log("STATE IN SC SAGA ----> ", store.getState());
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
-    console.log(selectedAddress);
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const id = yield GlobalSmartContractObject.methods.GetMyAccountId().call({
-        // from: "0xEcE27B8E018Fd5b5A52621cfa1e0e1a399874dA2"
         from: selectedAddress
     });
-    console.log("****************++++++++++++++++++++++++++++++++++++++++++++++++++=")
-    console.log("SEE HERE ---------------- ", id)
-    console.log("****************++++++++++++++++++++++++++++++++++++++++++++++++++=")
-    return yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id });
-    // return id;
+
+    yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id });
 }
 
 function* getOrderBook(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { prTrade, prBase, numOfOrdersToFetch = 10 } = params.payload;
     const res = yield call(GlobalSmartContractObject.methods.GetHoga, prTrade, prBase, numOfOrdersToFetch)
     const orderBook = yield call(res.call, {
         from: selectedAddress
     })
-    console.log("Order book --> ", orderBook);
     const convertPrice = (arr) => {
         return arr.map( obj => {
           return new Decimal(obj).div(new Decimal(config.basePrice)).toString(10)
@@ -138,17 +89,13 @@ function* getOrderBook(params) {
 }
 
 function* getMyOrders() {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
 
     const res = yield call(GlobalSmartContractObject.methods.GetMyOrders)
     const myOrders = yield call(res.call, {
         from: selectedAddress
     })
-    // const myOrders = yield Contract.methods.GetMyOrders().call({
-    //     from: Contract.givenProvider.selectedAddress
-    // })
     yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders });
-    return myOrders;
 }
 
 function* getBestBidBestAsk(params) {
@@ -157,8 +104,7 @@ function* getBestBidBestAsk(params) {
         if(i < (trade.length -1) )
             base.push(base[0]);
     })
-    console.log(base, trade);
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const bestBidBestAsk = yield GlobalSmartContractObject.methods.getOrderBookInfo(trade, base).call({
         from: selectedAddress
     });
@@ -166,14 +112,13 @@ function* getBestBidBestAsk(params) {
 }
 
 function* placeBuyOrder(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { price, amount, base, trade } = params.payload;
     const isSell = false;
     const ownerId = config.ownerId; // get the ownerId from the config
     const basePrice = config.basePrice;
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
-    //const baseDecimal = coinList.find(coin => coin.productId === base).decimal;
 
     let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
     let BN_Price = new BN(calculated_price.toString(10));
@@ -203,14 +148,13 @@ function* placeBuyOrder(params) {
 }
 
 function* placeSellOrder(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { price, amount, base, trade } = params.payload;
     const isSell = true;
     const ownerId = config.ownerId; // get the ownerId from the config
     const basePrice = config.basePrice;
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade);
-    //const baseDecimal = coinList.find(coin => coin.productId === base);
 
     let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
     let BN_Price = new BN(calculated_price.toString(10));
@@ -226,8 +170,7 @@ function* placeSellOrder(params) {
 }
 
 function* getBalance(params) {
-    // const { id } = params.payload;
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     let prCodesArray = [];
     let tokens = [];
     for (let c of data) {
@@ -235,29 +178,15 @@ function* getBalance(params) {
             prCodesArray.push(+c.prCode);
         }
         tokens.push({ name: c.product, address: c.tokenAddress, decimal: c.decimal });
-        // let x = yield c;
     }
-
-    //  const fetchAccountBalancePromise = (accountId, prCodesArray) => {
-    //     return new Promise((resolve, reject) => {
-    //         Contract.methods.getBalance(prCodesArray).call({
-    //             from: Contract.givenProvider.selectedAddress
-    //         }).then(data => resolve(data)).catch(err => reject(err));
-    //     })
-    // }
-    //
-    // let productArray = Lodash.uniq(prCodesArray)
-    // const balance = yield call(fetchAccountBalancePromise, productArray)
 
     let productArray = Lodash.uniq(prCodesArray);
     const res = yield call(GlobalSmartContractObject.methods.getBalance, productArray)
     const balance = yield call(res.call, {
        from: selectedAddress
-     });
-     console.log("balance from SC", balance);
+    });
     let _result = [];
     balance.available.forEach((obj, index) => {
-        //let dec = Math.pow(tokens[index].decimal);
         let n = new Decimal(obj.toString());
         let h = new Decimal (balance.reserved[index]);
         let d = new Decimal(tokens[index].decimal);
@@ -272,7 +201,7 @@ function* getBalance(params) {
 }
 
 function* depositEthRequest(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { amount } = params.payload;
     const deposit = GlobalSmartContractObject.methods.depositETH().send({
         from: selectedAddress,
@@ -282,7 +211,7 @@ function* depositEthRequest(params) {
 }
 
 function* withdrawEthRequest(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { amount } = params.payload;
     const withdrawAmount = GlobalSmartContractObject.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
         from: selectedAddress
@@ -291,7 +220,7 @@ function* withdrawEthRequest(params) {
 }
 
 function* depositTokenRequest(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     let num = new Decimal(amount.toString()).mul( new Decimal(config.decimal) );
@@ -303,7 +232,7 @@ function* depositTokenRequest(params) {
 }
 
 function* withdrawTokenRequest(params) {
-    const { GlobalWeb3Object, GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     let num = new Decimal(amount.toString()).mul( new Decimal(config.decimal) );
@@ -315,7 +244,6 @@ function* withdrawTokenRequest(params) {
 }
 
 function* actionWatcher() {
-    // yield takeLatest(Constants.default.Requests.SMARTCONTRACT_OBJECT_REQUEST, generateSmartContractObject)
     yield takeEvery(Constants.default.Requests.PLACE_BUY_ORDER_REQUEST, placeBuyOrder)
     yield takeEvery(Constants.default.Requests.PLACE_SELL_ORDER_REQUEST, placeSellOrder)
 

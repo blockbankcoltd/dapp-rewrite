@@ -102,9 +102,7 @@ export default class InstrumentSelectA extends React.Component {
 
 
     render() {
-        let timer = null;
         const { INSTRUMENTS } = this.props.languageConfig;
-        const sortedCoin = this.doSort(this.state.sortType, this.state.activeTabData);
         return (
             <Selector className="mobileWrapper">
                 {this.state.isMobile ?
@@ -147,7 +145,7 @@ export default class InstrumentSelectA extends React.Component {
                                     }}
                                 >
                                     {INSTRUMENTS.COIN_NAME}
-                                    <img
+                                    <img alt=""
                                         src={this.selectImage('char')}
                                     />
                                 </th>
@@ -158,7 +156,7 @@ export default class InstrumentSelectA extends React.Component {
                                     }}
                                 >
                                     {INSTRUMENTS.BEST_BID}
-                                    <img
+                                    <img alt=""
                                         src={this.selectImage('price')}
                                     />
                                 </th>
@@ -169,7 +167,7 @@ export default class InstrumentSelectA extends React.Component {
                                     }}
                                 >
                                     {INSTRUMENTS.BEST_ASK}
-                                    <img
+                                    <img alt=""
                                         src={this.selectImage('percent')}
                                     />
                                 </th>

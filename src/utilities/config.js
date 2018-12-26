@@ -1,5 +1,7 @@
 import * as contractJson2 from '../utilities/DEXHIGH2.json';
 import * as contractJson3 from '../utilities/DEXHIGH3.json';
+
+
 export const config = {
     ownerId: 1,
     basePrice: "10000000000",

@@ -17,22 +17,23 @@ export default class BalanceA extends React.Component {
         if(!bal){
             return balance;
         }
-        const baseBalance = bal.find(data => data.product === this.props.baseName);
-        const tradeBalance = bal.find(data => data.product === this.props.tradeName);
-
+        const baseBalance = bal.find(data => data.name === this.props.baseName);
+        const tradeBalance = bal.find(data => data.name === this.props.tradeName);
+        console.log("baseBalance ==> ", baseBalance, bal, this.props.baseName, this.props.tradeName);
+        console.log("tradeBalance ==> ", tradeBalance);
         if(!baseBalance || !tradeBalance) {
             return balance;
         } else {
             return {
-                baseAmount : baseBalance.balance.total,
-                tradeAmount : tradeBalance.balance.total,
-                baseHold : baseBalance.balance.hold,
-                tradeHold : tradeBalance.balance.hold
+                baseAmount : baseBalance.total,
+                tradeAmount : tradeBalance.total,
+                baseHold : baseBalance.hold,
+                tradeHold : tradeBalance.hold
             }
         }
     }
     render() {
-        const balances = this.getBalance(this.props.balance);
+        const balances = this.getBalance(this.props.selectedTokensBalances);
         const {ACCOUNT_BALANCES} = this.props.languageConfig;
         return (
           <Balance>
@@ -53,19 +54,19 @@ export default class BalanceA extends React.Component {
                 <tr className="first-row">
                   <td className="symbol">{this.props.baseName}</td>
                   <td className="able">
-                    <p>{balances.baseAmount - balances.baseHold}</p>
+                    <p>{+balances.baseAmount - +balances.baseHold}</p>
                   </td>
                   <td className="total">
-                    <p>{balances.baseAmount}</p>
+                    <p>{+balances.baseAmount}</p>
                   </td>
                 </tr>
                 <tr>
                   <td className="symbol">{this.props.tradeName}</td>
                   <td className="able">
-                    <p>{balances.tradeAmount-balances.tradeHold}</p>
+                    <p>{+balances.tradeAmount - +balances.tradeHold}</p>
                   </td>
                   <td className="total">
-                    <p>{balances.tradeAmount}</p>
+                    <p>{+balances.tradeAmount}</p>
                   </td>
                 </tr>
               </tbody>

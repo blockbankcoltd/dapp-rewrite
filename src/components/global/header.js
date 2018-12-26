@@ -8,7 +8,7 @@ import dexhiLogo from "../../assets/images/Dexhi_white.png";
 import { contractList } from "../../utilities/config";
 
 
-export default class HeaderComponent extends React.Component {
+export default class HeaderComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {

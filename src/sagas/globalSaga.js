@@ -16,7 +16,6 @@ function* generateGlobalWeb3Object() {
         if(ProvidersWeb3 !== null){
             const GlobalWeb3Object = new Web3(ProvidersWeb3);
             yield put({type: Constants.default.Success.WEB3_OBJECT_SUCCESS, web3Object: GlobalWeb3Object});
-            // yield put({type: Constants.default.Requests.SMARTCONTRACT_OBJECT_REQUEST});
         }else{
             yield put({type: Constants.default.Failure.WEB3_OBJECT_FAILURE, error: "Failed to Create a global Web3 Object. Please check your Provider and refresh the page."});
         }
@@ -27,10 +26,6 @@ function* generateGlobalWeb3Object() {
 }
 
 function* generateSmartContractObject() {
-    console.log("-------------------------------------------------------------------------------")
-    console.log("===============================================================================")
-    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    console.log(store)
     const selectedContract = contractList[(+localStorage.getItem('contract') || 0)];
     const contract_address = selectedContract.address;
     const { GlobalWeb3Object } = store.getState().main;
