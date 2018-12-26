@@ -123,3 +123,11 @@ export const convertVolumeArray = (arr, prTradeDecimal) => {
       return divideBigNumbers(obj, prTradeDecimal);
     })
 }
+
+export const convertQtyEach = (element, prTradeDecimal) => {
+      return divideBigNumbers(element, prTradeDecimal);
+}
+
+export const convertPriceEach = (element, prTradeDecimal) => {
+      return divideBigNumbers(element, config.basePrice);
+}
