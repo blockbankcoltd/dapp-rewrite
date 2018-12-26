@@ -17,13 +17,21 @@ class TransactionContainer extends Component {
             title: "",
             notice: true,
             auth: false,
-            selectedTab: 0
+            selectedTab: 0,
+            myOrders: []
         };
     }
 
     componentDidMount() {
-        console.log("LANGUAGE CONFIG Transaction -------------------------------------->>>>>>>> ", this.props);
         this.props.getMyOrders();
+    }
+
+    componentDidUpdate(prevProps){
+        if(this.props.myOrders !== prevProps.myOrders){
+            this.setState( {
+                myOrders: this.props.myOrders
+            });
+        }
     }
 
     render() {
@@ -86,7 +94,7 @@ class TransactionContainer extends Component {
                                         <PrivateTradesB languageConfig={this.props.languageConfig} />
                                     </div>
                                     <div id="tab1" className="tab_cont">
-                                        <OpenOrdersB languageConfig={this.props.languageConfig} />
+                                        <OpenOrdersB languageConfig={this.props.languageConfig} data={this.props.myOrders}/>
                                     </div>
                                     <div id="tab2" className="tab_cont">
                                         <TransactionsB languageConfig={this.props.languageConfig} />
@@ -109,6 +117,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
+        
     }
 }
 

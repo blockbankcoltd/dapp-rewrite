@@ -123,8 +123,10 @@ export default class InstrumentSelectA extends React.Component {
                                     key={idx}
                                     className={this.state.activeTab === idx ? "active" : ""}
                                     onClick={() => {
+                                        console.log("Active tab data ==> ", this.props.data[idx])
+                                        this.props.changeTabData(obj.market.productId);
                                         this.setState({
-                                            activeTabData: obj.market.trades,
+                                            activeTabData: this.props.data[idx].market.trades,
                                             activeBaseToken: obj.market.productId,
                                             activeTab: idx
                                         })
@@ -186,8 +188,8 @@ export default class InstrumentSelectA extends React.Component {
                                     style={{border: "none", fontWeight: "bold", display: "table-row"}}
                                 >
                                     <td className="coinSymbol">{obj.productName}</td>
-                                    <td className="up dataNumber">{obj.price}</td>
-                                    <td className="up dataNumber">{obj.change}</td>
+                                    <td className="up dataNumber">{obj.bestBid}</td>
+                                    <td className="up dataNumber">{obj.bestAsk}</td>
                                 </tr>
                                 )
                             })}

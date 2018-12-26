@@ -1,8 +1,8 @@
 // import { bindActionCreators } from "redux";
 import * as Constants from '../constants/constants';
+import initState from './initialState';
 
-
-export default (state = {}, action) => {
+export default (state = initState, action) => {
     switch (action.type) {
         case Constants.default.Success.SMARTCONTRACT_OBJECT_SUCCESS:
             return {

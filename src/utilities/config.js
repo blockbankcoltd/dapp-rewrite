@@ -1,407 +1,78 @@
-// import * as contractJson2 from '../utilities/DEXHIGH2.json';
-// import * as contractJson3 from '../utilities/DEXHIGH3.json';
-// export const config = {
-//     basePrice: 10000000000,
-//     trades: [
-//         {
-//             productName: "BAT",
-//             decimal: "1000000000000000000",
-//             productId: 2,
-//             tokenAddress: "0x4514fd2f873b859a5d713eba6dd9047a58a0da5e",
-//             logo: ""
-//         },
-//         {
-//             productName: "OMG",
-//             decimal: "1000000000000000000",
-//             productId: 3,
-//             tokenAddress: "0x6dae0a8f648a5b5fadc443bb01ce25eda1046933",
-//             logo: ""
-//         },
-//         {
-//             productName: "VIKKY",
-//             decimal: "1000000000000000000",
-//             productId: 4,
-//             tokenAddress: "0xae94b3e45eb554f434f6f06f73348b65d4f26615",
-//             logo: ""
-//         },
-//         {
-//             productName: "BTCB",
-//             decimal: "1000000000000000000",
-//             productId: 5,
-//             tokenAddress: "0xfb4209e6ee5f58540788bbb70e816068f45146b8",
-//             logo: ""
-//         },
-//         {
-//             productName: "NDI",
-//             decimal: "1000000000000000000",
-//             productId: 6,
-//             tokenAddress: "0x1f3ee54e2aa01b8239a2860751a500edf8b5b601",
-//             logo: ""
-//         },
-//         {
-//             productName: "VAT",
-//             decimal: "1000000000000000000",
-//             productId: 7,
-//             tokenAddress: "0x1304279a438adcde99e92e692e532765f6fa7eec",
-//             logo: ""
-//         },
-//         {
-//             productName: "BNB",
-//             decimal: "1000000000000000000",
-//             productId: 8,
-//             tokenAddress: "0x2a555f01f3097e2256dc9428d6b62b6ca5f0d8fd",
-//             logo: ""
-//         },
-//         {
-//             productName: "ICON",
-//             decimal: "1000000000000000000",
-//             productId: 9,
-//             tokenAddress: "0x5c1b571629b3d60f0c345995784148d2dbffbb50",
-//             logo: ""
-//         },
-//         {
-//             productName: "TUSD",
-//             decimal: "1000000000000000000",
-//             productId: 10,
-//             tokenAddress: "0x2ed3eaf6c5a361a1b2d6f4f7ab30ed9eebc73ecf",
-//             logo: ""
-//         },
-//         {
-//             productName: "VIEN",
-//             decimal: "1000000000000000000",
-//             productId: 11,
-//             tokenAddress: "0x9a6f9b846d518162b549aa4d321a3e0de2daf1b4",
-//             logo: ""
-//         },
-//         {
-
-//         }
-//     ],
-//     base: [
-//         {
-//             productName: "ETH",
-//             productId: 1,
-//             tokenAddress: "0x0000000000000000000000000000000000000000",
-//             decimal: 18
-//         },
-//         {
-//             productName: "LNC",
-//             productId: 2,
-//             tokenAddress: "0x873f4f3105377427c47c643221e7f250a5b4ddcf",
-//             decimal: 18
-//         }
-//     ],
-//     market: [
-//         {
-//             base: 1,
-//             trade: [2, 3, 4, 5, 6, 7, 8, 9, 10]
-//         },
-//         {
-//             base: 2,
-//             trade: [7, 8, 9, 10]
-//         }
-//     ]
-// };
-
-// export const filterMarkets = () => {
-//     let markets = [];
-//     config.market.forEach(obj => {
-//         let trades = [];
-//         let base = config.base.find(o => o.productId === obj.base);
-//         obj.trade.forEach(y => {
-//             let tradeObject = config.trades.find(x => x.productId === y);
-//             trades.push(tradeObject);
-//         });
-
-//         markets.push({
-//             market: {
-//                 productName: base.productName,
-//                 productId: base.productId,
-//                 tokenAddress: base.tokenAddress,
-//                 decimal: base.decimal,
-//                 trades: trades
-//             }
-//         });
-//     });
-//     return markets;
-// }
-
-
-// export const contractList = [
-//     {
-//         name: "Latest",
-//         address: "0xaa28c310cb063cf964b718801f55437989616223",
-//         abifile: contractJson2.default
-//     },
-//     {
-//         name: "Order",
-//         address: "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0",
-//         abifile: contractJson3.default
-//     }
-// ]
-
-
-// /* 
-// export default {
-//     ownerId: 1,
-//     productList: [
-//         {
-//             productName: "ETH",
-//             symbolName: "ETH",
-//             productId: 1,
-//             tokenAddress: "0x0000000000000000000000000000000000000000",
-//             decimal: "1000000000000000000",
-//             prTrade: [
-//                 {
-//                     productName: "BAT",
-//                     symbolName: "BAT",
-//                     decimal: "1000000000000000000",
-//                     productId: 2,
-//                     tokenAddress: "0x4514fd2f873b859a5d713eba6dd9047a58a0da5e",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "OMG",
-//                     symbolName: "OMG",
-//                     decimal: "1000000000000000000",
-//                     productId: 3,
-//                     tokenAddress: "0x6dae0a8f648a5b5fadc443bb01ce25eda1046933",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "VIKKY TOKEN",
-//                     symbolName: "VIKKY",
-//                     decimal: "1000000000000000000",
-//                     productId: 4,
-//                     tokenAddress: "0xae94b3e45eb554f434f6f06f73348b65d4f26615",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "BTCB",
-//                     symbolName: "BTCB",
-//                     decimal: "1000000000000000000",
-//                     productId: 5,
-//                     tokenAddress: "0xfb4209e6ee5f58540788bbb70e816068f45146b8",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "NDI",
-//                     symbolName: "NDI",
-//                     decimal: "1000000000000000000",
-//                     productId: 6,
-//                     tokenAddress: "0x1f3ee54e2aa01b8239a2860751a500edf8b5b601",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "VAT",
-//                     symbolName: "VAT",
-//                     decimal: "1000000000000000000",
-//                     productId: 7,
-//                     tokenAddress: "0x1304279a438adcde99e92e692e532765f6fa7eec",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "BNB",
-//                     symbolName: "BNB",
-//                     decimal: "1000000000000000000",
-//                     productId: 8,
-//                     tokenAddress: "0x2a555f01f3097e2256dc9428d6b62b6ca5f0d8fd",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "ICON",
-//                     symbolName: "ICON",
-//                     decimal: "1000000000000000000",
-//                     productId: 9,
-//                     tokenAddress: "0x5c1b571629b3d60f0c345995784148d2dbffbb50",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "TUSD",
-//                     symbolName: "TUSD",
-//                     decimal: "1000000000000000000",
-//                     productId: 10,
-//                     tokenAddress: "0x2ed3eaf6c5a361a1b2d6f4f7ab30ed9eebc73ecf",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "VIEN",
-//                     symbolName: "VIEN",
-//                     decimal: "1000000000000000000",
-//                     productId: 11,
-//                     tokenAddress: "0x9a6f9b846d518162b549aa4d321a3e0de2daf1b4",
-//                     logo: ""
-//                 }
-//             ]
-//         },
-//         {
-//             productName: "LNC",
-//             symbolName: "LNC",
-//             productId: 2,
-//             tokenAddress: "0x873f4f3105377427c47c643221e7f250a5b4ddcf",
-//             decimal: "1000000000000000000",
-//             prTrade: [
-//                 {
-//                     productName: "BAT",
-//                     symbolName: "BAT",
-//                     decimal: "1000000000000000000",
-//                     productId: 2,
-//                     tokenAddress: "0x4514fd2f873b859a5d713eba6dd9047a58a0da5e",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "OMG",
-//                     symbolName: "OMG",
-//                     decimal: "1000000000000000000",
-//                     productId: 3,
-//                     tokenAddress: "0x6dae0a8f648a5b5fadc443bb01ce25eda1046933",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "VIKKY TOKEN",
-//                     symbolName: "VIKKY",
-//                     decimal: "1000000000000000000",
-//                     productId: 4,
-//                     tokenAddress: "0xae94b3e45eb554f434f6f06f73348b65d4f26615",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "BTCB",
-//                     symbolName: "BTCB",
-//                     decimal: "1000000000000000000",
-//                     productId: 5,
-//                     tokenAddress: "0xfb4209e6ee5f58540788bbb70e816068f45146b8",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "NDI",
-//                     symbolName: "NDI",
-//                     decimal: "1000000000000000000",
-//                     productId: 6,
-//                     tokenAddress: "0x1f3ee54e2aa01b8239a2860751a500edf8b5b601",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "VAT",
-//                     symbolName: "VAT",
-//                     decimal: "1000000000000000000",
-//                     productId: 7,
-//                     tokenAddress: "0x1304279a438adcde99e92e692e532765f6fa7eec",
-//                     logo: ""
-//                 },
-//                 {
-//                     productName: "BNB",
-//                     symbolName: "BNB",
-//                     decimal: "1000000000000000000",
-//                     productId: 8,
-//                     tokenAddress: "0x2a555f01f3097e2256dc9428d6b62b6ca5f0d8fd",
-//                     logo: ""
-//                 },
-//                 // {
-//                 //     productName: "ICON",
-//                 //     symbolName: "ICON",
-//                 //     decimal: "1000000000000000000",
-//                 //     productId: 5,
-//                 //     tokenAddress: "0x5c1b571629b3d60f0c345995784148d2dbffbb50",
-//                 //     logo: ""
-//                 // },
-//                 // {
-//                 //     productName: "TUSD",
-//                 //     symbolName: "TUSD",
-//                 //     decimal: "1000000000000000000",
-//                 //     productId: 6,
-//                 //     tokenAddress: "0x2ed3eaf6c5a361a1b2d6f4f7ab30ed9eebc73ecf",
-//                 //     logo: ""
-//                 // },
-//                 // {
-//                 //     productName: "VIEN",
-//                 //     symbolName: "VIEN",
-//                 //     decimal: "1000000000000000000",
-//                 //     productId: 7,
-//                 //     tokenAddress: "0x9a6f9b846d518162b549aa4d321a3e0de2daf1b4",
-//                 //     logo: ""
-//                 // }
-//             ]
-//         }],
-
-// }
-// */
-
-
 import * as contractJson2 from '../utilities/DEXHIGH2.json';
 import * as contractJson3 from '../utilities/DEXHIGH3.json';
 export const config = {
     ownerId: 1,
+    basePrice: "10000000000",
     basePrice: 10000000000,
     trades: [
         {
             productName: "BAT",
             decimal: "1000000000000000000",
             productId: 3,
-            tokenAddress: "0x4514fd2f873b859a5d713eba6dd9047a58a0da5e",
+            tokenAddress: "0x8f803178891e51e055a4542788678b134435b613",
             logo: ""
         },
         {
             productName: "OMG",
             decimal: "1000000000000000000",
             productId: 4,
-            tokenAddress: "0x6dae0a8f648a5b5fadc443bb01ce25eda1046933",
+            tokenAddress: "0x10e4437cd6ab32d11a4b0d983157fe1dffc673c4",
             logo: ""
         },
         {
             productName: "VIKKY",
             decimal: "1000000000000000000",
             productId: 5,
-            tokenAddress: "0xae94b3e45eb554f434f6f06f73348b65d4f26615",
+            tokenAddress: "0x873f4f3105377427c47c643221e7f250a5b4ddcf",
             logo: ""
         },
         {
             productName: "BTCB",
             decimal: "1000000000000000000",
             productId: 6,
-            tokenAddress: "0xfb4209e6ee5f58540788bbb70e816068f45146b8",
+            tokenAddress: "0xb15596d37ec8ca879dc9bfbc1da92331ca6497be",
             logo: ""
         },
         {
             productName: "NDI",
             decimal: "1000000000000000000",
             productId: 7,
-            tokenAddress: "0x1f3ee54e2aa01b8239a2860751a500edf8b5b601",
+            tokenAddress: "0xc4c4c06ffad6f5e4099c754d1e58d6cec6d20b5f",
             logo: ""
         },
         {
             productName: "VAT",
             decimal: "1000000000000000000",
             productId: 8,
-            tokenAddress: "0x1304279a438adcde99e92e692e532765f6fa7eec",
+            tokenAddress: "0x3c6eb741bfec2f7916f6ea9b84f1494b02fe23d8",
             logo: ""
         },
         {
             productName: "BNB",
             decimal: "1000000000000000000",
             productId: 9,
-            tokenAddress: "0x2a555f01f3097e2256dc9428d6b62b6ca5f0d8fd",
+            tokenAddress: "0xd2aff1f2debe1120b4674b0b63e822dfc421c446",
             logo: ""
         },
         {
             productName: "ICON",
             decimal: "1000000000000000000",
             productId: 10,
-            tokenAddress: "0x5c1b571629b3d60f0c345995784148d2dbffbb50",
+            tokenAddress: "0xcfc701dd1570e5bf7fff2e57176e7dae7c858132",
             logo: ""
         },
         {
             productName: "TUSD",
             decimal: "1000000000000000000",
             productId: 11,
-            tokenAddress: "0x2ed3eaf6c5a361a1b2d6f4f7ab30ed9eebc73ecf",
+            tokenAddress: "0xb7c6ef39ba505bfdb560f0cd32c84963e3d8bcbe",
             logo: ""
         },
         {
             productName: "VIEN",
             decimal: "1000000000000000000",
             productId: 12,
-            tokenAddress: "0x9a6f9b846d518162b549aa4d321a3e0de2daf1b4",
+            tokenAddress: "0x13f59e0ed9224f646a94f28ca8120fc011b890b8",
             logo: ""
         },
         {
@@ -413,13 +84,13 @@ export const config = {
             productName: "ETH",
             productId: 1,
             tokenAddress: "0x0000000000000000000000000000000000000000",
-            decimal: 18
+            decimal: "1000000000000000000"
         },
         {
             productName: "LNC",
             productId: 2,
-            tokenAddress: "0x873f4f3105377427c47c643221e7f250a5b4ddcf",
-            decimal: 18
+            tokenAddress: "0x81d0a10c4478d6d0aea604aa4aa5a3154efa5bbd",
+            decimal: "1000000000000000000"
         }
     ],
     market: [
@@ -429,7 +100,7 @@ export const config = {
         },
         {
             base: 2,
-            trade: [7, 8, 9, 10]
+            trade: [3, 7, 8, 9, 10]
         }
     ]
 };
@@ -445,13 +116,13 @@ export const filterMarkets = () => {
         });
 
         markets.push({
-            market: {
+            market: Object.assign({},{
                 productName: base.productName,
                 productId: base.productId,
                 tokenAddress: base.tokenAddress,
                 decimal: base.decimal,
                 trades: trades
-            }
+            })
         });
     });
     return markets;
@@ -461,7 +132,7 @@ export const filterMarkets = () => {
 export const contractList = [
     {
         name: "Latest",
-        address: "0x2b8e32ef000dc2377955d23b0bf356f5092f2515",
+        address: "0x13f59e0ed9224f646a94f28ca8120fc011b890b8",
         abifile: contractJson2.default
     },
     {
@@ -470,4 +141,3 @@ export const contractList = [
         abifile: contractJson3.default
     }
 ]
-

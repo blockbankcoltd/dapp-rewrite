@@ -17,6 +17,7 @@ class ExchangeContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tabSelected: 0,
             baseCurrency: null,
             tradeCurrency: null,
             baseName: '',
@@ -30,28 +31,97 @@ class ExchangeContainer extends Component {
         // dispatch Action to get data for Orderbook
         const baseName = filterMarkets().find(data => data.market.productId === 1);
         const defaultTrade = config.trades.find(data => data.productId === 3);
-        const tradesForBase = baseName.market.trades.map( x => x.productId);
-        
+        const tradesForBase = baseName.market.trades.map(x => x.productId);
+
         const marketDataFromConfig = filterMarkets();
-        this.setState((state, props) =>{ return  { marketsData: marketDataFromConfig, baseName: baseName.market.productName, tradeName: defaultTrade.productName}});
         this.props.getOrderbook(1, 3, 10);
-        this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
         this.props.getBalance();
+        this.changeTabData(1);
         this.props.getMyOrders();
+
+        this.setState((state, props) => {
+            return {
+                marketsData: marketDataFromConfig,
+                baseName: baseName.market.productName,
+                tradeName: defaultTrade.productName,
+                baseCurrency: baseName.market.productId,
+                tradeCurrency: defaultTrade.productId,
+            }
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.myOrders !== prevProps.myOrders) {
+            let _array = [];
+
+            this.props.myOrders.orderId.forEach((o, i) => {
+                if(Number(this.props.myOrders.prBase[i]) === this.state.baseCurrency && Number(this.props.myOrders.prTrade[i]) === this.state.tradeCurrency){
+                    _array.push({
+                        orderId: o,
+                        prBase: this.props.myOrders.prBase[i],
+                        prTrade: this.props.myOrders.prTrade[i],
+                        price: this.props.myOrders.prices[i],
+                        qty: this.props.myOrders.qtys[i],
+                        isSell: this.props.myOrders.sells[i]
+                    })
+                }
+            });
+            this.setState({ openOrders: _array });
+        }
+
+        if(prevProps.orderBook !== this.props.orderBook){
+            this.setState({orderBook: this.props.orderBook});
+        }
+
+        if(prevProps.bestBidBestAsk !== this.props.bestBidBestAsk){
+            
+            this.state.marketsData.forEach( obj => {
+                if(obj.market.productId === this.state.baseCurrency){
+                    this.props.bestBidBestAsk.bestBidPrice.forEach( (x, index) => {
+                        obj.market.trades[index]["bestBid"] = x;
+                        obj.market.trades[index]["bestAsk"] = this.props.bestBidBestAsk.bestAskPrice[index];
+                    })
+                }
+            })
+            this.setState({marketsData: this.state.marketsData})
+        }
+    }
+
+    changeTabData = (base) => {
+        const baseObj = filterMarkets().find(data => data.market.productId === base);
+        const tradesForBase = baseObj.market.trades.map(x => x.productId);
+        this.props.getBestBidBestAsk(tradesForBase, [baseObj.market.productId]);
     }
 
     changeTradeCurrency = (base, trade) => {
+
+        console.log("Set BASE AND TRADE --> ", base, trade);
         const baseName = filterMarkets().find(data => data.market.productId === base);
-        const tradesForBase = baseName.market.trades.map( x => x.productId);
+        const tradesForBase = baseName.market.trades.map(x => x.productId);
         const prodName = baseName.market.trades.find(data => data.productId === trade);
+        let _array = [];
+        this.props.myOrders.orderId.forEach((o, i) => {
+            if(Number(this.props.myOrders.prBase[i]) === base && Number(this.props.myOrders.prTrade[i]) === trade){
+                _array.push({
+                    orderId: o,
+                    prBase: this.props.myOrders.prBase[i],
+                    prTrade: this.props.myOrders.prTrade[i],
+                    price: this.props.myOrders.prices[i],
+                    qty: this.props.myOrders.qtys[i],
+                    isSell: this.props.myOrders.sells[i]
+                })
+            }
+        });
         this.setState({
             baseCurrency: base,
             tradeCurrency: trade,
             baseName: baseName.market.productName,
-            tradeName: prodName.productName
+            tradeName: prodName.productName,
+            openOrders: _array
         });
         this.props.getOrderbook(trade, base, 10);
-        this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
+        // this.props.getBestBidBestAsk(tradesForBase, [baseName.market.productId]);
+
     }
 
     handleBuySellPrice = (val) => {
@@ -87,7 +157,7 @@ class ExchangeContainer extends Component {
             <Exchange id="wrap">
                 <ExchangeColumn1>
                     <div id="ticker">
-                    
+
                         <TickerA
                             languageConfig={this.props.languageConfig}
                             baseName={this.state.baseName}
@@ -97,29 +167,29 @@ class ExchangeContainer extends Component {
                     <div className="example-grow">
                         <div className="parent">
                             <div className="item">
-                                { !isMobile && (
-                                        <div className="chart-wrap">
-                                            <form className="module-trigger chart-trigger">
-                                                <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
-                                                <label htmlFor="chart-trigger-1" className="price-ch-btn">
-                                                    Price chart
+                                {!isMobile && (
+                                    <div className="chart-wrap">
+                                        <form className="module-trigger chart-trigger">
+                                            <input id="chart-trigger-1" type="radio" name="tabs" defaultChecked />
+                                            <label htmlFor="chart-trigger-1" className="price-ch-btn">
+                                                Price chart
                                                 </label>
-                                                <div className="clear" />
+                                            <div className="clear" />
 
-                                                <div className="trigger-content">
-                                                    <div id="chart-trigger-content-1">
-                                                        <div>*Chart Area</div>
-                                                    </div>
+                                            <div className="trigger-content">
+                                                <div id="chart-trigger-content-1">
+                                                    <div>*Chart Area</div>
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 )}
 
                                 <div className="quotation">
 
                                     <OrderbookA
                                         languageConfig={this.props.languageConfig}
-                                        data={this.props.orderBook}
+                                        data={this.state.orderBook}
                                         handleChangePrice={this.handleBuySellPrice}
                                     />
                                 </div>
@@ -193,7 +263,7 @@ class ExchangeContainer extends Component {
                                             id="historyTab"
                                             className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <OpenOrdersA languageConfig={this.props.languageConfig} data={this.props.myOpenOrders}/>
+                                            <OpenOrdersA languageConfig={this.props.languageConfig} data={this.state.openOrders} />
                                         </div>
                                         <div
                                             id="tradesTab"
@@ -231,7 +301,8 @@ class ExchangeContainer extends Component {
                         <InstrumentSelectA
                             handleTradeCurrencyChange={this.changeTradeCurrency}
                             languageConfig={this.props.languageConfig}
-                            data={filterMarkets()}
+                            data={this.state.marketsData}
+                            changeTabData={this.changeTabData}
                         />
 
                     </div>
@@ -246,7 +317,7 @@ const mapStateToProps = (state) => {
     return {
         orderBook: state.smartContract.orderBook,
         balance: state.smartContract.balance,
-        myOpenOrders: state.smartContract.myOrders,
+        myOrders: state.smartContract.myOrders,
         bestBidBestAsk: state.smartContract.bestBidBestAsk
     }
 }
@@ -668,7 +739,7 @@ const ExchangeColumn1 = styled.div`
                                 //color:#f33;
                                 font-weight:bold;
                                 background: rgba(0, 102, 204, 0.1);
-                             
+
                                 .bookViewBorder{
                                     width:100%;
                                     height:100%;
@@ -676,7 +747,7 @@ const ExchangeColumn1 = styled.div`
                                     border:2px solid black;
                                     box-sizing: border-box;
                                     z-index: 2;
-                                 
+
                                 }
                             }
                             .CellMyOrders {
@@ -722,7 +793,7 @@ const ExchangeColumn1 = styled.div`
                                 //color:#06c;
                                 font-weight:bold;
                                 background: rgba(255, 51, 51, 0.1);
-                                
+
                                 .bookViewBorder{
                                     width:100%;
                                     height:100%;
@@ -730,7 +801,7 @@ const ExchangeColumn1 = styled.div`
                                     border:2px solid black;
                                     box-sizing: border-box;
                                     z-index: 2;
-                                 
+
                                 }
                             }
                             .CellMyOrders {
@@ -815,11 +886,11 @@ const ExchangeColumn1 = styled.div`
                         }
                     }
                 }
-                
+
                 .emptyOrderEntry{
                     height:345px;line-height:345px;margin:11px 0 0 0;text-align:center;background:#fff;
                 }
-                
+
                 .order-entry-head {
                     height: 340px;
                     margin:11px 0 0 0;
@@ -939,20 +1010,20 @@ const ExchangeColumn1 = styled.div`
                                         height:10px;
                                         width:10px;
                                         background:url('/static/images/icon/top.png') 0 0 no-repeat;
-                                        background-size:10px 10px; 
-                                        cursor : pointer;    
+                                        background-size:10px 10px;
+                                        cursor : pointer;
                                     }
                                     .bottom_arrow{
                                         height:10px;
                                         width:10px;
                                         background:url('/static/images/icon/bottom.png') 0 0 no-repeat;
                                         background-size:10px 10px;
-                                        margin-top :5px; 
-                                        cursor: pointer;   
+                                        margin-top :5px;
+                                        cursor: pointer;
                                     }
                                 }
                                 label.error {
-                                    
+
                                 }
                             }
                         }
@@ -1273,12 +1344,12 @@ const ExchangeColumn1 = styled.div`
                 }
             }
         }
-    } 
+    }
     @media(max-width: 1024px) {
         width: 100%;
         max-width: 100%;
         .chart-wrap {
-            //display: none;  
+            //display: none;
             .module-trigger{
                 height:400px;
             }
@@ -1339,7 +1410,7 @@ const ExchangeColumn1 = styled.div`
                                 padding:5px 10px 0 0;
                                 font-size:1.2rem;
                                 box-sizing:border-box;
-                            }                        
+                            }
                         }
                     }
                     .priceStatus, .volStatus {
@@ -1374,7 +1445,7 @@ const ExchangeColumn1 = styled.div`
                         h4 {
                             font-size: 1rem;
                         }
-                    }                
+                    }
                 }
                 &.normal {
                     .cuKrw {
@@ -1428,7 +1499,7 @@ const ExchangeColumn1 = styled.div`
                             line-height:2rem;
                         }
                     }
-                    
+
                 }
                 .orderPanel {
                     float:left;
@@ -1510,7 +1581,7 @@ const ExchangeColumn1 = styled.div`
                                     line-height: 2.5rem;
                                 }
                             }
-                           
+
                         }
                     }
                 }
@@ -1572,7 +1643,7 @@ const ExchangeColumn1 = styled.div`
                 }
             }
         }
-        
+
         .chart-wrap{
             margin:1rem 0 0 0;
             border-top:2px solid #036;
@@ -1696,7 +1767,7 @@ const ExchangeColumn2 = styled.div`
         width:100%;
         max-width: 100%;
 
-        
+
         .mobileWrapper {
             position:relative;
             .setCoinMarket {
