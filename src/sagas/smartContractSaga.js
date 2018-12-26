@@ -100,8 +100,40 @@ function* getBestBidBestAsk(params) {
     const bestBidBestAsk = yield GlobalSmartContractObject.methods.getOrderBookInfo(trade, base).call({
         from: selectedAddress
     });
-    yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk });
+    let result = {
+         bestAskPrice: convertPriceArray(bestBidBestAsk.bestAskPrice),	
+         bestBidPrice: convertPriceArray(bestBidBestAsk.bestBidPrice)	
+     }	
+ 
+  
+      yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk: result });	
+ }	
+ 
+  function* GetDepositWithdrawlRecords(params) {	
+     const { id } = params.payload;	
+ 
+      const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;	
+     const depositWithdrawlRecords = yield GlobalSmartContractObject.methods.GetDWrecords(id).call({	
+         from: selectedAddress	
+     });	
+ 
+      const result = depositWithdrawlRecords.isDeposit.map( (o,i) => {	
+         return {	
+             isDeposit: o,	
+             qtys: convertVolumeArray(depositWithdrawlRecords.qty, transformToTokenName(depositWithdrawlRecords.prCode[i]).decimal),	
+             timestamp: new Date(depositWithdrawlRecords.timestamp[i] * 1000).toDateString(),	
+             prCode: depositWithdrawlRecords.prCode[i]	
+         }	
+ 
+      });	
+     /*  isDeposit: o,	
+         prCode: this.props.dwRecords.prCode[i],	
+         qty: this.props.dwRecords.qty[i],	
+         timestamp: new Date(this.props.dwRecords.timestamp[i] * 1000).toDateString() */	
+ 
+      yield put({ type: Constants.default.Success.GET_DEPOSIT_WITHDRAWL_RECORDS_SUCCESS, depositWithdrawlRecords: result })
 }
+
 
 function* placeBuyOrder(params) {
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
@@ -248,6 +280,7 @@ function* actionWatcher() {
     yield takeEvery(Constants.default.Requests.GET_MY_ACCOUNTID_REQUEST, getMyAccountId)
 
     yield takeEvery(Constants.default.Requests.GET_BESTBID_BESTASK_REQUEST, getBestBidBestAsk)
+    yield takeEvery(Constants.default.Requests.GET_DEPOSIT_WITHDRAWL_RECORDS_REQUEST, GetDepositWithdrawlRecords)
 
 }
 
