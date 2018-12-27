@@ -102,7 +102,7 @@ class WalletContainer extends Component {
                 {
                     Header: WALLET.TOTAL,
                     id: "total_balance",
-                    accessor: d => d.total.toString()
+                    accessor: d => (+d.hold + +d.total).toString()
                 },
                 {
                     Header: WALLET.AVAILABLE,
