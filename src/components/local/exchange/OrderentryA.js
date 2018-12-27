@@ -68,7 +68,7 @@ export default class OrderentryA extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.price !== this.props.price) {
       console.log("Changing Price ------>>>> ", prevProps.price, this.props.price);
-      this.setState({ price: parseInt(this.props.price) });
+      this.setState({ price: this.props.price });
     }
   }
 
