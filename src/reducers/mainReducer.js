@@ -68,6 +68,14 @@ export default (state = {}, action) => {
                     tradeHistory: action.result
                 }
             }
+        case Constants.Success.FETCH_ORDER_HISTORY_SUCCESS:
+            console.log("IN MAIN REDUCER --> ", action.result);
+            if(action.result){
+                return {
+                    ...state,
+                    orderHistory: action.result
+                }
+            }
         break;
         default:
             return state;

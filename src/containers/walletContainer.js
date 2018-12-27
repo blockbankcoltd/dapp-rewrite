@@ -53,10 +53,10 @@ class WalletContainer extends Component {
     deposit = (e, cellInfo) => {
         let amount = window.prompt("Enter the deposit amount");
         let tokenObj = cellInfo.original;
-        
+
         if(amount !== null && tokenObj.name === 'ETH'){
             this.props.depositEth(amount);
-            
+
         }else if(amount !== null && tokenObj.name !== 'ETH'){
             console.log("Token address --> ", tokenObj);
             this.props.depositToken(tokenObj.tokenAddress, amount);
@@ -68,11 +68,11 @@ class WalletContainer extends Component {
     withdraw = (e, cellInfo) => {
         let amount = window.prompt("Enter the deposit amount");
         let tokenObj = cellInfo.original;
-        
-        if(amount !== null && tokenObj.product === 'ETH'){
+
+        if(amount !== null && tokenObj.name === 'ETH'){
             this.props.withdrawEth(amount);
-            
-        }else if(amount !== null && tokenObj.product !== 'ETH'){
+
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
             this.props.withdrawToken(tokenObj.tokenAddress, amount);
         }else{
             console.log("Cancelled")
@@ -102,7 +102,7 @@ class WalletContainer extends Component {
                 {
                     Header: WALLET.TOTAL,
                     id: "total_balance",
-                    accessor: d => d.total.toString()
+                    accessor: d => (+d.hold + +d.total).toString()
                 },
                 {
                     Header: WALLET.AVAILABLE,
@@ -257,7 +257,7 @@ const Wallet = styled.div`
             }
         }
     }
-    
+
     .wallet_info {
         width: 100%;
         overflow: hidden;
@@ -292,7 +292,7 @@ const Wallet = styled.div`
             }
         }
     }
-    
+
     .wallet_info2 {
         h5 {
             padding: 20px 60px;
@@ -305,7 +305,7 @@ const Wallet = styled.div`
             font-weight: bold;
         }
     }
-    
+
     .asset_balance {
         width: 100%;
         overflow: hidden;
@@ -571,11 +571,11 @@ const Wallet = styled.div`
                             flex-wrap: wrap;
                             .balance{
                                 flex:1;align-self:flex-start;
-                                
+
                                 .wallet_title{
                                     align-self:flex-start;font-size:1.1rem;font-weight:bold;color:gray;line-height:1.5rem;
                                 }
-                                
+
                                 .wallet_cnt{
                                     align-self:flex-start;margin:0.2rem 0 0 0;font-size:1.2rem;line-height:1.25rem;
                                 }
@@ -589,7 +589,7 @@ const Wallet = styled.div`
                                     font-size: 1.2rem;
                                     // padding-left:2.5rem;
                                     padding-left:0;
-                                    line-height:1.5rem; 
+                                    line-height:1.5rem;
                                     display: block;
                                 }
                             }
@@ -628,7 +628,7 @@ const Wallet = styled.div`
                                 width: 100%;
                                 // margin: 1rem 0 0 0;
                                 padding:0 0 0 1rem;text-align:left;font-weight:normal;
-                                
+
                                 .tip{
                                     font-size:0.8rem;
                                 }

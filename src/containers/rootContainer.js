@@ -11,6 +11,7 @@ import Actions from '../actions/index';
 import FooterComponent from "../components/global/footer";
 import { Web3Provider } from '../components/global/web3provider';
 import { fetchAccounts, fetchNetwork } from '../utilities/helpers';
+import Loading from '../components/global/loading';
 
 class RootContainer extends Component {
     constructor(props) {

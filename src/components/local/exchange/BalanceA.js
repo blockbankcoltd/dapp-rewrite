@@ -52,19 +52,19 @@ export default class BalanceA extends React.Component {
                 <tr className="first-row">
                   <td className="symbol">{this.props.baseName}</td>
                   <td className="able">
-                    <p>{+balances.baseAmount - +balances.baseHold}</p>
+                    <p>{+balances.baseAmount}</p>
                   </td>
                   <td className="total">
-                    <p>{+balances.baseAmount}</p>
+                    <p>{+balances.baseAmount + +balances.baseHold}</p>
                   </td>
                 </tr>
                 <tr>
                   <td className="symbol">{this.props.tradeName}</td>
                   <td className="able">
-                    <p>{+balances.tradeAmount - +balances.tradeHold}</p>
+                    <p>{+balances.tradeAmount}</p>
                   </td>
                   <td className="total">
-                    <p>{+balances.tradeAmount}</p>
+                    <p>{+balances.tradeAmount + +balances.tradeHold}</p>
                   </td>
                 </tr>
               </tbody>

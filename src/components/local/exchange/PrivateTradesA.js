@@ -57,12 +57,12 @@ export default class PrivateTradesA extends React.Component{
                 </thead>
                 <tbody>
                   {/* {this.state.page} */}
-                  {this.state.data && this.state.data.length > 0 ? this.state.data.map( (o, i) => {
+                  {this.props.data && this.props.data.length > 0 ? this.props.data.map( (o, i) => {
                     return (
                       <tr key={i}>
-                        <td>{transformToTokenName(+o.prCode)}</td>
+                        <td>{o.instruement}</td>
                         <td>{o.timestamp}</td>
-                        <td>{o.isDeposit ? "Deposit" : "Withdrawl"}</td>
+                        <td>{o.side}</td>
                         <td>{o.qty}</td>
                       </tr>
                     )
