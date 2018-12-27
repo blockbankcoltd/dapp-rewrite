@@ -75,14 +75,20 @@ export default class OrderbookA extends React.Component {
                 {
                   _obj.bidOrder.reverse().map((item, i) => {
                     // if (item.volume !== '0') {
-                      return (
-                        <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceA)}>
-                          <div className="CellPublicOrders">{item.volume}</div>
-                          <div className="CellBidPrice CellPrice">{item.priceA}</div>
-                          <div className="CellMyOrders price">-</div>
-                        </span>
+                      return item.volume === "0"? (
+                          <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceA)}>
+                              <div className="CellMyOrders">-</div>
+                              <div className="CellBidPrice CellPrice">-</div>
+                              <div className="CellMyOrders price">-</div>
+                          </span>
+                      ) : (
+                          <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceA)}>
+                              <div className="CellPublicOrders">{item.volume}</div>
+                              <div className="CellBidPrice CellPrice">{item.priceA}</div>
+                              <div className="CellMyOrders price">-</div>
+                          </span>
                       )
-                    
+
                   })
                 }
               </div>
@@ -90,12 +96,18 @@ export default class OrderbookA extends React.Component {
                 {
                   _obj.askOrder.map((item, i) => {
                     // if (item.volume !== '0') {
-                      return (
-                        <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceB)}>
-                          <div className="CellMyOrders price">-</div>
-                          <div className="CellBidPrice CellPrice">{item.priceB}</div>
-                          <div className="CellPublicOrders">{item.volume}</div>
-                        </span>
+                      return item.volume === "0"? (
+                          <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceB)}>
+                              <div className="CellMyOrders price">-</div>
+                              <div className="CellBidPrice CellPrice">-</div>
+                              <div className="CellMyOrders">-</div>
+                          </span>
+                      ) : (
+                          <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceB)}>
+                              <div className="CellMyOrders price">-</div>
+                              <div className="CellBidPrice CellPrice">{item.priceB}</div>
+                              <div className="CellPublicOrders">{item.volume}</div>
+                          </span>
                       )
                     // }
                   })
