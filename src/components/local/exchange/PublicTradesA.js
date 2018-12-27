@@ -5,11 +5,16 @@ export default class PublicTradesA extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            page : 0
+        }
 
     }
 
-    state = {
-        page : 0
+    componentDidUpdate(prevProps){
+      if(prevProps.data !== this.props.data){
+        this.setState({data: this.props.data})
+      }
     }
 
     gotoPage = (page) => this.setState({ page });
@@ -36,11 +41,13 @@ export default class PublicTradesA extends React.Component {
                   <col width="33%" />
                 </colgroup>
                 <tbody>
-                  <tr>
-                    <td className="timeData">*time</td>
-                    <td className="priceData">*price</td>
-                    <td className="numberData">*quantity</td>
-                  </tr>
+                  {this.state.data && this.state.data.map( (o, i) => {
+                    return (<tr key={i}>
+                      <td className="timeData">*time</td>
+                      <td className="priceData">{o.price}</td>
+                      <td className="numberData">{o.qty}</td>
+                    </tr>)
+                  })}
                 </tbody>
               </table>
             </div>

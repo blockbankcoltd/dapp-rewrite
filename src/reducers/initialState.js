@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { config, filterMarkets, contractList } from '../utilities/config';
+import { contractList } from '../utilities/config';
 
 // const CheckProvider = () => {
 //     return window.web3 && window.web3.currentProvider ? window.web3.currentProvider : (Web3.givenProvider ? Web3.givenProvider : null);
