@@ -8,6 +8,15 @@ import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
 import Actions from '../actions/index';
 import ModalA from "../components/local/wallet/ModalA";
+import ModalB from "../components/local/wallet/ModalB";
+import ModalC from "../components/local/wallet/ModalC";
+import modalupdown_1 from "../assets/images/modalupdown_1.png";
+import modalupdown_2 from "../assets/images/modalupdown_2.png";
+import modalupdown_3 from "../assets/images/modalupdown_3.png";
+import modalupdown_4 from "../assets/images/modalupdown_4.png";
+import modaltest1 from "../assets/images/modaltestimg.png";
+import modaltest2 from "../assets/images/modaltestimg2.png";
+
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -19,21 +28,86 @@ class WalletContainer extends Component {
             balances: [],
             depositAmount: 0,
             showPrompt: false,
-            open : false
+            open : false,
+            pricebtn1: modalupdown_1,
+            pricebtn2: modalupdown_3,
+            limitbtn1: modalupdown_1,
+            limitbtn2: modalupdown_3,
+            depositpricebtn1: modalupdown_1,
+            depositpricebtn2: modalupdown_3,
+            withdrawpricebtn1: modalupdown_1,
+            withdrawpricebtn2: modalupdown_3,
         };
 
         this.called = false
     }
 
 
-    onOpenModal = () => {
-        this.setState({ open: true });
+    onOpenModalA = () => {
+        this.setState({ openA: true });
+    };
+    onCloseModalA = () => {
+        this.setState({
+            openA: false ,
+            pricebtn1: modalupdown_1,
+            pricebtn2: modalupdown_3,
+            limitbtn1: modalupdown_1,
+            limitbtn2: modalupdown_3,
+        });
+    };
+    onOpenModalB = () => {
+        this.setState({ openB: true });
+    };
+    onCloseModalB = () => {
+        this.setState({
+            openB: false,
+            depositpricebtn1: modalupdown_1,
+            depositpricebtn2: modalupdown_3,
+        });
+    };
+    onOpenModalC = () => {
+        this.setState({ openC: true });
+    };
+    onCloseModalC = () => {
+        this.setState({
+            openC: false,
+            withdrawpricebtn1: modalupdown_1,
+            withdrawpricebtn2: modalupdown_3,
+        });
     };
 
-    onCloseModal = () => {
-        this.setState({ open: false });
-    };
-
+    PriceUp = () =>{
+        this.setState({pricebtn1:modalupdown_2})
+        this.setState({pricebtn2:modalupdown_3})
+    }
+    PriceDown = () =>{
+        this.setState({pricebtn2:modalupdown_4})
+        this.setState({pricebtn1:modalupdown_1})
+    }
+    depositPriceUp = () =>{
+        this.setState({depositpricebtn1:modalupdown_2})
+        this.setState({depositpricebtn2:modalupdown_3})
+    }
+    depositPriceDown = () =>{
+        this.setState({depositpricebtn2:modalupdown_4})
+        this.setState({depositpricebtn1:modalupdown_1})
+    }
+    withdrawPriceUp = () =>{
+        this.setState({withdrawpricebtn1:modalupdown_2})
+        this.setState({withdrawpricebtn2:modalupdown_3})
+    }
+    withdrawPriceDown = () =>{
+        this.setState({withdrawpricebtn2:modalupdown_4})
+        this.setState({withdrawpricebtn1:modalupdown_1})
+    }
+    LimitUp = () =>{
+        this.setState({limitbtn1:modalupdown_2})
+        this.setState({limitbtn2:modalupdown_3})
+    }
+    LimitDown = () =>{
+        this.setState({limitbtn2:modalupdown_4})
+        this.setState({limitbtn1:modalupdown_1})
+    }
 
     componentDidMount() {
         this.props.getMyAccountId();
@@ -144,16 +218,118 @@ class WalletContainer extends Component {
     render() {
         const { WALLET } = this.props.languageConfig;
         // this.callFunction(this.props.accountId);
-
         return (
           <Wallet>
             <section className="main" role="">
               <div id="wallet" className="wallet_wrap">
-                  <button type="button" onClick={this.onOpenModal}>모달test</button>
-                  <ModalA open={this.state.open} onClose={this.onCloseModal}>
-                      <div>test modal</div>
+                  <ModalA openA={this.state.openA} onClose={this.onCloseModalA}>
+                      <ModalBoxA>
+                      <div className="modaltitle">Settings <span>Gas Fee</span></div>
+                      <div className="modal_inbox_A">
+                          <ul>
+                              <li><div>
+                                  Gas Price (GWEI)
+                                  <div className='UpDownright_1'>
+                                      <img className="Upbtn_1" src={this.state.pricebtn1} onClick={this.PriceUp}/>
+                                      <img className="Downbtn_1" src={this.state.pricebtn2} onClick={this.PriceDown}/>
+                                  </div>
+                                  <div className='Data_text'>0</div>
+                              </div></li>
+                              <li>네트워크 성공률을 기반으로 적합한 가스 가격을 계산합니다.</li>
+                          </ul>
+                          <ul>
+                              <li><div>
+                                  Gas Limit
+                                  <div className='UpDownright_2'>
+                                      <img className="Upbtn_2" src={this.state.limitbtn1} onClick={this.LimitUp}/>
+                                      <img className="Downbtn_2" src={this.state.limitbtn2} onClick={this.LimitDown}/>
+                                  </div>
+                                  <div className='Data_text'>0</div>
+                              </div></li>
+                              <li>네트워크 성공률을 기반으로 적합한 가스 리밋을 계산합니다.</li>
+                          </ul>
+                          <div>
+                          <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
+                          <button className='save'>Save</button>
+                          </div>
+                      </div>
+                      </ModalBoxA>
                   </ModalA>
+                  <ModalB openB={this.state.openB} onClose={this.onCloseModalB}>
+                      <ModalBoxB>
+                          <div className="modaltitle">Deposit <span>ETH</span></div>
+                          <div className="modal_inbox_B">
+                              <div><img src={modaltest1}/></div>
+                              <ul>
+                                  <li><div>
+                                      Amount
+                                      <div className='UpDownright_1'>ETH</div>
+                                      <div className='Data_text'>0.00000000</div>
+                                  </div></li>
+                                  <li>
+                                      <button>25%</button>
+                                      <button>50%</button>
+                                      <button>75%</button>
+                                      <button>100%</button>
+                                  </li>
+                              </ul>
+                                      <div>
+                                      <div className='ul_div'>Gas Price (GWEI)
+                                      <div className='UpDownright_2'>
+                                          <img className="Upbtn_2" src={this.state.depositpricebtn1} onClick={this.depositPriceUp}/>
+                                          <img className="Downbtn_2" src={this.state.depositpricebtn2} onClick={this.depositPriceDown}/>
+                                      </div>
+                                      <div className="Data_Deposit">0</div>
+                                      </div>
+                                      </div>
+                                      <button className='settings'>Settings</button>
+                                      <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
+                              <div>
+                                  <button className='cancel' onClick={this.onCloseModalB}>Cancel</button>
+                                  <button className='save'>Deposit</button>
+                              </div>
+                          </div>
+                      </ModalBoxB>
+                  </ModalB>
+                  <ModalC openC={this.state.openC} onClose={this.onCloseModalC}>
+                      <ModalBoxC>
+                          <div className="modaltitle">Withdraw <span>ETH</span></div>
+                          <div className="modal_inbox_C">
+                              <div><img src={modaltest2}/></div>
+                              <ul>
+                                  <li><div>
+                                      Amount
+                                      <div className='UpDownright_1'>ETH</div>
+                                      <div className='Data_text'>0.00000000</div>
+                                  </div></li>
+                                  <li>
+                                      <button>25%</button>
+                                      <button>50%</button>
+                                      <button>75%</button>
+                                      <button>100%</button>
+                                  </li>
+                                  <li className='btnunder_text'>* Minimum withdrawal amount (equivalent): 0.02062500 EHT</li>
+                              </ul>
+                              <div>
+                                  <div className='ul_div'>Gas Price (GWEI)
+                                      <div className='UpDownright_2'>
+                                          <img className="Upbtn_2" src={this.state.withdrawpricebtn1} onClick={this.withdrawPriceUp}/>
+                                          <img className="Downbtn_2" src={this.state.withdrawpricebtn2} onClick={this.withdrawPriceDown}/>
+                                      </div>
+                                      <div className="Data_Deposit">0</div>
+                                  </div>
+                              </div>
+                              <button className='settings'>Settings</button>
+                              <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
+                              <div>
+                                  <button className='cancel' onClick={this.onCloseModalC}>Cancel</button>
+                                  <button className='save'>Withdraw</button>
+                              </div>
+                          </div>
+                      </ModalBoxC>
+                  </ModalC>
                 <div className="container">
+
                   <div className="page_link">
                     <ul>
                       <li className="active">
@@ -164,7 +340,9 @@ class WalletContainer extends Component {
                   </div>
 
                   <div className="asset_balance">
-
+                      <button type="button" onClick={this.onOpenModalA}>모달A</button>
+                      <button type="button" onClick={this.onOpenModalB}>모달B</button>
+                      <button type="button" onClick={this.onOpenModalC}>모달C</button>
                     <div>
                       <div className="tab_list" />
                       <div className="wallet_info">
@@ -232,6 +410,380 @@ const mapDispatchToProps = (dispatch) => {
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WalletContainer));
 
+const ModalBoxA = styled.div`
+  width:350px;
+  height:400px;
+    .modaltitle{
+    border-bottom:1px solid #364958;
+    height:56px;
+    font-size:25px;
+    text-align:center;
+    font-weight:500;
+    color:#364958;
+    width:390px;
+    margin-left:-20px;
+        span{
+            color:#3c92ca;
+        }
+    }
+    .modal_inbox_A{
+        padding:13px;
+        font-weight:600;
+        ul{
+            list-style: none;
+            padding-inline-start:unset;
+            margin-bottom:47px;
+            li{
+                color:#808080;
+                line-height:42px;
+                font-size:12px;
+                :first-child{
+                    border-bottom:1px solid #e9e9e9;
+                    font-size:18px;
+                    color:#364958;
+                }
+                .Data_text{
+                    float:right;
+                    margin-right:7px;
+                    font-size:26px;
+                }
+                .UpDownright_1{
+                    float:right;
+                    img{
+                        cursor:pointer;
+                    }
+                    .Upbtn_1{
+                        vertical-align:9px;
+                        &:focus{
+                            content:url('../assets/images/modalupdown_2.png');
+                        }
+                    }
+                    .Downbtn_1{
+                        vertical-align:-4px;
+                        right:10px;
+                        position:relative;
+                    }
+                }
+                .UpDownright_2{
+                    float:right;
+                    img{
+                        cursor:pointer;
+                    }
+                    .Upbtn_2{
+                        vertical-align:9px;
+                    }
+                    .Downbtn_2{
+                        vertical-align:-4px;
+                        right:10px;
+                        position:relative;
+                    }
+                }
+            }
+        }
+        button{
+            width:145px;
+            height:40px;
+            font-size:20px
+            border:none;
+            cursor:pointer;
+            &:focus{outline:0;}
+            &.cancel{
+                color:#364958;
+                background:#e9e9e9;
+            }
+            &.save{
+                float:right;
+                color:#fff
+                background:#364958;
+            }
+        }
+    }
+  `
+
+const ModalBoxB = styled.div`
+  width:410px;
+  height:400px;
+    .modaltitle{
+    border-bottom:1px solid #364958;
+    height:56px;
+    font-size:25px;
+    text-align:center;
+    font-weight:500;
+    color:#364958;
+    width:449px;
+    margin-left:-20px;
+        span{
+            color:#3c92ca;
+        }
+    }
+    .modal_inbox_B{
+        padding:13px;
+        font-weight:600;
+        ul{
+            list-style: none;
+            padding-inline-start:unset;
+            margin-bottom:47px;
+            margin-top:30px;
+            li{
+                color:#808080;
+                line-height:42px;
+                font-size:12px;
+                margin-top:12px;
+                button{
+                    font-size:15px;
+                    font-weight:600;
+                    width:86px;
+                    height:26px;
+                    background:#e9e9e9;
+                    color:#364958;
+                    border-radius:3px;
+                    margin-left:13px;
+                    :first-child{
+                        margin-left:unset;
+                    }
+                    &:focus{
+                        background:#3c92ca;
+                        color:#fff;
+                    }
+                }
+                :first-child{
+                    border-bottom:1px solid #e9e9e9;
+                    font-size:18px;
+                    color:#364958;
+                }
+                .Data_text{
+                    float:right;
+                    margin-right:15px;
+                    font-size:26px;
+                    line-height:36px;
+                }
+                .UpDownright_1{
+                    float:right;
+                    img{
+                        cursor:pointer;
+                    }
+                    .Upbtn_1{
+                        vertical-align:9px;
+                    }
+                    .Downbtn_1{
+                        vertical-align:-4px;
+                        right:10px;
+                        position:relative;
+                    }
+                }
+            }
+        }
+        .ul_div{
+            border-bottom:1px solid #e9e9e9;
+            padding:5px 0px;
+            font-size:18px;
+            color:#364958;
+            width:288px;
+            float:left;
+            .Data_Deposit{
+                float:right;
+                margin-right:10px;
+                margin-top:-7px;
+                font-size:26px;
+                color:#364958;
+            }
+            .UpDownright_2{
+                float:right;
+                img{
+                        cursor:pointer;
+                    }
+                    .Upbtn_2{
+                        vertical-align:9px;
+                    }
+                    .Downbtn_2{
+                        vertical-align:-4px;
+                        right:10px;
+                        position:relative;
+                    }
+            }
+        }
+        .settings{
+            font-size:15px;
+            color:#364958;
+            background:#e9e9e9;
+            width:86px;
+            height:39px;
+            font-weight:600;
+            border-radius:3px;
+            margin-left:10px;
+        }
+        .settingText{
+            font-size:13px;
+            font-weight:600;
+            color:#808080;
+            padding:12px 0px;
+            margin-bottom:40px;
+        }
+        button{
+            width:180px;
+            height:44px;
+            font-size:20px;
+            border:none;
+            cursor:pointer;
+            &:focus{outline:0;}
+            &.cancel{
+                color:#364958;
+                background:#e9e9e9;
+            }
+            &.save{
+                float:right;
+                color:#fff
+                background:#364958;
+            }
+        }
+    }
+  `
+
+const ModalBoxC = styled.div`
+  width:410px;
+  height:400px;
+    .modaltitle{
+    border-bottom:1px solid #364958;
+    height:56px;
+    font-size:25px;
+    text-align:center;
+    font-weight:500;
+    color:#364958;
+    width:449px;
+    margin-left:-20px;
+        span{
+            color:#3c92ca;
+        }
+    }
+    .modal_inbox_C{
+        padding:13px;
+        font-weight:600;
+        ul{
+            list-style: none;
+            padding-inline-start:unset;
+            margin-bottom:47px;
+            margin-top:30px;
+            .btnunder_text{
+                line-height:0px;
+                margin-top:7px;
+                color:#3c92ca;
+                font-size:12px;
+                font-weight:700;
+            }
+            li{
+                color:#808080;
+                line-height:42px;
+                font-size:12px;
+                margin-top:12px;
+                button{
+                    font-size:15px;
+                    font-weight:600;
+                    width:86px;
+                    height:26px;
+                    background:#e9e9e9;
+                    color:#364958;
+                    border-radius:3px;
+                    margin-left:13px;
+                    :first-child{
+                        margin-left:unset;
+                    }
+                    &:focus{
+                        background:#3c92ca;
+                        color:#fff;
+                    }
+                }
+                :first-child{
+                    border-bottom:1px solid #e9e9e9;
+                    font-size:18px;
+                    color:#364958;
+                }
+                .Data_text{
+                    float:right;
+                    margin-right:15px;
+                    font-size:26px;
+                    line-height:36px;
+                }
+                .UpDownright_1{
+                    float:right;
+                    img{
+                        cursor:pointer;
+                    }
+                    .Upbtn_1{
+                        vertical-align:9px;
+                    }
+                    .Downbtn_1{
+                        vertical-align:-4px;
+                        right:10px;
+                        position:relative;
+                    }
+                }
+            }
+        }
+        .ul_div{
+            border-bottom:1px solid #e9e9e9;
+            padding:5px 0px;
+            font-size:18px;
+            color:#364958;
+            width:288px;
+            float:left;
+            .Data_Deposit{
+                float:right;
+                margin-right:10px;
+                margin-top:-7px;
+                font-size:26px;
+                color:#364958;
+            }
+            .UpDownright_2{
+                float:right;
+                img{
+                        cursor:pointer;
+                    }
+                    .Upbtn_2{
+                        vertical-align:9px;
+                    }
+                    .Downbtn_2{
+                        vertical-align:-4px;
+                        right:10px;
+                        position:relative;
+                    }
+            }
+        }
+        .settings{
+            font-size:15px;
+            color:#364958;
+            background:#e9e9e9;
+            width:86px;
+            height:39px;
+            font-weight:600;
+            border-radius:3px;
+            margin-left:10px;
+        }
+        .settingText{
+            font-size:13px;
+            font-weight:600;
+            color:#808080;
+            padding:12px 0px;
+            margin-bottom:40px;
+        }
+        button{
+            width:180px;
+            height:44px;
+            font-size:20px;
+            border:none;
+            cursor:pointer;
+            &:focus{outline:0;}
+            &.cancel{
+                color:#364958;
+                background:#e9e9e9;
+            }
+            &.save{
+                float:right;
+                color:#fff
+                background:#364958;
+            }
+        }
+    }
+  `
 
 const Wallet = styled.div`
     background:#fff;
