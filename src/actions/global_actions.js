@@ -20,6 +20,13 @@ export const fetchTradeHistory = (accountId, trade, base) => {
     }
 };
 
+export const fetchOrderHistory = (accountId, trade, base) => {
+    return {
+        type: Constants.default.Requests.FETCH_ORDER_HISTORY_REQUEST, 
+        payload: {accountId, trade, base}
+    }
+};
+
 export const fetchAccounts = () => {
     console.log("Fetching accounts. Global Event Triggered.");
     return {type: "FETCH_ACCOUNTS_FROM_WEB3"}

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import Loading from '../components/global/loading';
+import Error from '../components/global/error';
 import thum_icon1 from "../assets/images/dexhi_icon_1.png";
 import thum_icon2 from "../assets/images/dexhi_icon_2.png";
 import thum_icon3 from "../assets/images/dexhi_icon_3.png";

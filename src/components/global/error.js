@@ -9,13 +9,13 @@ export default class Error extends React.Component {
     }
 
     render() {
-        const {msg, route, language} = this.props;
+        const {msg, route, language, buttonTitle} = this.props;
         return (
             <ErrorComp>
                 <div className="cont">
                     <p>{msg}</p>
                     <Link to={route}>
-                        <button type="button">Back</button>
+                        <button type="button">{buttonTitle}</button>
                     </Link>
                 </div>
             </ErrorComp>

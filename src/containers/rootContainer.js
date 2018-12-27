@@ -82,7 +82,6 @@ class RootContainer extends Component {
         
         return (
           <div className="App">
-              <Loading show={true}/>
             <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
             <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
             <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
