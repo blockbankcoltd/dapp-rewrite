@@ -74,7 +74,7 @@ export default class OrderbookA extends React.Component {
               <div id="askRows">
                 {
                   _obj.bidOrder.reverse().map((item, i) => {
-                    // if (item.volume !== '0') {
+                    if (item.volume !== '0') {
                       return (
                         <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceA)}>
                           <div className="CellPublicOrders">{item.volume}</div>
@@ -82,14 +82,14 @@ export default class OrderbookA extends React.Component {
                           <div className="CellMyOrders price">-</div>
                         </span>
                       )
-                    
+                    }
                   })
                 }
               </div>
               <div id="bidRows">
                 {
                   _obj.askOrder.map((item, i) => {
-                    // if (item.volume !== '0') {
+                    if (item.volume !== '0') {
                       return (
                         <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceB)}>
                           <div className="CellMyOrders price">-</div>
@@ -97,7 +97,7 @@ export default class OrderbookA extends React.Component {
                           <div className="CellPublicOrders">{item.volume}</div>
                         </span>
                       )
-                    // }
+                    }
                   })
                 }
               </div>
