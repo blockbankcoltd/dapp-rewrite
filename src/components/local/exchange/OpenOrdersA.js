@@ -16,8 +16,13 @@ export default class OpenOrdersA extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("Received the data here from props --> ", this.props.data);
-
+    console.log("Open Orders Updated --> ", this.props.data);
+    // if(prevProps.data !== this.props.data){
+    //   const filteredData = this.props.data && this.props.data.filter(obj => {
+    //     return +obj.prBase === +this.props.base && +obj.prTrade === +this.props.trade
+    //   });
+    //   this.setState((state, props) => {return {data: filteredData}});
+    // }
 
   }
 

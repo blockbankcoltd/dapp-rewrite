@@ -25,9 +25,10 @@ export const getOrderBookRequest = (prTrade, prBase, numOfRecordsToFetch) => {
     }
 };
 
-export const getMyOrdersRequest = () => {
+export const getMyOrdersRequest = (trade, base) => {
     return {
-        type: Constants.default.Requests.GET_MY_ORDERS_REQUEST
+        type: Constants.default.Requests.GET_MY_ORDERS_REQUEST,
+        payload: { trade, base }
     }
 };
 
