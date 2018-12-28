@@ -6,7 +6,9 @@ import { fetchAccounts, fetchNetwork } from '../../actions/global_actions'
 
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
+
 class Web3Provider extends Component {
+
   constructor(props) {
     super(props);
     // this.props.fetchAccounts();

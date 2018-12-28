@@ -23,6 +23,7 @@ class TransactionContainer extends Component {
     }
 
     componentDidMount() {
+        this.props.getMyAccountId();
         this.props.getMyOrders();
     }
 
@@ -31,6 +32,25 @@ class TransactionContainer extends Component {
             this.setState( {
                 myOrders: this.props.myOrders
             });
+        }
+
+        if(prevProps.myAccountId !== this.props.myAccountId){
+            this.props.getDWRecords(this.props.myAccountId);
+        }
+
+        if(prevProps.dwRecords !== this.props.dwRecords){
+            // let _array = [];
+            // this.props.dwRecords.isDeposit.forEach( (o, i) => {
+            //     _array.push({
+                    // isDeposit: o,
+                    // prCode: this.props.dwRecords.prCode[i],
+                    // qty: this.props.dwRecords.qty[i],
+                    // timestamp: new Date(this.props.dwRecords.timestamp[i] * 1000).toDateString()
+            //     });
+            // })
+            // this.setState((state, props) => { 
+            //     return {dwRecords: _array}
+            // });
         }
     }
 
@@ -97,7 +117,7 @@ class TransactionContainer extends Component {
                                         <OpenOrdersB languageConfig={this.props.languageConfig} data={this.props.myOrders}/>
                                     </div>
                                     <div id="tab2" className="tab_cont">
-                                        <TransactionsB languageConfig={this.props.languageConfig} />
+                                        <TransactionsB languageConfig={this.props.languageConfig} dwRecords={this.props.dwRecords}/>
                                     </div>
                                 </div>
                             </div>
@@ -111,12 +131,16 @@ class TransactionContainer extends Component {
 
 
 const mapStateToProps = (state) => ({
-    myOrders: state.smartContract.myOrders
+    myOrders: state.smartContract.myOrders,
+    dwRecords: state.smartContract.depositWithdrawlRecords,
+    myAccountId: state.smartContract.accountId
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
+        getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest()),
+        getDWRecords: (x) => dispatch(Actions.smartContract.getDWRecordsRequest(x)),
         
     }
 }

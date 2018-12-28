@@ -1,15 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import spinner from '../../assets/images/spinner.gif';
+// import spinner from '../../assets/images/spinner.gif';
+import spinner from '../../assets/images/ethwaterloo.gif';
 
 export default class Loading extends React.Component {
-
-    constructor(props) {
-        super(props)
-
-
-    }
 
     render() {
         const {width, height, show} = this.props;
@@ -31,18 +26,19 @@ Loading.propTypes = {
     show: PropTypes.bool.isRequired
 }
 Loading.defaultProps = {
-    width: 1000,
-    height: 1000,
-    show: true
+    width: "100%",
+    height: "100%",
+    show: false
 }
 
 const Comp = styled.div`
-    background : black;
+    background : white;
     z-index: 100000;
+    opacity: 0.87;
     position: absolute;
-    left : 50%;
-    top : 50%;
-    transform : translate(-50%,-50%);
+    // left : 50%;
+    // top : 50%;
+    // transform : translate(-50%,-50%);
     margin: 0 auto;
     
     .icon {
@@ -51,7 +47,7 @@ const Comp = styled.div`
         left : 50%;
         top : 50%;
         transform : translate(-50%,-50%);
-        width: 50px;
-        height: 50px;
+        width: 40%;
+        height: 40%;
     }
 `

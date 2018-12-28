@@ -5,18 +5,35 @@ import {Link} from 'react-router-dom';
 
 export default class Error extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.activeButton = this.activeButton.bind(this);
+    }
+
+    async activeButton(route) {
+        if(route !== "login"){
+            window.location.href = route;
+        } else {
+            try {
+                // Request account access if needed
+                await window.ethereum.enable();
+                // Acccounts now exposed
+                window.location.reload();
+            } catch (error) {
+                alert('Y')
+            }
+        }
+
     }
 
     render() {
-        const {msg, route, language} = this.props;
+        const {msg, route, language, buttonMsg} = this.props;
         return (
             <ErrorComp>
                 <div className="cont">
                     <p>{msg}</p>
-                    <Link to={route}>
-                        <button type="button">Back</button>
-                    </Link>
+                    {route !== "" &&
+                        <button type="button" onClick={() => buttonMsg==="login" && this.activeButton(route)}>{buttonMsg}</button>
+                    }
                 </div>
             </ErrorComp>
         )
@@ -25,12 +42,14 @@ export default class Error extends React.Component {
 
 Error.propTypes = {
     msg: PropTypes.string,
-    route: PropTypes.string.isRequired,
+    buttonMsg: PropTypes.string,
+    route: PropTypes.string,
     language: PropTypes.object
 }
 Error.defaultProps = {
     msg: "",
-    route: "/",
+    buttonMsg: "back",
+    route: "",
     language: {}
 }
 
