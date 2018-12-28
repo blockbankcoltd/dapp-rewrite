@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components';
 import ReactTable from 'react-table';
+import { transformToTokenName } from '../../../utilities/helpers';
 
 export default class OpenOrdersB extends React.Component {
 
@@ -11,56 +12,42 @@ export default class OpenOrdersB extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-        console.log("Received the data here from props --> ", this.props.data);
-        if(prevProps.data !== this.props.data){
-            let _array = [];
-            this.props.data.orderId.forEach((o, i) => {
-                _array.push({
-                    orderId: o,
-                    prBase: this.props.data.prBase[i],
-                    prTrade: this.props.data.prTrade[i],
-                    price: this.props.data.prices[i],
-                    qty: this.props.data.qtys[i],
-                    isSell: this.props.data.sells[i]
-                })
-            });
-            this.setState({ data: _array });
-            console.log("Parsed Data ==> ", _array);
-        }
-
-    }
-
     render() {
         const { TRANSACTION, OPEN_ORDERS } = this.props.languageConfig;
-
+        /* 
+            orderID: obj,
+            instrumentPair: transformToTokenName(myOrders.prTrade[i]).productName + '/'+ transformToTokenName(myOrders.prBase[i]).productName,
+            prices: convertPriceArray(myOrders.prices),
+            qtys: convertVolumeArray(myOrders.qtys, transformToTokenName(myOrders.prTrade[i]).decimal),
+            sells: myOrders.sells[i]
+        */
         return this.state.isLogin ? (
             <OpenOrder>
                 <div className="table table-hover">
                     <ReactTable
-                        data={this.state.data}
+                        data={this.props.data}
                         columns={[
                             {
                                 Header: OPEN_ORDERS.INSTRUMENT_TEXT,
                                 id: OPEN_ORDERS.INSTRUMENT_TEXT,
                                 class: "headerW",
-                                accessor: (d) => `${d.prTrade}/${d.prBase}`
+                                accessor: "instrumentPair"
                             },
                             {
                                 Header: OPEN_ORDERS.TYPE_TEXT,
                                 id: OPEN_ORDERS.TYPE_TEXT,
                                 class: "headerW",
-                                accessor: (d) => d.isSell ? "Sell" : "Buy"
+                                accessor: (d) => d.sells ? "Sell" : "Buy"
                             }, {
                                 Header: OPEN_ORDERS.PRICE_TEXT,
                                 id: OPEN_ORDERS.PRICE_TEXT,
                                 class: "headerW",
-                                accessor: "price"
+                                accessor: "prices"
                             }, {
                                 Header: OPEN_ORDERS.TOTAL_TEXT,
                                 id: OPEN_ORDERS.TOTAL_TEXT,
                                 class: "headerW",
-                                accessor: "qty"
+                                accessor: "qtys"
                             }, {
                                 Header: OPEN_ORDERS.REMAINING_TEXT,
                                 id: OPEN_ORDERS.REMAINING_TEXT,

@@ -11,29 +11,46 @@ import Actions from '../actions/index';
 import FooterComponent from "../components/global/footer";
 import { Web3Provider } from '../components/global/web3provider';
 import { fetchAccounts, fetchNetwork } from '../utilities/helpers';
-import Loading from '../components/global/loading';
+import Error from "../components/global/error";
+import Loading from "../components/global/loading";
 
 class RootContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             activeLanguage: "en",
-            languageConfig: englishConfig
+            languageConfig: englishConfig,
+            metamask : ""
         };
     }
 
     componentDidMount(){
-        if(window.web3){
-            // this.props.putWeb3ToStore();
-            // this.props.putSmartContractObjectToStore();
-        }else{
-            // render an Error Page if window.web3 is not available
-        }
+        this.checkMetamask()
         if(!localStorage.getItem('lang')){
             localStorage.setItem('lang', 'kr');
             this.setState({activeLanguage: 'kr', languageConfig: koreanConfig});
         }
         // this.props.getAccoutId();
+    }
+
+    async checkMetamask() {
+        if(!window.web3){
+            this.setState({
+                metamask : "install"
+            })
+            return;
+        }
+        const Web3 = require('web3');
+        const web3 = new Web3(window.ethereum);
+        const account = await web3.eth.getAccounts();
+        const network = await web3.eth.net.getNetworkType();
+        if(!account[0]) {
+            this.setState({metamask : "account"});
+        } else if(network !== "kovan"){
+            this.setState({metamask : "network"})
+        } else {
+            this.setState({metamask : "ok"})
+        }
     }
 
     componentDidUpdate = (prevProps) => {
@@ -55,6 +72,7 @@ class RootContainer extends Component {
             localStorage.setItem('lang', code);
             return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
         };
+        const {metamask} = this.state;
         const FooterData={
             titleLink:"",
             titleSrc:"/static/images/bitnaruLogo.png",
@@ -79,10 +97,34 @@ class RootContainer extends Component {
                 }
             }
         }
+        switch (metamask) {
+            case "" :
+                return (<Loading show={true} width={"100%"} height={"100%"}/>);
+
+            case "network" :
+                return (<Error msg="Please change network to Kovan and reload page" route={"/"} buttonMsg="reload" />);
+
+            case "account" :
+                return (<Error msg="Please login and reload page" route={"login"} buttonMsg="login"/>);
+
+            case "install" :
+                return (<Error msg="Please install metamask and reload page" route={"https://metamask.io"} buttonMsg="Metamask page"/>);
+
+            case "ok":
+                return (
+                    <div className="App">
+                        <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
+                        <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+                        <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
+                        <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+                    </div>
+                );
+            default :
+                return (<Loading show={true} width={"100%"} height={"100%"}/>);
+        }
         
         return (
           <div className="App">
-              <Loading show={false}/>
             <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
             <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
             <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />

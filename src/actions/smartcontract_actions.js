@@ -25,15 +25,23 @@ export const getOrderBookRequest = (prTrade, prBase, numOfRecordsToFetch) => {
     }
 };
 
-export const getMyOrdersRequest = () => {
+export const getMyOrdersRequest = (trade, base) => {
     return {
-        type: Constants.default.Requests.GET_MY_ORDERS_REQUEST
+        type: Constants.default.Requests.GET_MY_ORDERS_REQUEST,
+        payload: { trade, base }
     }
 };
 
 export const getBalanceRequest = (id) => {
     return {
         type: Constants.default.Requests.GET_BALANCE_REQUEST,
+        payload: { id }
+    }
+};
+
+export const getDWRecordsRequest = (id) => {
+    return {
+        type: Constants.default.Requests.GET_DEPOSIT_WITHDRAWL_RECORDS_REQUEST,
         payload: { id }
     }
 };

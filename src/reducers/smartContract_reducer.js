@@ -3,6 +3,9 @@ import * as Constants from '../constants/constants';
 import initState from './initialState';
 
 export default (state = initState, action) => {
+    if(!state) {
+        return null;
+    }
     switch (action.type) {
         case Constants.default.Success.SMARTCONTRACT_OBJECT_SUCCESS:
             return {
@@ -22,7 +25,12 @@ export default (state = initState, action) => {
         case Constants.default.Success.PLACE_SELL_ORDER_SUCCESS:
             return {
                 ...state,
-                buyOrderStatus: action.sellOrderStatus
+                sellOrderStatus: action.sellOrderStatus
+            }
+        case Constants.default.Success.GET_DEPOSIT_WITHDRAWL_RECORDS_SUCCESS:
+            return {
+                ...state,
+                depositWithdrawlRecords: action.depositWithdrawlRecords
             }
         case Constants.default.Success.GET_ORDERBOOK_SUCCESS:
             return {
