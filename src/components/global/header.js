@@ -67,6 +67,18 @@ export default class HeaderComponent extends Component {
                         {navLinks.map(r => {
                             if (r.name === "Home") {
                                 return null;
+                            }else if(r.name === "noticeContainer") {
+                                return null;
+                            }else if(r.name === "informationUse") {
+                                return null;
+                            }else if(r.name === "feeInformation") {
+                                return null;
+                            }else if(r.name === "termsOfUse") {
+                                return null;
+                            }else if(r.name === "privacyPolicy") {
+                                return null;
+                            }else if(r.name === "ListingRequest") {
+                                return null;
                             }
                             return <Link key={r.path} to={r.path}>{HEADER[r.langname]}</Link>
                         })}

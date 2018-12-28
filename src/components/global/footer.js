@@ -13,32 +13,32 @@ export default class FooterComponent extends React.Component {
             <FooterNavi>
               <FooterNaviInner>
                 <ListItem>
-                  <Link to="/">
+                  <Link to="/noticeContainer">
                     {FOOTER.NOTICE}
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="/">
+                  <Link to="/informationUse">
                     {FOOTER.GUIDE}
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="/">
+                  <Link to="/feeInformation">
                     {FOOTER.FEE}
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="/">
+                  <Link to="/termsOfUse">
                     {FOOTER.TERMS}
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="/">
+                  <Link to="/privacyPolicy">
                     {FOOTER.PRIVACY}
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="/">
+                  <Link to="/ListingRequest">
                     {FOOTER.LISTING}
                   </Link>
                 </ListItem>
