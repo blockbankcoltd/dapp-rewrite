@@ -8,8 +8,6 @@ import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
 import Actions from '../actions/index';
 import ModalA from "../components/local/wallet/ModalA";
-import ModalB from "../components/local/wallet/ModalB";
-import ModalC from "../components/local/wallet/ModalC";
 import modalupdown_1 from "../assets/images/modalupdown_1.png";
 import modalupdown_2 from "../assets/images/modalupdown_2.png";
 import modalupdown_3 from "../assets/images/modalupdown_3.png";
@@ -28,9 +26,7 @@ class WalletContainer extends Component {
             balances: [],
             depositAmount: 0,
             showPrompt: false,
-            openA : false,
-            openB : false,
-            openC : false,
+            open : false,
             pricebtn1: modalupdown_1,
             pricebtn2: modalupdown_3,
             limitbtn1: modalupdown_1,
@@ -39,40 +35,28 @@ class WalletContainer extends Component {
             depositpricebtn2: modalupdown_3,
             withdrawpricebtn1: modalupdown_1,
             withdrawpricebtn2: modalupdown_3,
+            type:""
         };
 
         this.called = false
     }
 
 
-    onOpenModalA = () => {
-        this.setState({ openA: true });
+    onOpenModalA = (e) => {
+        this.setState({
+            open: true,
+            type: e.target.value
+        });
     };
     onCloseModalA = () => {
         this.setState({
-            openA: false ,
+            open: false ,
             pricebtn1: modalupdown_1,
             pricebtn2: modalupdown_3,
             limitbtn1: modalupdown_1,
             limitbtn2: modalupdown_3,
-        });
-    };
-    onOpenModalB = () => {
-        this.setState({ openB: true });
-    };
-    onCloseModalB = () => {
-        this.setState({
-            openB: false,
             depositpricebtn1: modalupdown_1,
             depositpricebtn2: modalupdown_3,
-        });
-    };
-    onOpenModalC = () => {
-        this.setState({ openC: true });
-    };
-    onCloseModalC = () => {
-        this.setState({
-            openC: false,
             withdrawpricebtn1: modalupdown_1,
             withdrawpricebtn2: modalupdown_3,
         });
@@ -85,6 +69,14 @@ class WalletContainer extends Component {
     PriceDown = () =>{
         this.setState({pricebtn2:modalupdown_4})
         this.setState({pricebtn1:modalupdown_1})
+    }
+    LimitUp = () =>{
+        this.setState({limitbtn1:modalupdown_2})
+        this.setState({limitbtn2:modalupdown_3})
+    }
+    LimitDown = () =>{
+        this.setState({limitbtn2:modalupdown_4})
+        this.setState({limitbtn1:modalupdown_1})
     }
     depositPriceUp = () =>{
         this.setState({depositpricebtn1:modalupdown_2})
@@ -101,14 +93,6 @@ class WalletContainer extends Component {
     withdrawPriceDown = () =>{
         this.setState({withdrawpricebtn2:modalupdown_4})
         this.setState({withdrawpricebtn1:modalupdown_1})
-    }
-    LimitUp = () =>{
-        this.setState({limitbtn1:modalupdown_2})
-        this.setState({limitbtn2:modalupdown_3})
-    }
-    LimitDown = () =>{
-        this.setState({limitbtn2:modalupdown_4})
-        this.setState({limitbtn1:modalupdown_1})
     }
 
     componentDidMount() {
@@ -141,10 +125,10 @@ class WalletContainer extends Component {
     deposit = (e, cellInfo) => {
         let amount = window.prompt("Enter the deposit amount");
         let tokenObj = cellInfo.original;
-        
+
         if(amount !== null && tokenObj.name === 'ETH'){
             this.props.depositEth(amount);
-            
+
         }else if(amount !== null && tokenObj.name !== 'ETH'){
             console.log("Token address --> ", tokenObj);
             this.props.depositToken(tokenObj.tokenAddress, amount);
@@ -156,10 +140,10 @@ class WalletContainer extends Component {
     withdraw = (e, cellInfo) => {
         let amount = window.prompt("Enter the deposit amount");
         let tokenObj = cellInfo.original;
-        
+
         if(amount !== null && tokenObj.product === 'ETH'){
             this.props.withdrawEth(amount);
-            
+
         }else if(amount !== null && tokenObj.product !== 'ETH'){
             this.props.withdrawToken(tokenObj.tokenAddress, amount);
         }else{
@@ -171,11 +155,11 @@ class WalletContainer extends Component {
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
             return<div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button>
-                <button type="button" onClick={this.onOpenModalB}>Deposit_pop</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e)} value="deposit">Deposit_pop</button>
             </div>
         } else {
             return <div><button onClick={(e) => this.withdraw(e, cellInfo)} type="button">Withdraw</button>
-                <button type="button" onClick={this.onOpenModalC}>Withdraw_pop</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e)} value="withdraw">Withdraw_pop</button>
             </div>
         }
     }
@@ -224,118 +208,127 @@ class WalletContainer extends Component {
     render() {
         const { WALLET } = this.props.languageConfig;
         // this.callFunction(this.props.accountId);
+        console.log("TEST",this.state.type);
         return (
           <Wallet>
             <section className="main" role="">
               <div id="wallet" className="wallet_wrap">
-                  <ModalA openA={this.state.openA} onClose={this.onCloseModalA}>
-                      <ModalBoxA>
-                      <div className="modaltitle">Settings <span>Gas Fee</span></div>
-                      <div className="modal_inbox_A">
-                          <ul>
-                              <li><div>
-                                  Gas Price (GWEI)
-                                  <div className='UpDownright_1'>
-                                      <img className="Upbtn_1" src={this.state.pricebtn1} onClick={this.PriceUp}/>
-                                      <img className="Downbtn_1" src={this.state.pricebtn2} onClick={this.PriceDown}/>
-                                  </div>
-                                  <div className='Data_text'>0</div>
-                              </div></li>
-                              <li>네트워크 성공률을 기반으로 적합한 가스 가격을 계산합니다.</li>
-                          </ul>
-                          <ul>
-                              <li><div>
-                                  Gas Limit
-                                  <div className='UpDownright_2'>
-                                      <img className="Upbtn_2" src={this.state.limitbtn1} onClick={this.LimitUp}/>
-                                      <img className="Downbtn_2" src={this.state.limitbtn2} onClick={this.LimitDown}/>
-                                  </div>
-                                  <div className='Data_text'>0</div>
-                              </div></li>
-                              <li>네트워크 성공률을 기반으로 적합한 가스 리밋을 계산합니다.</li>
-                          </ul>
-                          <div>
-                          <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
-                          <button className='save'>Save</button>
-                          </div>
-                      </div>
-                      </ModalBoxA>
-                  </ModalA>
-                  <ModalB openB={this.state.openB} onClose={this.onCloseModalB}>
-                      <ModalBoxB>
-                          <div className="modaltitle">Deposit <span>ETH</span></div>
-                          <div className="modal_inbox_B">
-                              <div><img src={modaltest1}/></div>
-                              <ul>
-                                  <li><div>
-                                      Amount
-                                      <div className='UpDownright_1'>ETH</div>
-                                      <div className='Data_text'>0.00000000</div>
-                                  </div></li>
-                                  <li>
-                                      <button>25%</button>
-                                      <button>50%</button>
-                                      <button>75%</button>
-                                      <button>100%</button>
-                                  </li>
-                              </ul>
-                                      <div>
+                  <ModalA open={this.state.open} onClose={this.onCloseModalA}>
+                      {
+                          this.state.type === "deposit" &&
+                          <ModalBoxB>
+                              <div className="modaltitle">Deposit <span>ETH</span></div>
+                              <div className="modal_inbox_B">
+                                  <div><img src={modaltest1}/></div>
+                                  <ul>
+                                      <li><div>
+                                          Amount
+                                          <div className='UpDownright_1'>ETH</div>
+                                          <div className='Data_text'>
+                                              <input
+                                                  type='number'
+                                              />
+                                          </div>
+                                      </div></li>
+                                      <li>
+                                          <button>25%</button>
+                                          <button>50%</button>
+                                          <button>75%</button>
+                                          <button>100%</button>
+                                      </li>
+                                  </ul>
+                                  <div>
                                       <div className='ul_div'>Gas Price (GWEI)
-                                      <div className='UpDownright_2'>
-                                          <img className="Upbtn_2" src={this.state.depositpricebtn1} onClick={this.depositPriceUp}/>
-                                          <img className="Downbtn_2" src={this.state.depositpricebtn2} onClick={this.depositPriceDown}/>
+                                          <div className='UpDownright_2'>
+                                              <img className="Upbtn_2" src={this.state.depositpricebtn1} onClick={this.depositPriceUp}/>
+                                              <img className="Downbtn_2" src={this.state.depositpricebtn2} onClick={this.depositPriceDown}/>
+                                          </div>
+                                          <div className="Data_Deposit">0</div>
                                       </div>
-                                      <div className="Data_Deposit">0</div>
-                                      </div>
-                                      </div>
-                                      <button className='settings'>Settings</button>
-                                      <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
-                              <div>
-                                  <button className='cancel' onClick={this.onCloseModalB}>Cancel</button>
-                                  <button className='save'>Deposit</button>
-                              </div>
-                          </div>
-                      </ModalBoxB>
-                  </ModalB>
-                  <ModalC openC={this.state.openC} onClose={this.onCloseModalC}>
-                      <ModalBoxC>
-                          <div className="modaltitle">Withdraw <span>ETH</span></div>
-                          <div className="modal_inbox_C">
-                              <div><img src={modaltest2}/></div>
-                              <ul>
-                                  <li><div>
-                                      Amount
-                                      <div className='UpDownright_1'>ETH</div>
-                                      <div className='Data_text'>0.00000000</div>
-                                  </div></li>
-                                  <li>
-                                      <button>25%</button>
-                                      <button>50%</button>
-                                      <button>75%</button>
-                                      <button>100%</button>
-                                  </li>
-                                  <li className='btnunder_text'>* Minimum withdrawal amount (equivalent): 0.02062500 EHT</li>
-                              </ul>
-                              <div>
-                                  <div className='ul_div'>Gas Price (GWEI)
-                                      <div className='UpDownright_2'>
-                                          <img className="Upbtn_2" src={this.state.withdrawpricebtn1} onClick={this.withdrawPriceUp}/>
-                                          <img className="Downbtn_2" src={this.state.withdrawpricebtn2} onClick={this.withdrawPriceDown}/>
-                                      </div>
-                                      <div className="Data_Deposit">0</div>
+                                  </div>
+                                  <button className='settings'>Settings</button>
+                                  <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
+                                  <div>
+                                      <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
+                                      <button className='save'>Deposit</button>
                                   </div>
                               </div>
-                              <button className='settings'>Settings</button>
-                              <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
-                              <div>
-                                  <button className='cancel' onClick={this.onCloseModalC}>Cancel</button>
-                                  <button className='save'>Withdraw</button>
+                          </ModalBoxB>
+                      }
+                      {
+                          this.state.type === "withdraw" &&
+                          <ModalBoxC>
+                              <div className="modaltitle">Withdraw <span>ETH</span></div>
+                              <div className="modal_inbox_C">
+                                  <div><img src={modaltest2}/></div>
+                                  <ul>
+                                      <li><div>
+                                          Amount
+                                          <div className='UpDownright_1'>ETH</div>
+                                          <div className='Data_text'>0.00000000</div>
+                                      </div></li>
+                                      <li>
+                                          <button>25%</button>
+                                          <button>50%</button>
+                                          <button>75%</button>
+                                          <button>100%</button>
+                                      </li>
+                                      <li className='btnunder_text'>* Minimum withdrawal amount (equivalent): 0.02062500 EHT</li>
+                                  </ul>
+                                  <div>
+                                      <div className='ul_div'>Gas Price (GWEI)
+                                          <div className='UpDownright_2'>
+                                              <img className="Upbtn_2" src={this.state.withdrawpricebtn1} onClick={this.withdrawPriceUp}/>
+                                              <img className="Downbtn_2" src={this.state.withdrawpricebtn2} onClick={this.withdrawPriceDown}/>
+                                          </div>
+                                          <div className="Data_Deposit">0</div>
+                                      </div>
+                                  </div>
+                                  <button className='settings'>Settings</button>
+                                  <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
+                                  <div>
+                                      <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
+                                      <button className='save'>Withdraw</button>
+                                  </div>
                               </div>
-                          </div>
-                      </ModalBoxC>
-                  </ModalC>
+                          </ModalBoxC>
+                      }
+                      {
+                          this.state.type === "gas" &&
+                          <ModalBoxA>
+                              <div className="modaltitle">Settings <span>Gas Fee</span></div>
+                              <div className="modal_inbox_A">
+                                  <ul>
+                                      <li><div>
+                                          Gas Price (GWEI)
+                                          <div className='UpDownright_1'>
+                                              <img className="Upbtn_1" src={this.state.pricebtn1} onClick={this.PriceUp}/>
+                                              <img className="Downbtn_1" src={this.state.pricebtn2} onClick={this.PriceDown}/>
+                                          </div>
+                                          <div className='Data_text'>0</div>
+                                      </div></li>
+                                      <li>네트워크 성공률을 기반으로 적합한 가스 가격을 계산합니다.</li>
+                                  </ul>
+                                  <ul>
+                                      <li><div>
+                                          Gas Limit
+                                          <div className='UpDownright_2'>
+                                              <img className="Upbtn_2" src={this.state.limitbtn1} onClick={this.LimitUp}/>
+                                              <img className="Downbtn_2" src={this.state.limitbtn2} onClick={this.LimitDown}/>
+                                          </div>
+                                          <div className='Data_text'>0</div>
+                                      </div></li>
+                                      <li>네트워크 성공률을 기반으로 적합한 가스 리밋을 계산합니다.</li>
+                                  </ul>
+                                  <div>
+                                      <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
+                                      <button className='save'>Save</button>
+                                  </div>
+                              </div>
+                          </ModalBoxA>
+                      }
+                  </ModalA>
                 <div className="container">
-
                   <div className="page_link">
                     <ul>
                       <li className="active">
@@ -344,11 +337,8 @@ class WalletContainer extends Component {
                       <li><Link to="/transactionDetails">{WALLET.ORDERS}</Link></li>
                     </ul>
                   </div>
-
                   <div className="asset_balance">
-                      <button type="button" onClick={this.onOpenModalA}>모달A</button>
-                      <button type="button" onClick={this.onOpenModalB}>모달B</button>
-                      <button type="button" onClick={this.onOpenModalC}>모달C</button>
+                      <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button>
                     <div>
                       <div className="tab_list" />
                       <div className="wallet_info">

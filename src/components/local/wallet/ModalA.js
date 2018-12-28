@@ -9,9 +9,9 @@ export default class ModalA extends React.Component {
     }
 
     render() {
-        const { openA, children, onClose } = this.props;
+        const { open, children, onClose } = this.props;
         return (
-            <Modal open={openA} onClose={onClose} center showCloseIcon={false}>
+            <Modal open={open} onClose={onClose} center showCloseIcon={false}>
                 {children}
             </Modal>
         )
