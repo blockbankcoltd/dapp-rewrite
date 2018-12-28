@@ -27,6 +27,11 @@ export default (state = initState, action) => {
                 ...state,
                 sellOrderStatus: action.sellOrderStatus
             }
+        case Constants.default.Success.CANCEL_ORDER_SUCCESS:
+            return {
+                ...state,
+                cancelOrderStatus: action.cancelOrderStatus
+            }
         case Constants.default.Success.GET_DEPOSIT_WITHDRAWL_RECORDS_SUCCESS:
             return {
                 ...state,

@@ -12,6 +12,12 @@ export default class OpenOrdersB extends React.Component {
         }
     }
 
+    cancelOrder = (event, cellInfo) => {
+        let dataObject = cellInfo.original;
+        console.log("Cancelling Order -> ", dataObject);
+        return this.props.cancelOrder(dataObject);
+    }
+
     render() {
         const { TRANSACTION, OPEN_ORDERS } = this.props.languageConfig;
         /* 
@@ -62,7 +68,7 @@ export default class OpenOrdersB extends React.Component {
                                 Header: OPEN_ORDERS.CANCEL,
                                 id: OPEN_ORDERS.CANCEL,
                                 class: "headerW",
-                                accessor: OPEN_ORDERS.CANCEL
+                                Cell: (cellInfo) => <button onClick={(e) => this.cancelOrder(e, cellInfo)} type="button">Cancel Order</button>
                             },
 
                         ]}

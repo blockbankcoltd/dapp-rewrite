@@ -6,30 +6,30 @@ import { Decimal } from 'decimal.js';
 import store from '../store/reduxStore';
 import * as Constants from '../constants/constants';
 import { config, filterMarkets, contractList } from '../utilities/config';
-import {divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName, convertQtyEach, convertPriceEach} from '../utilities/helpers.js';
+import { divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName, convertQtyEach, convertPriceEach } from '../utilities/helpers.js';
 
 
 let data = [];
 const coinList = config.base.concat(config.trades);
 coinList.forEach((obj, i) => {
-  data.push({
-    product: obj.productName,
-    prCode: obj.productId,
-    tokenAddress: obj.tokenAddress,
-    decimal: obj.decimal
-  });
-  if (i === 0) {
-    if (obj.prTrade && obj.prTrade.length > 0) {
-      obj.prTrade.forEach(o => {
-        data.push({
-          product: o.productName,
-          prCode: o.productId,
-          tokenAddress: o.tokenAddress,
-          decimal: o.decimal
-        });
-      })
+    data.push({
+        product: obj.productName,
+        prCode: obj.productId,
+        tokenAddress: obj.tokenAddress,
+        decimal: obj.decimal
+    });
+    if (i === 0) {
+        if (obj.prTrade && obj.prTrade.length > 0) {
+            obj.prTrade.forEach(o => {
+                data.push({
+                    product: o.productName,
+                    prCode: o.productId,
+                    tokenAddress: o.tokenAddress,
+                    decimal: o.decimal
+                });
+            })
+        }
     }
-  }
 });
 
 function* getMyAccountId() {
@@ -54,8 +54,8 @@ function* getOrderBook(params) {
     const tradeDecimal = transformToTokenName(prTrade).decimal; // coinList.find(coin => coin.productId === prTrade).decimal;
     yield put({
         type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
-            priceA:  convertPriceArray(orderBook.priceA),
-            priceB:  convertPriceArray(orderBook.priceB),
+            priceA: convertPriceArray(orderBook.priceA),
+            priceB: convertPriceArray(orderBook.priceB),
             volumeA: convertVolumeArray(orderBook.volumeA, tradeDecimal),
             volumeB: convertVolumeArray(orderBook.volumeB, tradeDecimal)
         }
@@ -72,13 +72,13 @@ function* getMyOrders(params) {
     })
     let result = [];
     const prices = convertPriceArray(myOrders.prices);
-    
+
     myOrders.orderId.forEach((obj, i) => {
         result.push({
             orderID: obj,
             prTrade: myOrders.prTrade[i],
             prBase: myOrders.prBase[i],
-            instrumentPair: transformToTokenName(myOrders.prTrade[i]).productName + '/'+ transformToTokenName(myOrders.prBase[i]).productName,
+            instrumentPair: transformToTokenName(myOrders.prTrade[i]).productName + '/' + transformToTokenName(myOrders.prBase[i]).productName,
             prices: prices[i],
             qtys: convertQtyEach(myOrders.qtys[i], transformToTokenName(myOrders.prTrade[i]).decimal),
             sells: myOrders.sells[i]
@@ -89,9 +89,9 @@ function* getMyOrders(params) {
 }
 
 function* getBestBidBestAsk(params) {
-    const {trade, base} = params.payload;
-    trade.forEach( (o, i) => {
-        if(i < (trade.length -1) )
+    const { trade, base } = params.payload;
+    trade.forEach((o, i) => {
+        if (i < (trade.length - 1))
             base.push(base[0]);
     })
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
@@ -99,37 +99,44 @@ function* getBestBidBestAsk(params) {
         from: selectedAddress
     });
     let result = {
-         bestAskPrice: convertPriceArray(bestBidBestAsk.bestAskPrice),	
-         bestBidPrice: convertPriceArray(bestBidBestAsk.bestBidPrice)	
-     }	
- 
-  
-      yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk: result });	
- }	
- 
-  function* GetDepositWithdrawlRecords(params) {	
-     const { id } = params.payload;	
- 
-      const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;	
-     const depositWithdrawlRecords = yield GlobalSmartContractObject.methods.GetDWrecords(id).call({	
-         from: selectedAddress	
-     });	
- 
-      const result = depositWithdrawlRecords.isDeposit.map( (o,i) => {	
-         return {	
-             isDeposit: o,	
-             qtys: convertVolumeArray(depositWithdrawlRecords.qty, transformToTokenName(depositWithdrawlRecords.prCode[i]).decimal),	
-             timestamp: new Date(depositWithdrawlRecords.timestamp[i] * 1000).toDateString(),	
-             prCode: depositWithdrawlRecords.prCode[i]	
-         }	
- 
-      });	
-     /*  isDeposit: o,	
-         prCode: this.props.dwRecords.prCode[i],	
-         qty: this.props.dwRecords.qty[i],	
-         timestamp: new Date(this.props.dwRecords.timestamp[i] * 1000).toDateString() */	
- 
-      yield put({ type: Constants.default.Success.GET_DEPOSIT_WITHDRAWL_RECORDS_SUCCESS, depositWithdrawlRecords: result })
+        bestAskPrice: convertPriceArray(bestBidBestAsk.bestAskPrice),
+        bestBidPrice: convertPriceArray(bestBidBestAsk.bestBidPrice)
+    }
+
+
+    yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk: result });
+}
+
+function* GetDepositWithdrawlRecords(params) {
+    const { id } = params.payload;
+
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    const depositWithdrawlRecords = yield GlobalSmartContractObject.methods.GetDWrecords(id).call({
+        from: selectedAddress
+    });
+
+    const result = depositWithdrawlRecords.isDeposit.map((o, i) => {
+        return {
+            isDeposit: o,
+            qtys: convertVolumeArray(depositWithdrawlRecords.qty, transformToTokenName(depositWithdrawlRecords.prCode[i]).decimal),
+            timestamp: new Date(depositWithdrawlRecords.timestamp[i] * 1000).toDateString(),
+            prCode: depositWithdrawlRecords.prCode[i]
+        }
+
+    });
+    
+    yield put({ type: Constants.default.Success.GET_DEPOSIT_WITHDRAWL_RECORDS_SUCCESS, depositWithdrawlRecords: result })
+}
+
+function* cancelOrder(params) {
+    const { orderId } = params.payload;
+    const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+
+    const result = yield GlobalSmartContractObject.methods.cancelOrder(orderId).send({
+        from: selectedAddress
+    });
+    // const result = true;
+    yield put({type: Constants.default.Success.CANCEL_ORDER_SUCCESS, cancelOrderStatus: result});
 }
 
 
@@ -142,10 +149,8 @@ function* placeBuyOrder(params) {
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
 
-    //let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
     let BN_Price = multiplyBigNumbers(price, basePrice);  //new BN(calculated_price.toString(10));
 
-  //  let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal) );
     let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
 
 
@@ -178,12 +183,9 @@ function* placeSellOrder(params) {
 
     const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
 
-    // let calculated_price = new Decimal(price).mul( new Decimal(basePrice) );
-    // let BN_Price = new BN(calculated_price.toString(10));
     let BN_Price = multiplyBigNumbers(price, basePrice);
 
-    //let calculated_amount = new Decimal(amount).mul( new Decimal(tradeDecimal.decimal) );
-    let BN_Amount =  multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
+    let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);
 
 
     const orderHash = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
@@ -197,7 +199,7 @@ function* getBalance(params) {
     let prCodesArray = [];
     let tokens = [];
     for (let c of data) {
-        if (+c.prCode){
+        if (+c.prCode) {
             prCodesArray.push(+c.prCode);
         }
         tokens.push({ name: c.product, address: c.tokenAddress, decimal: c.decimal });
@@ -206,13 +208,13 @@ function* getBalance(params) {
     let productArray = Lodash.uniq(prCodesArray);
     const res = yield call(GlobalSmartContractObject.methods.getBalance, productArray)
     const balance = yield call(res.call, {
-       from: selectedAddress
+        from: selectedAddress
     });
     let _result = [];
     balance.available.forEach((obj, index) => {
         _result.push({
             name: tokens[index].name,
-            hold:  divideBigNumbers(balance.reserved[index], tokens[index].decimal),
+            hold: divideBigNumbers(balance.reserved[index], tokens[index].decimal),
             total: divideBigNumbers(obj.toString(), tokens[index].decimal),
             tokenAddress: tokens[index].address
         });
@@ -232,7 +234,6 @@ function* depositEthRequest(params) {
 
 function* withdrawEthRequest(params) {
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
-    console.log("Withdraw Eth ", selectedAddress);
     const { amount } = params.payload;
     const withdrawAmount = yield GlobalSmartContractObject.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
         from: selectedAddress
@@ -280,7 +281,8 @@ function* actionWatcher() {
 
     yield takeEvery(Constants.default.Requests.GET_BESTBID_BESTASK_REQUEST, getBestBidBestAsk)
     yield takeEvery(Constants.default.Requests.GET_DEPOSIT_WITHDRAWL_RECORDS_REQUEST, GetDepositWithdrawlRecords)
-
+    
+    yield takeEvery(Constants.default.Requests.CANCEL_ORDER_REQUEST, cancelOrder)
 }
 
 export default function* smartContractSaga() {

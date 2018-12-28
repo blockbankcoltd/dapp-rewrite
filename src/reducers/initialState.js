@@ -1,15 +1,23 @@
 import Web3 from 'web3';
 import { contractList } from '../utilities/config';
 
-// const CheckProvider = () => {
-//     return window.web3 && window.web3.currentProvider ? window.web3.currentProvider : (Web3.givenProvider ? Web3.givenProvider : null);
-// };
-// const ProvidersWeb3 = CheckProvider();
 let Web3Object = null;
 let selectedContract = null;
 let contract_address = null;
 let Contract = null;
 let selectedAddress = null;
+
+const getAccount = (Web3Object) => {
+    return new Promise( (resolve, reject) => {
+        Web3Object.eth.getAccounts( (err, accountsArray) => { 
+            if(err){
+                return reject(err);
+            }else{
+                return resolve(accountsArray[0]);
+            }
+        });
+    })
+}
 
 try{
     Web3Object =  new Web3(window.web3.currentProvider);
@@ -19,13 +27,14 @@ try{
     contract_address = selectedContract.address;
     Contract = new Web3Object.eth.Contract(selectedContract.abifile.abi, contract_address);
 
-    if(Contract.givenProvider && Contract.givenProvider.selectedAddress && Contract.givenProvider.selectedAddress !== null && Contract.givenProvider.selectedAddress !== undefined){
-        localStorage.setItem('selectedAddress', Contract.givenProvider.selectedAddress);
-    }
-    selectedAddress = Contract.givenProvider.selectedAddress || localStorage.getItem('selectedAddress');
+    getAccount(Web3Object).then( address => {
+        selectedAddress = address;
+    });
+    
 
 } catch(e) {
-    console.log(e)
+    console.log(e);
+    // @TODO: Re route to error page
 }
 
 

@@ -62,7 +62,20 @@ class ExchangeContainer extends Component {
         }
         
         if(prevProps.myOrders !== this.props.myOrders){
-            this.setState((state, props) => {return {myOrders: props.myOrders}});
+            let _array = [];
+            this.props.myOrders.forEach((o, i) => {
+                if(+o.prBase === this.state.baseCurrency && +o.prTrade === this.state.tradeCurrency){
+                    _array.push({
+                        instrumentPair: o.instrumentPair,
+                        prBase: o.prBase,
+                        prTrade: o.prTrade,
+                        price: o.prices,
+                        qty: o.qtys,
+                        isSell: o.sells
+                    })
+                }
+            });
+            this.setState((state, props) => {return {myOrders: _array}});
         }
 
 

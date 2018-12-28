@@ -54,6 +54,10 @@ class TransactionContainer extends Component {
         }
     }
 
+    cancelOpenOrder = (data) => {
+        this.props.cancelOrderRequest(data.orderID);
+    }
+
     render() {
         const { WALLET, TRANSACTION } = this.props.languageConfig;
         return (
@@ -73,6 +77,7 @@ class TransactionContainer extends Component {
                                     </li>
                                 </ul>
                             </div>
+                            <pre>{JSON.stringify(this.props.cancelledOrderStatus)}</pre>
                             <div className={`tab_container ${this.state.container}`}>
                                 <div className="tab_list">
                                     <ul>
@@ -114,7 +119,7 @@ class TransactionContainer extends Component {
                                         <PrivateTradesB languageConfig={this.props.languageConfig} />
                                     </div>
                                     <div id="tab1" className="tab_cont">
-                                        <OpenOrdersB languageConfig={this.props.languageConfig} data={this.props.myOrders}/>
+                                        <OpenOrdersB languageConfig={this.props.languageConfig} data={this.props.myOrders} cancelOrder={this.cancelOpenOrder}/>
                                     </div>
                                     <div id="tab2" className="tab_cont">
                                         <TransactionsB languageConfig={this.props.languageConfig} dwRecords={this.props.dwRecords}/>
@@ -133,7 +138,8 @@ class TransactionContainer extends Component {
 const mapStateToProps = (state) => ({
     myOrders: state.smartContract.myOrders,
     dwRecords: state.smartContract.depositWithdrawlRecords,
-    myAccountId: state.smartContract.accountId
+    myAccountId: state.smartContract.accountId,
+    cancelledOrderStatus: state.smartContract.calcelOrderStatus
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -141,6 +147,7 @@ const mapDispatchToProps = (dispatch) => {
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
         getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest()),
         getDWRecords: (x) => dispatch(Actions.smartContract.getDWRecordsRequest(x)),
+        cancelOrderRequest: (x) => dispatch(Actions.smartContract.cancelOrderRequest(x)),
         
     }
 }

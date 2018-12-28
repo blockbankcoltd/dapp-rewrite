@@ -3,9 +3,9 @@ import * as contractJson3 from '../utilities/DEXHIGH3.json';
 
 
 export const config = {
+
     ownerId: 1,
     basePrice: "10000000000",
-    basePrice: 10000000000,
     trades: [
         {
             productName: "BAT",

@@ -32,6 +32,13 @@ export const getMyOrdersRequest = (trade, base) => {
     }
 };
 
+export const cancelOrderRequest = (orderId) => {
+    return {
+        type: Constants.default.Requests.CANCEL_ORDER_REQUEST,
+        payload: { orderId }
+    }
+};
+
 export const getBalanceRequest = (id) => {
     return {
         type: Constants.default.Requests.GET_BALANCE_REQUEST,

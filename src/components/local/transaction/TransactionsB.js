@@ -61,12 +61,13 @@ export default class TransactionsB extends React.Component{
                             id: OPEN_ORDERS.TIME_TEXT,
                             class: "headerW",
                             accessor: "timestamp"
-                        },{
-                            Header: OPEN_ORDERS.CANCEL,
-                            id: OPEN_ORDERS.CANCEL,
-                            class: "headerW",
-                            accessor: d => <button>Cancel</button>
                         },
+                        // {
+                        //     Header: OPEN_ORDERS.CANCEL,
+                        //     id: OPEN_ORDERS.CANCEL,
+                        //     class: "headerW",
+                        //     accessor: d => <button>Cancel</button>
+                        // },
 
                     ]}
                 defaultPageSize={10}

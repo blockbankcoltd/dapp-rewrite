@@ -2,7 +2,8 @@ import * as React from 'react'
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 // import spinner from '../../assets/images/spinner.gif';
-import spinner from '../../assets/images/ethwaterloo.gif';
+// import spinner from '../../assets/images/ethwaterloo.gif';
+import spinner from '../../assets/images/loader.gif';
 
 export default class Loading extends React.Component {
 
