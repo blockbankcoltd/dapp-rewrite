@@ -34,7 +34,7 @@ class ExchangeContainer extends Component {
         const tradesForBase = baseName.market.trades.map(x => x.productId);
 
         const marketDataFromConfig = filterMarkets();
-        this.props.getOrderbook(1, 3, 10);
+        this.props.getOrderbook(3, 1, 10);
         this.props.getBalance();
         this.changeTabData(1);
         this.props.getMyOrders(3, 1);

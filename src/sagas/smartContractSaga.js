@@ -35,6 +35,7 @@ coinList.forEach((obj, i) => {
 function* getMyAccountId() {
 
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    console.log("HERE --------------------------------------------------------------------------------- ", selectedAddress)
     const id = yield GlobalSmartContractObject.methods.GetMyAccountId().call({
         from: selectedAddress
     });
@@ -148,7 +149,7 @@ function* placeBuyOrder(params) {
     let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
 
 
-    const orderHash = GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
+    const orderHash = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
         from: selectedAddress
     });
     yield put({ type: Constants.default.Success.PLACE_BUY_ORDER_SUCCESS, buyOrderStatus: orderHash });
@@ -185,7 +186,7 @@ function* placeSellOrder(params) {
     let BN_Amount =  multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
 
 
-    const orderHash = GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
+    const orderHash = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
         from: selectedAddress
     });
     yield put({ type: Constants.default.Success.PLACE_SELL_ORDER_SUCCESS, sellOrderStatus: orderHash });
@@ -222,7 +223,7 @@ function* getBalance(params) {
 function* depositEthRequest(params) {
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
     const { amount } = params.payload;
-    const deposit = GlobalSmartContractObject.methods.depositETH().send({
+    const deposit = yield GlobalSmartContractObject.methods.depositETH().send({
         from: selectedAddress,
         value: Web3.utils.toWei(amount, 'ether')
     });
@@ -231,8 +232,9 @@ function* depositEthRequest(params) {
 
 function* withdrawEthRequest(params) {
     const { GlobalSmartContractObject, selectedAddress } = store.getState().smartContract;
+    console.log("Withdraw Eth ", selectedAddress);
     const { amount } = params.payload;
-    const withdrawAmount = GlobalSmartContractObject.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
+    const withdrawAmount = yield GlobalSmartContractObject.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
         from: selectedAddress
     });
     yield put({ type: Constants.default.Success.WITHDRAW_ETH_SUCCESS, withdrawnAmount: withdrawAmount });
@@ -243,7 +245,7 @@ function* depositTokenRequest(params) {
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     let BN_Amount = multiplyBigNumbers(amount.toString(), config.decimal)
-    const deposit = GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, true).send({
+    const deposit = yield GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, true).send({
         from: selectedAddress
     });
     yield put({ type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit });
@@ -254,7 +256,7 @@ function* withdrawTokenRequest(params) {
     const { prAddress, amount } = params.payload;
     const config = coinList.find(coin => coin.tokenAddress === prAddress);
     let BN_Amount = multiplyBigNumbers(amount.toString(), config.decimal)
-    const withdrawAmount = GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, false).send({
+    const withdrawAmount = yield GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, false).send({
         from: selectedAddress
     });
     yield put({ type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount });

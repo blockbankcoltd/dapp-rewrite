@@ -3,6 +3,9 @@ import * as Constants from '../constants/constants';
 import initState from './initialState';
 
 export default (state = initState, action) => {
+    if(!state) {
+        return null;
+    }
     switch (action.type) {
         case Constants.default.Success.SMARTCONTRACT_OBJECT_SUCCESS:
             return {
