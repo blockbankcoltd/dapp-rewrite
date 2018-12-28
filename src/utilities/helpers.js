@@ -4,12 +4,9 @@ import { Decimal } from 'decimal.js';
 import BN from 'bn.js';
 
 export const fetchNetwork = () => {
-	console.log("Inside network")
 	return new Promise((resolve, reject) => {
 		const { web3 } = window;
-		console.log("Returned Promise", web3)
 		web3 && web3.version && web3.version.getNetwork((err, netId) => {
-			console.log("Inside getNetwork", err, netId);
 			if (err) {
 				reject(err);
 			} else {
@@ -72,16 +69,8 @@ export const fetchAccounts = async (Web3Object) => {
 	});
 };
 
-function getAccounts() {
 
-  try {
-    const { web3 } = window;
-    // throws if no account selected
-    return web3.eth.accounts;
-  } catch (e) {
-    return [];
-  }
-}
+
 //BN Does not handle fractions, move to BN when it supports so.
 //https://github.com/indutny/bn.js/issues/182
 export const divideBigNumbers = (number, divisor) => {

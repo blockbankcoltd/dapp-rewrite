@@ -110,7 +110,6 @@ export default class OrderbookA extends React.Component {
                                             )
                                     })
                                 }
-                                }
                             </div>
                         </div>
                     </div>
