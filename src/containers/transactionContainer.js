@@ -18,7 +18,21 @@ class TransactionContainer extends Component {
             notice: true,
             auth: false,
             selectedTab: 0,
-            myOrders: []
+            myOrders: [],
+            tabs: [
+                {
+                    text: "Filled Orders",
+                    ap: this.props.languageConfig.TRANSACTION.ORDERSHISTORY
+                },
+                {
+                    text: "Open Orders",
+                    ap: this.props.languageConfig.TRANSACTION.OUTSTANDING
+                },
+                {
+                    text: "Transfer History",
+                    ap: this.props.languageConfig.TRANSACTION.TRANSHISTORY
+                }
+            ]
         };
     }
 
@@ -36,6 +50,11 @@ class TransactionContainer extends Component {
 
         if(prevProps.myAccountId !== this.props.myAccountId){
             this.props.getDWRecords(this.props.myAccountId);
+            this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
+        }
+        
+        if(prevProps.orderHistory !== this.props.orderHistory){
+            this.setState({orderHistory: this.props.orderHistory});
         }
 
         if(prevProps.dwRecords !== this.props.dwRecords){
@@ -48,14 +67,26 @@ class TransactionContainer extends Component {
                     // timestamp: new Date(this.props.dwRecords.timestamp[i] * 1000).toDateString()
             //     });
             // })
-            // this.setState((state, props) => { 
-            //     return {dwRecords: _array}
-            // });
+            this.setState((state, props) => { 
+                return {dwRecords: this.props.dwRecords}
+            });
         }
     }
 
     cancelOpenOrder = (data) => {
         this.props.cancelOrderRequest(data.orderID);
+    }
+
+    fetchData = (index) =>  {
+        if(index === 1){
+            this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
+        }
+        else if(index === 2){
+            this.props.getMyOrders();
+        }
+        else if(index === 3){
+            this.props.getDWRecords(this.props.myAccountId);
+        }
     }
 
     render() {
@@ -82,24 +113,12 @@ class TransactionContainer extends Component {
                                 <div className="tab_list">
                                     <ul>
                                         {
-                                            [
-                                                {
-                                                    text: "Filled Orders",
-                                                    ap: TRANSACTION.ORDERSHISTORY
-                                                },
-                                                {
-                                                    text: "Open Orders",
-                                                    ap: TRANSACTION.OUTSTANDING
-                                                },
-                                                {
-                                                    text: "Transfer History",
-                                                    ap: TRANSACTION.TRANSHISTORY
-                                                }
-                                            ].map((item, index) => {
+                                            this.state.tabs.map((item, index) => {
                                                 return (
                                                     <li
                                                         key={index}
                                                         onClick={() => {
+                                                            this.fetchData(index);
                                                             this.setState({
                                                                 container: "tab_container tab" + index,
                                                                 selectedTab: index
@@ -116,7 +135,7 @@ class TransactionContainer extends Component {
                                 </div>
                                 <div className={`tab_content tab${this.state.selectedTab}`}>
                                     <div id="tab0" className="tab_cont">
-                                        <PrivateTradesB languageConfig={this.props.languageConfig} />
+                                        <PrivateTradesB languageConfig={this.props.languageConfig} data={this.props.orderHistory} />
                                     </div>
                                     <div id="tab1" className="tab_cont">
                                         <OpenOrdersB languageConfig={this.props.languageConfig} data={this.props.myOrders} cancelOrder={this.cancelOpenOrder}/>
@@ -139,7 +158,8 @@ const mapStateToProps = (state) => ({
     myOrders: state.smartContract.myOrders,
     dwRecords: state.smartContract.depositWithdrawlRecords,
     myAccountId: state.smartContract.accountId,
-    cancelledOrderStatus: state.smartContract.calcelOrderStatus
+    cancelledOrderStatus: state.smartContract.calcelOrderStatus,
+    orderHistory: state.main.orderHistory
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -148,7 +168,7 @@ const mapDispatchToProps = (dispatch) => {
         getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest()),
         getDWRecords: (x) => dispatch(Actions.smartContract.getDWRecordsRequest(x)),
         cancelOrderRequest: (x) => dispatch(Actions.smartContract.cancelOrderRequest(x)),
-        
+        fetchOrderHistory: (x, y, z) => dispatch(Actions.global.fetchOrderHistory(x, y, z)),
     }
 }
 

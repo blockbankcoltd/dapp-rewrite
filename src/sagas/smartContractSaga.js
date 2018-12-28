@@ -117,12 +117,12 @@ function* GetDepositWithdrawlRecords(params) {
     const depositWithdrawlRecords = yield GlobalSmartContractObject.methods.GetDWrecords(id).call({
         from: FromAddress[0]
     });
-
+    console.log("depositWithdrawlRecords", depositWithdrawlRecords)
     const result = depositWithdrawlRecords.isDeposit.map((o, i) => {
         return {
             isDeposit: o,
-            qtys: convertVolumeArray(depositWithdrawlRecords.qty, transformToTokenName(depositWithdrawlRecords.prCode[i]).decimal),
-            timestamp: new Date(depositWithdrawlRecords.timestamp[i] * 1000).toDateString(),
+            qtys: convertQtyEach(depositWithdrawlRecords.qty[i], transformToTokenName(depositWithdrawlRecords.prCode[i]).decimal),
+            timestamp: depositWithdrawlRecords.timestamp[i],
             prCode: depositWithdrawlRecords.prCode[i]
         }
 
@@ -139,7 +139,7 @@ function* cancelOrder(params) {
     const result = yield GlobalSmartContractObject.methods.cancelOrder(orderId).send({
         from: FromAddress[0]
     });
-    // const result = true;
+    
     yield put({type: Constants.default.Success.CANCEL_ORDER_SUCCESS, cancelOrderStatus: result});
 }
 

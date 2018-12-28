@@ -74,12 +74,16 @@ function* fetchOrderHistory(params){
     let _array = [];
     result.data.forEach( o => {
         _array.push({
+            prTrade: o.prTrade,
+            prBase: o.prBase,
             instruement: transformToTokenName( o.prTrade ).productName + '/'+ transformToTokenName( o.prBase ).productName,
-            timestamp: new Date(o.timeStamp * 1000).toDateString(),
+            timestamp: o.timeStamp,
             side: o.isSell ? "SELL" : "BUY",
             qty: divideBigNumbers(o.qty, transformToTokenName( o.prTrade ).decimal),
             status: o.status,
-            accountId
+            accountId,
+            price: o.price,
+            open: o.open
         });
     });
     yield put({type: Constants.default.Success.FETCH_ORDER_HISTORY_SUCCESS, result: _array})

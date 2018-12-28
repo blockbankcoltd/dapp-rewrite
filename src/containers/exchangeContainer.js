@@ -32,7 +32,6 @@ class ExchangeContainer extends Component {
         const baseName = filterMarkets().find(data => data.market.productId === 1);
         const defaultTrade = config.trades.find(data => data.productId === 3);
         const tradesForBase = baseName.market.trades.map(x => x.productId);
-
         const marketDataFromConfig = filterMarkets();
         this.props.getOrderbook(3, 1, 10);
         this.props.getBalance();
@@ -57,8 +56,12 @@ class ExchangeContainer extends Component {
         }
 
         if(prevProps.myAccountId !== this.props.myAccountId){
-            this.props.fetchTradeHistory(this.props.myAccountId, 2, 3);
-            this.props.fetchOrderHistory(this.props.myAccountId, 3, 2);
+            this.props.fetchTradeHistory(this.props.myAccountId,3, 1);
+            this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
+        }
+        
+        if(prevProps.tradeHistory !== this.props.tradeHistory){
+            this.setState({tradeHistory: this.props.tradeHistory});
         }
         
         if(prevProps.myOrders !== this.props.myOrders){
@@ -69,8 +72,8 @@ class ExchangeContainer extends Component {
                         instrumentPair: o.instrumentPair,
                         prBase: o.prBase,
                         prTrade: o.prTrade,
-                        price: o.prices,
-                        qty: o.qtys,
+                        prices: o.prices,
+                        qtys: o.qtys,
                         isSell: o.sells
                     })
                 }
@@ -273,9 +276,9 @@ class ExchangeContainer extends Component {
                                 <div className="publicTrades">
                                     <PublicTradesA
                                         languageConfig={this.props.languageConfig}
-                                        baseName={this.state.baseName}
-                                        tradeName={this.state.tradeName}
-                                        data={this.props.tradeHistory}
+                                        base={this.state.baseCurrency}
+                                        trade={this.state.tradeCurrency}
+                                        data={this.state.tradeHistory}
                                     />
                                 </div>
 
@@ -313,7 +316,7 @@ class ExchangeContainer extends Component {
                                             id="tradesTab"
                                             className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <PrivateTradesA languageConfig={this.props.languageConfig} data={this.props.orderHistory} />
+                                            <PrivateTradesA languageConfig={this.props.languageConfig} data={this.props.orderHistory} base={this.state.baseCurrency} trade={this.state.tradeCurrency} />
                                             {/* <PrivateTradesA languageConfig={this.props.languageConfig} records={this.state.dwRecords} /> */}
                                         </div>
                                     </div>

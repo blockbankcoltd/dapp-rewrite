@@ -1,7 +1,8 @@
 import * as React from 'react'
 import styled from 'styled-components';
 import ReactTable from 'react-table';
-import { transformToTokenName } from '../../../utilities/helpers';
+import { divideBigNumbers, transformToTokenName } from '../../../utilities/helpers';
+import { config } from '../../../utilities/config';
 
 export default class TransactionsB extends React.Component{
 
@@ -21,8 +22,13 @@ export default class TransactionsB extends React.Component{
         }
     }
 
+    constructTime = (timestamp) => {
+        let dateString = new Date(timestamp * 1000);
+        return dateString.getMonth()+1 + "." + dateString.getDate() + "/" + dateString.getHours() + "." + dateString.getMinutes();
+      }
+
     render() {
-        const {TRANSACTION, OPEN_ORDERS} = this.props.languageConfig;
+        const {TRANSACTION, OPEN_ORDERS, TRADES} = this.props.languageConfig;
 
         return this.state.isLogin ? (
           <Transaction>
@@ -42,25 +48,27 @@ export default class TransactionsB extends React.Component{
                             class: "headerW",
                             accessor: (d) => d.isDeposit ? "Deposit" : "Withdrawal"
                         },{
-                            Header: OPEN_ORDERS.PRICE_TEXT,
-                            id: OPEN_ORDERS.PRICE_TEXT,
+                            Header: TRADES.QUANTITY_TEXT,
+                            id: TRADES.QUANTITY_TEXT,
                             class: "headerW",
-                            accessor: OPEN_ORDERS.PRICE_TEXT
-                        },{
-                            Header: OPEN_ORDERS.TOTAL_TEXT,
-                            id: OPEN_ORDERS.TOTAL_TEXT,
-                            class: "headerW",
-                            accessor: "qty"
-                        },{
-                            Header: OPEN_ORDERS.REMAINING_TEXT,
-                            id: OPEN_ORDERS.REMAINING_TEXT,
-                            class: "headerW",
-                            accessor: OPEN_ORDERS.REMAINING_TEXT
-                        },{
+                            accessor: d => divideBigNumbers(d.qtys, transformToTokenName(d.prCode).decimal)
+                        },
+                        // {
+                        //     Header: OPEN_ORDERS.PRICE_TEXT,
+                        //     id: OPEN_ORDERS.PRICE_TEXT,
+                        //     class: "headerW",
+                        //     accessor: "price"
+                        // },{
+                        //     Header: OPEN_ORDERS.REMAINING_TEXT,
+                        //     id: OPEN_ORDERS.REMAINING_TEXT,
+                        //     class: "headerW",
+                        //     accessor: OPEN_ORDERS.REMAINING_TEXT
+                        // },
+                        {
                             Header: OPEN_ORDERS.TIME_TEXT,
                             id: OPEN_ORDERS.TIME_TEXT,
                             class: "headerW",
-                            accessor: "timestamp"
+                            accessor: d => this.constructTime(+d.timestamp)
                         },
                         // {
                         //     Header: OPEN_ORDERS.CANCEL,

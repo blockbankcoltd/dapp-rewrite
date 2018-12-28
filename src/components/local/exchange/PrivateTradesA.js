@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import { transformToTokenName } from '../../../utilities/helpers';
+import { divideBigNumbers, transformToTokenName } from '../../../utilities/helpers';
+import { config } from "../../../utilities/config";
 
 export default class PrivateTradesA extends React.Component{
 
@@ -31,7 +32,10 @@ export default class PrivateTradesA extends React.Component{
 
 
     gotoPage = (page) => this.setState({ page });
-
+    constructTime = (timestamp) => {
+      let dateString = new Date(timestamp * 1000);
+      return dateString.getMonth()+1 + "." + dateString.getDate() + "/" + dateString.getHours() + "." + dateString.getMinutes();
+    }
     render() {
         const {TRADES, TRANSACTION} = this.props.languageConfig;
         return (
@@ -50,7 +54,7 @@ export default class PrivateTradesA extends React.Component{
                     <th className="headerW">Token</th>
                     <th className="headerW">{TRADES.TIME_TEXT}</th>
                     <th className="headerW">{TRADES.SIDE_TEXT}</th>
-                    {/* <th className="headerW">{TRADES.PRICE_TEXT}</th> */}
+                    <th className="headerW">{TRADES.PRICE_TEXT}</th>
                     <th className="headerW">{TRADES.QUANTITY_TEXT}</th>
                     {/* <th className="headerW">{TRADES.TOTAL_TEXT}</th> */}
                   </tr>
@@ -61,9 +65,10 @@ export default class PrivateTradesA extends React.Component{
                     return (
                       <tr key={i}>
                         <td>{o.instruement}</td>
-                        <td>{o.timestamp}</td>
+                        <td>{this.constructTime(o.timestamp)}</td>
                         <td>{o.side}</td>
-                        <td>{o.qty}</td>
+                        <td>{divideBigNumbers(o.price, config.basePrice)}</td>
+                        <td>{divideBigNumbers(o.qty, transformToTokenName(this.props.trade).decimal)}</td>
                       </tr>
                     )
                   }) : <tr><td colSpan={5} className="no-data">{TRANSACTION.NO_TRANSACTION_DATA}</td></tr>}

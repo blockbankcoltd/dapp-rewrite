@@ -54,17 +54,19 @@ export default class OpenOrdersB extends React.Component {
                                 id: OPEN_ORDERS.TOTAL_TEXT,
                                 class: "headerW",
                                 accessor: "qtys"
-                            }, {
-                                Header: OPEN_ORDERS.REMAINING_TEXT,
-                                id: OPEN_ORDERS.REMAINING_TEXT,
-                                class: "headerW",
-                                accessor: OPEN_ORDERS.REMAINING_TEXT
-                            }, {
-                                Header: OPEN_ORDERS.TIME_TEXT,
-                                id: OPEN_ORDERS.TIME_TEXT,
-                                class: "headerW",
-                                accessor: OPEN_ORDERS.TIME_TEXT
-                            }, {
+                            },
+                            //  {
+                            //     Header: OPEN_ORDERS.REMAINING_TEXT,
+                            //     id: OPEN_ORDERS.REMAINING_TEXT,
+                            //     class: "headerW",
+                            //     accessor: OPEN_ORDERS.REMAINING_TEXT
+                            // }, {
+                            //     Header: OPEN_ORDERS.TIME_TEXT,
+                            //     id: OPEN_ORDERS.TIME_TEXT,
+                            //     class: "headerW",
+                            //     accessor: OPEN_ORDERS.TIME_TEXT
+                            // }, 
+                            {
                                 Header: OPEN_ORDERS.CANCEL,
                                 id: OPEN_ORDERS.CANCEL,
                                 class: "headerW",
