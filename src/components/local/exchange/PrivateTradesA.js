@@ -68,7 +68,8 @@ export default class PrivateTradesA extends React.Component{
                         <td>{this.constructTime(o.timestamp)}</td>
                         <td>{o.side}</td>
                         <td>{divideBigNumbers(o.price, config.basePrice)}</td>
-                        <td>{divideBigNumbers(o.qty, transformToTokenName(this.props.trade).decimal)}</td>
+                        {/* <td> {divideBigNumbers(o.qty, transformToTokenName(this.props.trade).decimal)} </td> */}
+                        <td> {o.qty} </td>
                       </tr>
                     )
                   }) : <tr><td colSpan={5} className="no-data">{TRANSACTION.NO_TRANSACTION_DATA}</td></tr>}

@@ -151,11 +151,11 @@ class WalletContainer extends Component {
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
             return<div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit</button>
             </div>
         } else {
             return <div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw</button>
             </div>
         }
     }
@@ -344,7 +344,7 @@ class WalletContainer extends Component {
                                 </ul>
                             </div>
                             <div className="asset_balance">
-                                <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button>
+                                {/* <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button> */}
                                 <div>
                                     <div className="tab_list" />
                                     <div className="wallet_info">
