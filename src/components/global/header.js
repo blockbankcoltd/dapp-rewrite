@@ -40,20 +40,18 @@ export default class HeaderComponent extends Component {
         }
     }
 
-    componentDidMount() {
-        document.body.addEventListener('click',this.languageHandler);
-    }
-    componentWillUnmount() {
-        document.body.removeEventListener('click',this.languageHandler);
+    controlHandler(state) {
+        state ? document.body.addEventListener('click',this.languageHandler) : document.body.removeEventListener('click',this.languageHandler);
     }
 
     render() {
+        this.controlHandler(this.state.langActive)
         const {navLinks, titleSrc, language} = this.props;
         // const {children,titleSrc,Language} = this.props;
         // const header=Language.HEADER;
         // const buttons=Language.BUTTONS;
         const {MENU_TEXT_HOME} = language.HEADER;
-        const {HEADER} = this.props.language
+        const {HEADER} = this.props.language;
         return (
             <Header className={this.state.headerAdd ? 'header scr_on' : 'header'}>
                 <HeaderContents>
@@ -75,7 +73,7 @@ export default class HeaderComponent extends Component {
 
                     <div className="lang_navi">
                         <p className={localStorage.getItem('lang') === "kr" ? "lang_kr" : "lang_en"} onClick={(e) => {
-                            this.setState({langActive: !this.state.langActive})
+                            this.setState({langActive: !this.state.langActive});
                         }}>
                   <span>
                     {localStorage.getItem('lang') === "kr" ? "KR" : "EN"}
