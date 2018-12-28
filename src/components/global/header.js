@@ -103,22 +103,7 @@ export default class HeaderComponent extends Component {
                             </li>
                         </ul>
                     </div>
-                    <div className="select_contract">
-                        <select onChange={this.changeContract} defaultValue={+localStorage.getItem('contract')}>
-                            {
-                                contractList.map((cont, idx) => {
-                                    return (
-                                        <option value={idx} key={idx}>
-                                            {cont.name}
-                                            {' '}
-                                            :
-                                            {cont.address}
-                                        </option>
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
+
 
                     <MobileBars>
                         <i className={this.state.side ? 'xi-close' : 'xi-bars'} onClick={this.viewSide}/>
@@ -148,6 +133,22 @@ export default class HeaderComponent extends Component {
                             </ul>
                         </div>
                     </MobileMenu>
+                    <div className="select_contract">
+                        <select onChange={this.changeContract} defaultValue={+localStorage.getItem('contract')}>
+                            {
+                                contractList.map((cont, idx) => {
+                                    return (
+                                        <option value={idx} key={idx}>
+                                            {cont.name}
+                                            {' '}
+                                            :
+                                            {cont.address}
+                                        </option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
                 </HeaderContents>
             </Header>
         )
@@ -251,6 +252,21 @@ const HeaderContents = styled.div`
 
     .lang_navi .lang_en {
         background-image: url(${englishLangIcon});
+    }
+    .select_contract {
+        width: 100px;
+        float: right;
+        position: relative;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        
+        select {
+            width: 250px;
+            height: 30px;
+            cursor: pointer;
+        }
     }
     @media (max-width: 1024px) {
         width: 100%;

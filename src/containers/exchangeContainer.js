@@ -413,6 +413,9 @@ const Exchange = styled.div`
 const ExchangeColumn1 = styled.div`
     width:67%;
     max-width:67%;
+    table {
+        border-collapse : collapse;
+    }
     .tab_cont{
         .pull-right, .paging-wrap {
             margin: 14px 0 13px;
@@ -1028,7 +1031,7 @@ const ExchangeColumn1 = styled.div`
                             justify-content: space-between;
                             align-items:center;
                             height:40px;
-                            margin-bottom:15px;
+                            margin-bottom:20px;
                             label {
                                 width:35%;
                             }
@@ -1086,7 +1089,7 @@ const ExchangeColumn1 = styled.div`
                     }
                     .summary-wrap {
                         margin:0 23px;
-                        padding:8px 0 0 0;
+                        padding:30px 0 ;
                         .min-order-price {
                             display:flex;
                             flex-direction: row;
@@ -1297,7 +1300,7 @@ const ExchangeColumn1 = styled.div`
             .open-order-head {
                 box-shadow: 2px 2px 4px #dee1e7;
                 width:51%;
-                margin:-30px 0 0 0;
+                margin:-40px 0 0 0;
                 height:100%;
                 background: #fff;
                 .tab_cont{
@@ -1313,6 +1316,9 @@ const ExchangeColumn1 = styled.div`
                         place-content: center space-between;
                         justify-content: space-between;
                         align-items:center;
+                        padding: 0;
+                        list-style : none;
+                        margin: 0;
                         li {
                             width:50%;
                             text-align:center;
