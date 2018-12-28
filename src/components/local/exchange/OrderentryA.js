@@ -204,16 +204,6 @@ export default class OrderentryA extends React.Component {
           </div>
         </div>
         <div className={this.state.buy ? 'summary-wrap buy' : 'summary-wrap sell'}>
-          <div className="order-amount">
-            <div className="summary-item">
-              {TRADES.FEE_TEXT}
-              {' '}
-              :
-                </div>
-            <div className="order-amount-total">
-              0 *Fee price or amount
-                </div>
-          </div>
           {
             <div className="order-price">
               <div
@@ -234,22 +224,6 @@ export default class OrderentryA extends React.Component {
               </div>
             </div>
           }
-          <div className="min-order-price">
-            <div
-              className="summary-item"
-            >
-              ·
-                  {BUY_SELL_ADV.MIN_ORDER_AMOUNT}
-              {' '}
-              : Min_order
-                </div>
-            <div className="summary-item">
-              ·
-                  {BUY_SELL_ADV.FEES}
-              {' '}
-              : Fee
-                </div>
-          </div>
 
         </div>
         <div className="button-wrap pad">
