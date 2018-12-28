@@ -60,22 +60,15 @@ export const filterMarkets = () => {
 	return markets;
 }
 
-export const fetchAccounts = () => {
-	return new Promise((resolve, reject) => {
-		const { web3 } = window;
-		const ethAccounts = getAccounts();
-
-		if (isEmpty(ethAccounts)) {
-			web3 && web3.eth && web3.eth.getAccounts((err, accounts) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(accounts);
-				}
-			});
-		} else {
-			resolve(ethAccounts);
-		}
+export const fetchAccounts = async (Web3Object) => {
+	await new Promise((resolve, reject) => {
+		Web3Object.eth.getAccounts( (err, accountsArray) => { 
+			if(err){
+					return reject(err);
+			}else{
+					return resolve(accountsArray[0]);
+			}
+		})
 	});
 };
 
