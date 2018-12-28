@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import { isMobile } from "react-device-detect";
+import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
 import Actions from '../actions/index';
 import ModalA from "../components/local/wallet/ModalA";
@@ -26,7 +26,7 @@ class WalletContainer extends Component {
             balances: [],
             depositAmount: 0,
             showPrompt: false,
-            open: false,
+            open : false,
             pricebtn1: modalupdown_1,
             pricebtn2: modalupdown_3,
             limitbtn1: modalupdown_1,
@@ -35,27 +35,40 @@ class WalletContainer extends Component {
             depositpricebtn2: modalupdown_3,
             withdrawpricebtn1: modalupdown_1,
             withdrawpricebtn2: modalupdown_3,
-            type: ""
+            type:"",
+            Amount_price_deposit:"",
+            Amount_price_withdraw:"",
+            selectToken : '',
+            selectTokenName: ""
         };
 
         this.called = false
     }
 
+    onHandleChange=(e)=>{
+        if(e.target.name==="Deposit_input"){
+            this.setState({
+                Amount_price_deposit : e.target.value
+            })
+        }
+        if(e.target.name==="Withdraw_input"){
+            this.setState({
+                Amount_price_withdraw : e.target.value
+            })
+        }
+    }
 
-    onOpenModalA = (e, cellInfo) => {
+    onOpenModalA = (e, cellinfo) => {
         this.setState({
             open: true,
-            type: e.target.value
+            type: e.target.value,
+            selectToken : cellinfo,
+            selectTokenName : cellinfo.original.name
         });
-        if (e.target.value === 'deposit') {
-            return this.deposit(e, cellInfo);
-        } else {
-            return this.withdraw(e, cellInfo);
-        }
     };
     onCloseModalA = () => {
         this.setState({
-            open: false,
+            open: false ,
             pricebtn1: modalupdown_1,
             pricebtn2: modalupdown_3,
             limitbtn1: modalupdown_1,
@@ -67,37 +80,32 @@ class WalletContainer extends Component {
         });
     };
 
-    PriceUp = () => {
-        this.setState({ pricebtn1: modalupdown_2 })
-        this.setState({ pricebtn2: modalupdown_3 })
-    }
-    PriceDown = () => {
-        this.setState({ pricebtn2: modalupdown_4 })
-        this.setState({ pricebtn1: modalupdown_1 })
-    }
-    LimitUp = () => {
-        this.setState({ limitbtn1: modalupdown_2 })
-        this.setState({ limitbtn2: modalupdown_3 })
-    }
-    LimitDown = () => {
-        this.setState({ limitbtn2: modalupdown_4 })
-        this.setState({ limitbtn1: modalupdown_1 })
-    }
-    depositPriceUp = () => {
-        this.setState({ depositpricebtn1: modalupdown_2 })
-        this.setState({ depositpricebtn2: modalupdown_3 })
-    }
-    depositPriceDown = () => {
-        this.setState({ depositpricebtn2: modalupdown_4 })
-        this.setState({ depositpricebtn1: modalupdown_1 })
-    }
-    withdrawPriceUp = () => {
-        this.setState({ withdrawpricebtn1: modalupdown_2 })
-        this.setState({ withdrawpricebtn2: modalupdown_3 })
-    }
-    withdrawPriceDown = () => {
-        this.setState({ withdrawpricebtn2: modalupdown_4 })
-        this.setState({ withdrawpricebtn1: modalupdown_1 })
+    PriceUpDown = (e) =>{
+        if(e.target.name==="GasPrice_up"){
+            this.setState({pricebtn1:modalupdown_2})
+            this.setState({pricebtn2:modalupdown_3})
+        }else if(e.target.name==="GasPrice_down"){
+            this.setState({pricebtn2:modalupdown_4})
+            this.setState({pricebtn1:modalupdown_1})
+        }else if(e.target.name==="GasLimit_up"){
+            this.setState({limitbtn1:modalupdown_2})
+            this.setState({limitbtn2:modalupdown_3})
+        }else if(e.target.name==="GasLimit_down"){
+            this.setState({limitbtn2:modalupdown_4})
+            this.setState({limitbtn1:modalupdown_1})
+        }else if(e.target.name==="depositPriceUp"){
+            this.setState({depositpricebtn1:modalupdown_2})
+            this.setState({depositpricebtn2:modalupdown_3})
+        }else if(e.target.name==="depositPriceDown"){
+            this.setState({depositpricebtn2:modalupdown_4})
+            this.setState({depositpricebtn1:modalupdown_1})
+        }else if(e.target.name==="withdrawPriceUp"){
+            this.setState({withdrawpricebtn1:modalupdown_2})
+            this.setState({withdrawpricebtn2:modalupdown_3})
+        }else if(e.target.name==="withdrawPriceDown"){
+            this.setState({withdrawpricebtn2:modalupdown_4})
+            this.setState({withdrawpricebtn1:modalupdown_1})
+        }
     }
 
     componentDidMount() {
@@ -105,22 +113,9 @@ class WalletContainer extends Component {
         this.props.getBalance();
     }
 
-    // componentDidUpdate = (prevProps) => {
-    //     if(this.props.balance !== prevProps.balance){
-    //         let _array = [];
-    //         this.props.balance.available.forEach( (o, i) => {
-    //             _array.push({
-    //                 name: o.,
-    //                 hold: "",
-    //                 total: ""
-    //             });
-    //         })
-    //         this.setState({balances: _array});
-    //     }
-    // }
 
     callFunction(id) {
-        if (id && this.called === false) {
+        if(id && this.called === false){
             // this.props.getMyOrders();
             // this.props.getBalance(+id);
             this.called = true;
@@ -128,32 +123,26 @@ class WalletContainer extends Component {
     }
 
     deposit = (e, cellInfo) => {
-        let amount = window.prompt("Enter the deposit amount");
+        let amount = this.state.Amount_price_deposit;
         let tokenObj = cellInfo.original;
-
-        if (amount !== null && tokenObj.name === 'ETH') {
+        if(amount !== null && tokenObj.name === 'ETH'){
             this.props.depositEth(amount);
-
-        } else if (amount !== null && tokenObj.name !== 'ETH') {
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
             console.log("Token address --> ", tokenObj);
             this.props.depositToken(tokenObj.tokenAddress, amount);
-        } else {
+        }else{
             console.log("Cancelled")
         }
     }
 
     withdraw = (e, cellInfo) => {
-        let amount = window.prompt("Enter the deposit amount");
+        let amount = this.state.Amount_price_withdraw;
         let tokenObj = cellInfo.original;
-
-
-        if (amount !== null && tokenObj.product === 'ETH') {
+        if(amount !== null && tokenObj.name === 'ETH'){
             this.props.withdrawEth(amount);
-
-        } else if (amount !== null && tokenObj.product !== 'ETH') {
-
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
             this.props.withdrawToken(tokenObj.tokenAddress, amount);
-        } else {
+        }else{
             console.log("Cancelled")
         }
     }
@@ -161,23 +150,19 @@ class WalletContainer extends Component {
 
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
-            return (
-                <div>
-                    <button type="button" onClick={(e) => this.onOpenModalA(e, cellInfo)} value="deposit">Deposit</button>
-                </div>
-            )
+            return<div>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
+            </div>
         } else {
-            return (
-                <div>
-                    <button type="button" onClick={(e) => this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw</button>
-                </div>
-            )
+            return <div>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
+            </div>
         }
     }
 
     renderTable() {
         const { WALLET } = this.props.languageConfig;
-        return (
+        return(
             <ReactTable
                 data={this.props.balance}
                 columns={[
@@ -219,7 +204,7 @@ class WalletContainer extends Component {
     render() {
         const { WALLET } = this.props.languageConfig;
         // this.callFunction(this.props.accountId);
-        console.log("TEST", this.state.type);
+        console.log(this.state.selectToken)
         return (
             <Wallet>
                 <section className="main" role="">
@@ -228,18 +213,21 @@ class WalletContainer extends Component {
                             {
                                 this.state.type === "deposit" &&
                                 <ModalBoxB>
-                                    <div className="modaltitle">Deposit <span>ETH</span></div>
+                                    <div className="modaltitle">Deposit <span>{this.state.selectTokenName}</span></div>
                                     <div className="modal_inbox_B">
-                                        <div><img src={modaltest1} /></div>
+                                        <div><img src={modaltest1}/></div>
                                         <ul>
-                                            <li><div>
-                                                Amount
-                                          <div className='UpDownright_1'>ETH</div>
+                                            <li><div className='li_Box'>
+                                                <div className='Data_text2'>Amount</div>
                                                 <div className='Data_text'>
                                                     <input
                                                         type='number'
+                                                        name="Deposit_input"
+                                                        onChange={(e)=>this.onHandleChange(e)}
+                                                        placeholder="0"
                                                     />
                                                 </div>
+                                                <div className='UpDownright_1'>{this.state.selectTokenName}</div>
                                             </div></li>
                                             <li>
                                                 <button>25%</button>
@@ -250,9 +238,9 @@ class WalletContainer extends Component {
                                         </ul>
                                         <div>
                                             <div className='ul_div'>Gas Price (GWEI)
-                                          <div className='UpDownright_2'>
-                                                    <img className="Upbtn_2" src={this.state.depositpricebtn1} onClick={this.depositPriceUp} />
-                                                    <img className="Downbtn_2" src={this.state.depositpricebtn2} onClick={this.depositPriceDown} />
+                                                <div className='UpDownright_2'>
+                                                    <img className="Upbtn_2" src={this.state.depositpricebtn1} onClick={(e)=>this.PriceUpDown(e)} name="depositPriceUp"/>
+                                                    <img className="Downbtn_2" src={this.state.depositpricebtn2} onClick={(e)=>this.PriceUpDown(e)} name="depositPriceDown"/>
                                                 </div>
                                                 <div className="Data_Deposit">0</div>
                                             </div>
@@ -261,7 +249,7 @@ class WalletContainer extends Component {
                                         <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
                                         <div>
                                             <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
-                                            <button className='save'>Deposit</button>
+                                            <button className='save' onClick={(e) => this.deposit(e, this.state.selectToken)}>Deposit</button>
                                         </div>
                                     </div>
                                 </ModalBoxB>
@@ -269,14 +257,21 @@ class WalletContainer extends Component {
                             {
                                 this.state.type === "withdraw" &&
                                 <ModalBoxC>
-                                    <div className="modaltitle">Withdraw <span>ETH</span></div>
+                                    <div className="modaltitle">Withdraw <span>{this.state.selectTokenName}</span></div>
                                     <div className="modal_inbox_C">
-                                        <div><img src={modaltest2} /></div>
+                                        <div><img src={modaltest2}/></div>
                                         <ul>
-                                            <li><div>
-                                                Amount
-                                          <div className='UpDownright_1'>ETH</div>
-                                                <div className='Data_text'>0.00000000</div>
+                                            <li><div className='li_Box'>
+                                                <div className='Data_text2'>Amount</div>
+                                                <div className='Data_text'>
+                                                    <input
+                                                        type='number'
+                                                        name="Withdraw_input"
+                                                        onChange={(e)=>this.onHandleChange(e)}
+                                                        placeholder="0"
+                                                    />
+                                                </div>
+                                                <div className='UpDownright_1'>{this.state.selectTokenName}</div>
                                             </div></li>
                                             <li>
                                                 <button>25%</button>
@@ -288,9 +283,9 @@ class WalletContainer extends Component {
                                         </ul>
                                         <div>
                                             <div className='ul_div'>Gas Price (GWEI)
-                                          <div className='UpDownright_2'>
-                                                    <img className="Upbtn_2" src={this.state.withdrawpricebtn1} onClick={this.withdrawPriceUp} />
-                                                    <img className="Downbtn_2" src={this.state.withdrawpricebtn2} onClick={this.withdrawPriceDown} />
+                                                <div className='UpDownright_2'>
+                                                    <img className="Upbtn_2" src={this.state.withdrawpricebtn1} onClick={(e)=>this.PriceUpDown(e)} name="withdrawPriceUp"/>
+                                                    <img className="Downbtn_2" src={this.state.withdrawpricebtn2} onClick={(e)=>this.PriceUpDown(e)} name="withdrawPriceDown"/>
                                                 </div>
                                                 <div className="Data_Deposit">0</div>
                                             </div>
@@ -299,7 +294,7 @@ class WalletContainer extends Component {
                                         <div className='settingText'>Gas Fee &#60; 0.00000000 ETH</div>
                                         <div>
                                             <button className='cancel' onClick={this.onCloseModalA}>Cancel</button>
-                                            <button className='save'>Withdraw</button>
+                                            <button className='save' onClick={(e) => this.withdraw(e, this.state.selectToken)}>Withdraw</button>
                                         </div>
                                     </div>
                                 </ModalBoxC>
@@ -312,9 +307,9 @@ class WalletContainer extends Component {
                                         <ul>
                                             <li><div>
                                                 Gas Price (GWEI)
-                                          <div className='UpDownright_1'>
-                                                    <img className="Upbtn_1" src={this.state.pricebtn1} onClick={this.PriceUp} />
-                                                    <img className="Downbtn_1" src={this.state.pricebtn2} onClick={this.PriceDown} />
+                                                <div className='UpDownright_1'>
+                                                    <img className="Upbtn_1" src={this.state.pricebtn1} onClick={(e)=>this.PriceUpDown(e)} name="GasPrice_up"/>
+                                                    <img className="Downbtn_1" src={this.state.pricebtn2} onClick={(e)=>this.PriceUpDown(e)} name="GasPrice_down"/>
                                                 </div>
                                                 <div className='Data_text'>0</div>
                                             </div></li>
@@ -323,9 +318,9 @@ class WalletContainer extends Component {
                                         <ul>
                                             <li><div>
                                                 Gas Limit
-                                          <div className='UpDownright_2'>
-                                                    <img className="Upbtn_2" src={this.state.limitbtn1} onClick={this.LimitUp} />
-                                                    <img className="Downbtn_2" src={this.state.limitbtn2} onClick={this.LimitDown} />
+                                                <div className='UpDownright_2'>
+                                                    <img className="Upbtn_2" src={this.state.limitbtn1} onClick={(e)=>this.PriceUpDown(e)} name="GasLimit_up"/>
+                                                    <img className="Downbtn_2" src={this.state.limitbtn2} onClick={(e)=>this.PriceUpDown(e)} name="GasLimit_down"/>
                                                 </div>
                                                 <div className='Data_text'>0</div>
                                             </div></li>
@@ -349,7 +344,7 @@ class WalletContainer extends Component {
                                 </ul>
                             </div>
                             <div className="asset_balance">
-                                <button onClick={(e) => this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button>
+                                <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button>
                                 <div>
                                     <div className="tab_list" />
                                     <div className="wallet_info">
@@ -411,7 +406,7 @@ const mapDispatchToProps = (dispatch) => {
         depositToken: (address, amount) => dispatch(Actions.smartContract.placeDepositTokenRequest(address, amount)),
         withdrawToken: (address, amount) => dispatch(Actions.smartContract.placeWithdrawTokenRequest(address, amount)),
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
-        getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest())
+        getMyAccountId : () => dispatch(Actions.smartContract.getMyAccountIdRequest())
     }
 }
 
@@ -558,24 +553,52 @@ const ModalBoxB = styled.div`
                     font-size:18px;
                     color:#364958;
                 }
-                .Data_text{
-                    float:right;
-                    margin-right:15px;
-                    font-size:26px;
-                    line-height:36px;
-                }
-                .UpDownright_1{
-                    float:right;
-                    img{
-                        cursor:pointer;
+                .li_Box{
+                    display:flex;
+                    .Data_text{
+                        flex:1;
+                        margin-right:15px;
+                        margin-left:95px;
+                        font-size:26px;
+                        line-height:36px;
+                        input{
+                            -webkit-appearance: none;
+                            -moz-appearance: none;
+                            appearance: none;
+                            border:none;
+                            outline:none;
+                            text-align:right;
+                            font-size:26px;
+                            font-weight:600;
+                            width:165px;
+                            &[type=number]::-webkit-inner-spin-button{
+                                -webkit-appearance: none;
+                                -moz-appearance: none;
+                                appearance: none;
+                            }
+                            &[type=number]::-webkit-outer-spin-button{
+                                -webkit-appearance: none;
+                                -moz-appearance: none;
+                                appearance: none;
+                            }
+                        }
                     }
-                    .Upbtn_1{
-                        vertical-align:9px;
+                    .Data_text2{
+                        flex:1;
                     }
-                    .Downbtn_1{
-                        vertical-align:-4px;
-                        right:10px;
-                        position:relative;
+                    .UpDownright_1{
+                        flex:1;
+                        img{
+                            cursor:pointer;
+                        }
+                        .Upbtn_1{
+                            vertical-align:9px;
+                        }
+                        .Downbtn_1{
+                            vertical-align:-4px;
+                            right:10px;
+                            position:relative;
+                        }
                     }
                 }
             }
@@ -704,24 +727,52 @@ const ModalBoxC = styled.div`
                     font-size:18px;
                     color:#364958;
                 }
-                .Data_text{
-                    float:right;
-                    margin-right:15px;
-                    font-size:26px;
-                    line-height:36px;
-                }
-                .UpDownright_1{
-                    float:right;
-                    img{
-                        cursor:pointer;
+                .li_Box{
+                    display:flex;
+                    .Data_text{
+                        flex:1;
+                        margin-right:15px;
+                        margin-left:95px;
+                        font-size:26px;
+                        line-height:36px;
+                        input{
+                            -webkit-appearance: none;
+                            -moz-appearance: none;
+                            appearance: none;
+                            border:none;
+                            outline:none;
+                            text-align:right;
+                            font-size:26px;
+                            font-weight:600;
+                            width:165px;
+                            &[type=number]::-webkit-inner-spin-button{
+                                -webkit-appearance: none;
+                                -moz-appearance: none;
+                                appearance: none;
+                            }
+                            &[type=number]::-webkit-outer-spin-button{
+                                -webkit-appearance: none;
+                                -moz-appearance: none;
+                                appearance: none;
+                            }
+                        }
                     }
-                    .Upbtn_1{
-                        vertical-align:9px;
+                    .Data_text2{
+                        flex:1;
                     }
-                    .Downbtn_1{
-                        vertical-align:-4px;
-                        right:10px;
-                        position:relative;
+                    .UpDownright_1{
+                        flex:1;
+                        img{
+                            cursor:pointer;
+                        }
+                        .Upbtn_1{
+                            vertical-align:9px;
+                        }
+                        .Downbtn_1{
+                            vertical-align:-4px;
+                            right:10px;
+                            position:relative;
+                        }
                     }
                 }
             }
