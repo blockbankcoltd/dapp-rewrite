@@ -9,16 +9,7 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 import Actions from '../actions/index';
 
-const hrefName=[
-    "/notice",
-    "/informationUse",
-    "/feeInformation",
-    "/termsOfUse",
-    "/privacyPolicy",
-    "/faq"
-]
-
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component{
 
     state = ({
         page: 1,
@@ -144,7 +135,7 @@ export default class extends React.Component<Props, {}> {
                                                     <li
                                                         className={item.title===FOOTER.PRIVACY_TEXT ? "active" : ""} key={index}
                                                     >
-                                                        <Link prefetch to={item.href}>
+                                                        <Link to={item.href}>
                                                             {item.title}
                                                         </Link>
                                                     </li>
@@ -216,9 +207,7 @@ export default class extends React.Component<Props, {}> {
         )
     }
 }
-interface Props {
-    children: any
-}
+
 const Notice = styled.div`
     background : #fff;
     width:100%;

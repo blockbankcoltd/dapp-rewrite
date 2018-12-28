@@ -9,16 +9,7 @@ import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 import Actions from '../actions/index';
 
-const hrefName=[
-    "/notice",
-    "/informationUse",
-    "/feeInformation",
-    "/termsOfUse",
-    "/privacyPolicy",
-    "/faq"
-]
-
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component {
 
     constructor(props) {
         super(props);
@@ -64,7 +55,7 @@ export default class extends React.Component<Props, {}> {
                                                 <li
                                                     className={item.title===FOOTER.FEE ? "active" : ""} key={index}
                                                 >
-                                                    <Link prefetch to={item.href}>
+                                                    <Link to={item.href}>
                                                         {item.title}
                                                     </Link>
                                                 </li>
@@ -133,12 +124,6 @@ export default class extends React.Component<Props, {}> {
             </div>
         )
     }
-}
-
-
-interface Props {
-    title: string,
-        children: any
 }
 
 const Fee = styled.div`

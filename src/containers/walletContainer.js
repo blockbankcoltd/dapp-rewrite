@@ -28,7 +28,9 @@ class WalletContainer extends Component {
             balances: [],
             depositAmount: 0,
             showPrompt: false,
-            open : false,
+            openA : false,
+            openB : false,
+            openC : false,
             pricebtn1: modalupdown_1,
             pricebtn2: modalupdown_3,
             limitbtn1: modalupdown_1,
@@ -168,9 +170,13 @@ class WalletContainer extends Component {
 
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
-            return <div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button></div>
+            return<div><button onClick={(e) => this.deposit(e, cellInfo)} type="button">Deposit</button>
+                <button type="button" onClick={this.onOpenModalB}>Deposit_pop</button>
+            </div>
         } else {
-            return <div><button onClick={(e) => this.withdraw(e, cellInfo)} type="button">Withdraw</button></div>
+            return <div><button onClick={(e) => this.withdraw(e, cellInfo)} type="button">Withdraw</button>
+                <button type="button" onClick={this.onOpenModalC}>Withdraw_pop</button>
+            </div>
         }
     }
 

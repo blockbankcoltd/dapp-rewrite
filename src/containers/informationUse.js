@@ -10,7 +10,7 @@ import Web3 from 'web3';
 import Actions from '../actions/index';
 
 
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component{
     constructor(props) {
         super(props);
     }
@@ -58,7 +58,7 @@ export default class extends React.Component<Props, {}> {
                                                 <li
                                                     className={item.title===FOOTER.GUIDE ? "active" : ""} key={index}
                                                 >
-                                                    <Link prefetch to={item.href}>
+                                                    <Link to={item.href}>
                                                         {item.title}
                                                     </Link>
                                                 </li>
@@ -122,7 +122,7 @@ export default class extends React.Component<Props, {}> {
                                     <h3>{INFO_USE.LIMIT}</h3>
                                     <div>
                                         <p>{INFO_USE.LIMIT01}</p>
-                                        <Link to='/'><a className="link_more btn btn_long">{INFO_USE.LIMIT02}</a></Link>
+                                        <Link to='/' className="link_more btn btn_long">{INFO_USE.LIMIT02}</Link>
                                     </div>
                                     <div className="table_cont">
                                         <table>
@@ -209,11 +209,7 @@ export default class extends React.Component<Props, {}> {
 }
 
 
-interface Props {
-    title: string,
-        children: any
 
-}
 const Info = styled.div`
     width:100%;
     margin : 0 auto;

@@ -18,7 +18,7 @@ const hrefName=[
     "/faq"
 ]
 
-export default class extends React.Component<Props, {}> {
+export default class extends React.Component{
 
     state = ({
         page: 1,
@@ -145,7 +145,7 @@ export default class extends React.Component<Props, {}> {
                                                     <li
                                                         className={item.title===FOOTER.NOTICE ? "active" : ""} key={index}
                                                     >
-                                                        <Link prefetch to={item.href}>
+                                                        <Link to={item.href}>
                                                             {item.title}
                                                         </Link>
                                                     </li>
@@ -216,9 +216,6 @@ export default class extends React.Component<Props, {}> {
             </div>
         )
     }
-}
-interface Props {
-    children: any
 }
 const Notice = styled.div`
     background : #fff;

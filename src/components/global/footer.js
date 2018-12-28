@@ -6,42 +6,6 @@ import dexhiLogo from "../../assets/images/Dexhi_white.png";
 
 export default class FooterComponent extends React.Component {
     render() {
-      const {
-        titleSrc,
-        titleLink,
-        email,
-        sns,
-        chatUrl,
-        naviLink,
-        MENU_TEXT_HOME,
-        TERMS_TEXT,
-        PRIVACY_TEXT,
-        PRICING_TEXT,
-        OUR_FOCUS_TEXT,
-        CONTACT_TEXT,
-        FEES_TEXT,
-        NEWS_TEXT,
-        ABOUT_TEXT,
-        FAQS_TEXT,
-        SECURITY_TEXT,
-        COMPANY,
-        ADDRESS,
-        CEO,
-        FOT_NUM1,
-        CSCENTER,
-        TIME,
-        WORK,
-        TEL,
-        NOTICE,
-        GUIDE,
-        TERMS,
-        PRIVACY,
-        FAQ,
-        CHAT,
-        FEE,
-        LISTING,
-        INFO
-      } = this.props;
         const {language, FooterData} = this.props;
         const {FOOTER} = language;
         return (
