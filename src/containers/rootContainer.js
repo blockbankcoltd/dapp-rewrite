@@ -25,11 +25,8 @@ class RootContainer extends Component {
     }
 
     componentDidMount(){
-        this.checkMetamask()
-        if(!localStorage.getItem('lang')){
-            localStorage.setItem('lang', 'kr');
-            this.setState({activeLanguage: 'kr', languageConfig: koreanConfig});
-        }
+        this.checkMetamask();
+        this.switchLanguage(localStorage.getItem('lang') || 'en');
         // this.props.getAccoutId();
     }
 
@@ -66,12 +63,14 @@ class RootContainer extends Component {
             // console.log("Who is the Provider? --> ", currentStore.main.GlobalWeb3Object.givenProvider);
         }
     }
+
+    switchLanguage = (code) => {
+        localStorage.setItem('lang', code);
+        return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
+    };
     
     render() {
-        const switchLanguage = (code) => {
-            localStorage.setItem('lang', code);
-            return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
-        };
+
         const {metamask} = this.state;
         const FooterData={
             titleLink:"",
@@ -114,7 +113,7 @@ class RootContainer extends Component {
                 return (
                     <div className="App">
                         <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
-                        <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+                        <HeaderComponent switchLanguage={this.switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
                         <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
                         <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
                     </div>
@@ -123,14 +122,15 @@ class RootContainer extends Component {
                 return (<Loading show={true} width={"100%"} height={"100%"}/>);
         }
         
-        return (
-          <div className="App">
-            <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
-            <HeaderComponent switchLanguage={switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
-            <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
-            <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
-          </div>
-        )
+        // return (
+        //   <div className="App">
+        //     <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
+        //     <HeaderComponent switchLanguage={this.switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+        //     <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />
+        //     <FooterComponent FooterData={FooterData} language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
+        //   </div>
+        // )
+        // This code is unreachable code now. Check it please.
     }
 }
 
