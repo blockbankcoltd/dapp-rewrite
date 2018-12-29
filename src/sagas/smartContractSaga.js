@@ -6,8 +6,7 @@ import { Decimal } from 'decimal.js';
 import store from '../store/reduxStore';
 import * as Constants from '../constants/constants';
 import { config, filterMarkets, contractList } from '../utilities/config';
-import { divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName, convertQtyEach, convertPriceEach } from '../utilities/helpers.js';
-
+import { etherscanTx, etherscanUrl, divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName, convertQtyEach, convertPriceEach } from '../utilities/helpers.js';
 
 let data = [];
 const coinList = config.base.concat(config.trades);
@@ -169,7 +168,9 @@ function* cancelOrder(params) {
         const result = yield GlobalSmartContractObject.methods.cancelOrder(orderId).send({
             from: FromAddress[0]
         });
-        
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', result.transactionHash);
+        result["etherscanLink"] = etherscanLink;
         yield put({type: Constants.default.Success.CANCEL_ORDER_SUCCESS, cancelOrderStatus: result});
     }
     catch(e){
@@ -195,10 +196,13 @@ function* placeBuyOrder(params) {
         let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
     
     
-        const orderHash = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
+        const order = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
             from: FromAddress[0]
         });
-        yield put({ type: Constants.default.Success.PLACE_BUY_ORDER_SUCCESS, buyOrderStatus: orderHash });
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', order.transactionHash);
+        order["etherscanLink"] = etherscanLink;
+        yield put({ type: Constants.default.Success.PLACE_BUY_ORDER_SUCCESS, buyOrderStatus: order });
     }
     catch(e){
         yield put({ type: Constants.default.Failure.PLACE_BUY_ORDER_FAILURE, e });        
@@ -222,10 +226,13 @@ function* placeSellOrder(params) {
         let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);
     
     
-        const orderHash = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
+        const order = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
             from: FromAddress[0]
         });
-        yield put({ type: Constants.default.Success.PLACE_SELL_ORDER_SUCCESS, sellOrderStatus: orderHash });
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', order.transactionHash);
+        order["etherscanLink"] = etherscanLink;
+        yield put({ type: Constants.default.Success.PLACE_SELL_ORDER_SUCCESS, sellOrderStatus: order });
     }
     catch(e){
         yield put({ type: Constants.default.Failure.PLACE_SELL_ORDER_FAILURE, e });
@@ -276,6 +283,9 @@ function* depositEthRequest(params) {
             from: FromAddress[0],
             value: Web3.utils.toWei(amount, 'ether')
         });
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', deposit.transactionHash);
+        deposit["etherscanLink"] = etherscanLink;
         yield put({ type: Constants.default.Success.DEPOSIT_ETH_SUCCESS, depositedEth: deposit });
     }
     catch(e){
@@ -292,6 +302,9 @@ function* withdrawEthRequest(params) {
         const withdrawAmount = yield GlobalSmartContractObject.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
             from: FromAddress[0]
         });
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', withdrawAmount.transactionHash);
+        withdrawAmount["etherscanLink"] = etherscanLink;
         yield put({ type: Constants.default.Success.WITHDRAW_ETH_SUCCESS, withdrawnAmount: withdrawAmount });
     }
     catch(e){
@@ -309,6 +322,9 @@ function* depositTokenRequest(params) {
         const deposit = yield GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, true).send({
             from: FromAddress[0]
         });
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', deposit.transactionHash);
+        deposit["etherscanLink"] = etherscanLink;
         yield put({ type: Constants.default.Success.DEPOSIT_TOKEN_SUCCESS, depositedToken: deposit });
     }
     catch(e){
@@ -326,6 +342,9 @@ function* withdrawTokenRequest(params) {
         const withdrawAmount = yield GlobalSmartContractObject.methods.depositWithdrawToken(prAddress, BN_Amount, false).send({
             from: FromAddress[0]
         });
+        let network = yield GlobalWeb3Object.eth.net.getNetworkType();
+        let etherscanLink = etherscanTx( network, 'Check Status: View Tx status', withdrawAmount.transactionHash);
+        withdrawAmount["etherscanLink"] = etherscanLink;
         yield put({ type: Constants.default.Success.WITHDRAW_TOKEN_SUCCESS, withdrawnAmount: withdrawAmount });
     }
     catch(e){
