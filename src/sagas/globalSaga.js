@@ -7,8 +7,8 @@ import * as contractJson from '../utilities/DEXHIGH2.json';
 import * as Constants from '../constants/constants'
 import { config, filterMarkets, contractList } from '../utilities/config';
 import { transformToTokenName, divideBigNumbers } from '../utilities/helpers';
-const AWS_SERVER_URL = 'http://ec2-54-180-123-66.ap-northeast-2.compute.amazonaws.com:8000';
-//const AWS_SERVER_URL = 'http://localhost:8000';
+// const AWS_SERVER_URL = 'http://ec2-54-180-123-66.ap-northeast-2.compute.amazonaws.com:8000';
+const AWS_SERVER_URL = 'http://localhost:8000';
 const CheckProvider = () => {
     return window.web3 && window.web3.currentProvider ? window.web3.currentProvider : (Web3.givenProvider ? Web3.givenProvider : null);
 };
