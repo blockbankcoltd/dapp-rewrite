@@ -13,7 +13,6 @@ export default class ToastComponent extends Component {
     return (
       <div>
         {this.props.message}
-        {this.props.toastStatus === 'error'}
       </div>
     )
   }

@@ -1,6 +1,8 @@
-// import { bindActionCreators } from "redux";
+import React from 'react';
 import * as Constants from '../constants/constants';
 import initState from './initialState';
+import { toast } from 'react-toastify';
+import ToastComponent from '../components/global/toastComponent'
 
 export default (state = initState, action) => {
     if(!state) {
@@ -18,16 +20,25 @@ export default (state = initState, action) => {
                 GlobalSmartContractObject_Error: action.error
             }
         case Constants.default.Success.PLACE_BUY_ORDER_SUCCESS:
+            toast.success(<ToastComponent message={"Buy Order Placed Successfully."} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
             return {
                 ...state,
                 buyOrderStatus: action.buyOrderStatus
             }
         case Constants.default.Success.PLACE_SELL_ORDER_SUCCESS:
+            toast.success(<ToastComponent message={"Sell Order Placed Successfully."} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
             return {
                 ...state,
                 sellOrderStatus: action.sellOrderStatus
             }
         case Constants.default.Success.CANCEL_ORDER_SUCCESS:
+            toast.success(<ToastComponent message={"Order Cancelled Successfully."} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
             return {
                 ...state,
                 cancelOrderStatus: action.cancelOrderStatus
@@ -38,6 +49,7 @@ export default (state = initState, action) => {
                 depositWithdrawlRecords: action.depositWithdrawlRecords
             }
         case Constants.default.Success.GET_ORDERBOOK_SUCCESS:
+            
             return {
                 ...state,
                 orderBook: action.orderbook
@@ -61,6 +73,127 @@ export default (state = initState, action) => {
             return {
                 ...state,
                 bestBidBestAsk: action.bestBidBestAsk
+            }
+        
+        case Constants.default.Failure.PLACE_BUY_ORDER_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.GET_ORDERBOOK_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.GET_MY_ORDERS_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.PLACE_SELL_ORDER_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.DEPOSIT_ETH_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.WITHDRAW_ETH_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.DEPOSIT_TOKEN_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.WITHDRAW_TOKEN_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.GET_BALANCE_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.GET_MY_ACCOUNTID_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.GET_BESTBID_BESTASK_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.GET_DEPOSIT_WITHDRAWL_RECORDS_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.FETCH_TRADE_HISTORY_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.FETCH_ORDER_HISTORY_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
+            }
+        case Constants.default.Failure.CANCEL_ORDER_FAILURE:
+            toast.error(<ToastComponent message={action.e.message} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+            return {
+                ...state,
+                error: action.e.message
             }
         default:
             return state;
