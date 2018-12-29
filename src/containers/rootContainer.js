@@ -13,7 +13,10 @@ import { Web3Provider } from '../components/global/web3provider';
 import { fetchAccounts, fetchNetwork } from '../utilities/helpers';
 import Error from "../components/global/error";
 import Loading from "../components/global/loading";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+  
 class RootContainer extends Component {
     constructor(props) {
         super(props);
@@ -112,6 +115,7 @@ class RootContainer extends Component {
             case "ok":
                 return (
                     <div className="App">
+                        <ToastContainer autoClose={false}/>
                         <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>
                         <HeaderComponent switchLanguage={this.switchLanguage} navLinks={links} titleSrc="/assets/images/bitnaruLogo.png" language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} />
                         <Routes language={this.state.languageConfig ? this.state.languageConfig : koreanConfig} navLinks={links} />

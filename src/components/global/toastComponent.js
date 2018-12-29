@@ -4,15 +4,17 @@ import 'react-toastify/dist/ReactToastify.css';
 // minified version is also included
 // import 'react-toastify/dist/ReactToastify.min.css';
 
-class Toaster extends Component {
-  notify = () => toast("Wow so easy !");
+export default class ToastComponent extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
 
-  render(){
     return (
       <div>
-        <button onClick={this.notify}>Notify !</button>
-        <ToastContainer />
+        {this.props.message}
+        {this.props.toastStatus === 'error'}
       </div>
-    );
+    )
   }
 }

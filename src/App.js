@@ -6,6 +6,7 @@ import { createBrowserHistory } from 'history';
 import store from './store/reduxStore';
 import RootContainer from './containers/rootContainer';
 
+
 const history = createBrowserHistory();
 
 class App extends Component {

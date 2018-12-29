@@ -12,6 +12,9 @@ import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
 import Actions from '../actions/index';
 import { config, filterMarkets } from '../utilities/config';
+import { ToastContainer, toast } from 'react-toastify';
+import ToastComponent from '../components/global/toastComponent'
+
 
 class ExchangeContainer extends Component {
     constructor(props) {
@@ -47,27 +50,32 @@ class ExchangeContainer extends Component {
                 tradeCurrency: defaultTrade.productId,
             }
         });
+        // this.notify('success');
+        // this.notify('error');
+        // this.notify('warning');
+        // this.notify('info');
+        // this.notify('custom');
     }
 
     componentDidUpdate(prevProps) {
 
-        if(prevProps.orderBook !== this.props.orderBook){
-            this.setState({orderBook: this.props.orderBook});
+        if (prevProps.orderBook !== this.props.orderBook) {
+            this.setState({ orderBook: this.props.orderBook });
         }
 
-        if(prevProps.myAccountId !== this.props.myAccountId){
-            this.props.fetchTradeHistory(this.props.myAccountId,3, 1);
+        if (prevProps.myAccountId !== this.props.myAccountId) {
+            this.props.fetchTradeHistory(this.props.myAccountId, 3, 1);
             this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
         }
-        
-        if(prevProps.tradeHistory !== this.props.tradeHistory){
-            this.setState({tradeHistory: this.props.tradeHistory});
+
+        if (prevProps.tradeHistory !== this.props.tradeHistory) {
+            this.setState({ tradeHistory: this.props.tradeHistory });
         }
-        
-        if(prevProps.myOrders !== this.props.myOrders){
+
+        if (prevProps.myOrders !== this.props.myOrders) {
             let _array = [];
             this.props.myOrders.forEach((o, i) => {
-                if(+o.prBase === this.state.baseCurrency && +o.prTrade === this.state.tradeCurrency){
+                if (+o.prBase === this.state.baseCurrency && +o.prTrade === this.state.tradeCurrency) {
                     _array.push({
                         instrumentPair: o.instrumentPair,
                         prBase: o.prBase,
@@ -78,31 +86,31 @@ class ExchangeContainer extends Component {
                     })
                 }
             });
-            this.setState((state, props) => {return {myOrders: _array}});
+            this.setState((state, props) => { return { myOrders: _array } });
         }
 
 
 
-        if(prevProps.bestBidBestAsk !== this.props.bestBidBestAsk){
-            
-            this.state.marketsData.forEach( obj => {
-                if(obj.market.productId === this.state.baseCurrency){
-                    obj.market.trades.forEach( (x, index) => {
-                        obj.market.trades[index] = { ...obj.market.trades[index], bestBid: this.props.bestBidBestAsk.bestBidPrice[index], bestAsk: this.props.bestBidBestAsk.bestAskPrice[index]};
+        if (prevProps.bestBidBestAsk !== this.props.bestBidBestAsk) {
+
+            this.state.marketsData.forEach(obj => {
+                if (obj.market.productId === this.state.baseCurrency) {
+                    obj.market.trades.forEach((x, index) => {
+                        obj.market.trades[index] = { ...obj.market.trades[index], bestBid: this.props.bestBidBestAsk.bestBidPrice[index], bestAsk: this.props.bestBidBestAsk.bestAskPrice[index] };
                     });
                 }
             })
-            this.setState({marketsData: this.state.marketsData})
+            this.setState({ marketsData: this.state.marketsData })
         }
-        if(prevProps.balance !== this.props.balance){
+        if (prevProps.balance !== this.props.balance) {
             const baseObj = filterMarkets().find(data => data.market.productId === this.state.baseCurrency);
             const tradeObj = baseObj.market.trades.find(data => data.productId === this.state.tradeCurrency);
             let selectedTokensBalances = [];
-            this.props.balance.forEach( x => {
-                if(x.name === baseObj.market.productName){
+            this.props.balance.forEach(x => {
+                if (x.name === baseObj.market.productName) {
                     selectedTokensBalances.push(x);
                 }
-                if(x.name === tradeObj.productName){
+                if (x.name === tradeObj.productName) {
                     selectedTokensBalances.push(x);
                 }
             });
@@ -112,7 +120,7 @@ class ExchangeContainer extends Component {
     }
 
     changeTabData = (base) => {
-        this.setState({baseCurrency: base})
+        this.setState({ baseCurrency: base })
         const baseObj = filterMarkets().find(data => data.market.productId === base);
         const tradesForBase = baseObj.market.trades.map(x => x.productId);
         this.props.getBestBidBestAsk(tradesForBase, [baseObj.market.productId]);
@@ -127,15 +135,15 @@ class ExchangeContainer extends Component {
         this.props.getOrderbook(trade, base, 10);
         this.props.fetchTradeHistory(this.props.myAccountId, trade, base);
         this.props.fetchOrderHistory(this.props.myAccountId, trade, base);
-        
-        const filteredData =  this.props.myOrders && this.props.myOrders.filter(obj => {
+
+        const filteredData = this.props.myOrders && this.props.myOrders.filter(obj => {
             return +obj.prBase === base && +obj.prTrade === trade
         });
         console.log("FilteredData --> ", filteredData, this.props.myOrders);
 
         let _array = [];
         this.props.myOrders.forEach((o, i) => {
-            if(+o.prBase === base && +o.prTrade === trade){
+            if (+o.prBase === base && +o.prTrade === trade) {
                 _array.push({
                     instrumentPair: o.instrumentPair,
                     prBase: o.prBase,
@@ -148,11 +156,11 @@ class ExchangeContainer extends Component {
         });
 
         const selectedTokensBalances = [];
-        this.props.balance.forEach( x => {
-            if(x.name === baseObj.market.productName){
+        this.props.balance.forEach(x => {
+            if (x.name === baseObj.market.productName) {
                 selectedTokensBalances.push(x);
             }
-            if(x.name === tradeObj.productName){
+            if (x.name === tradeObj.productName) {
                 selectedTokensBalances.push(x);
             }
         })
@@ -180,6 +188,35 @@ class ExchangeContainer extends Component {
     placeSellOrder = (price, amount) => {
         this.props.placeSellOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
     }
+
+    notify = (status) => {
+        if (status === 'success') {
+            return toast.success(<ToastComponent message={"Hi"} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+        }
+        if (status === 'error') {
+            return toast.error(<ToastComponent message={"Hi"} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+        }
+        if (status === 'warning') {
+            return toast.warn(<ToastComponent message={"Hi"} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+        }
+        if (status === 'info') {
+            return toast.info(<ToastComponent message={"Hi"} />, {
+                position: toast.POSITION.BOTTOM_CENTER
+            })
+        }
+        if (status === 'custom') {
+            return toast(<ToastComponent message={"Hi"} />, {
+                position: toast.POSITION.BOTTOM_RIGHT,
+                className: 'toasty'
+            });
+        }
+    };
 
     render() {
         const { ORDER_HISTORY, TRADES } = this.props.languageConfig;
@@ -262,7 +299,7 @@ class ExchangeContainer extends Component {
                                                                 price={this.state.price}
                                                                 baseName={this.state.baseName}
                                                                 tradeName={this.state.tradeName}
-                                                                
+
                                                             />
                                                         </div>
                                                     </div>
@@ -415,6 +452,9 @@ const ExchangeColumn1 = styled.div`
     max-width:67%;
     table {
         border-collapse : collapse;
+    }
+    .toasty{
+        box-shadow: 5px 5px 5px #f00;
     }
     .tab_cont{
         .pull-right, .paging-wrap {
