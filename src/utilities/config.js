@@ -140,11 +140,11 @@ export const contractList = [
     {
         name: "Order",
         address: "0x6be6a4bdc15e8ce8986dd58677f93c312484cdc0",
-        abifile: contractJson3.default
+        abifile: contractJson2.default
     },
     {
         name: "Original",
         address: "0x13f59e0ed9224f646a94f28ca8120fc011b890b8",
-        abifile: contractJson3.default
+        abifile: contractJson2.default
     }
 ]

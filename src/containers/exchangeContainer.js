@@ -14,6 +14,8 @@ import Actions from '../actions/index';
 import { config, filterMarkets } from '../utilities/config';
 import { ToastContainer, toast } from 'react-toastify';
 import ToastComponent from '../components/global/toastComponent'
+import store from "../store/reduxStore";
+import {divideBigNumbers, transformToTokenName} from "../utilities/helpers";
 
 
 class ExchangeContainer extends Component {
@@ -50,11 +52,167 @@ class ExchangeContainer extends Component {
                 tradeCurrency: defaultTrade.productId,
             }
         });
+
+        const self = this;
+        const {GlobalSmartContractObject} = store.getState().smartContract;
+        this.newOrders = GlobalSmartContractObject.events.allEvents({
+            address: '0x13f59e0ed9224f646a94f28ca8120fc011b890b8',
+            toBlock: 'latest'
+        }, function (error, result) {
+            if (result !== undefined) {
+                if (result.event === "NewOrder" && self.state.orderBook) {
+                    self.batchOrder(result.returnValues);
+                } else if(result.event === "NewTrade") {
+                    //new tradehistory batch function
+                }
+            }
+        });
         // this.notify('success');
         // this.notify('error');
         // this.notify('warning');
         // this.notify('info');
         // this.notify('custom');
+    }
+
+    makeObj(data, num) {
+        let _obj = {
+            bidOrder: [],
+            askOrder: []
+        }
+        for (let i = 0; i < num; i++) {
+            _obj.bidOrder.push({
+                priceA: data.priceA[i] || 0,
+                volume: data.volumeA[i] || 0
+            });
+            _obj.askOrder.push({
+                priceB: data.priceB[i] || 0,
+                volume: data.volumeB[i] || 0
+            });
+        }
+        return _obj;
+    }
+
+    batchOrder(value) {
+        const {baseCurrency, tradeCurrency, orderBook} = this.state;
+        const {price, qty, prBase, prTrade, isSell} = value;
+        const {priceA, priceB, volumeA, volumeB} = orderBook;
+        if (+prBase !== baseCurrency || +prTrade !== tradeCurrency) {
+            return;
+        }
+        const tradeDecimal = transformToTokenName(prTrade).decimal;
+
+        let remainQty = divideBigNumbers(qty, tradeDecimal);
+        const parsePrice = divideBigNumbers(price, config.basePrice);
+        if (!isSell) {
+            const findPrice = priceB.indexOf(parsePrice.toString());
+
+            Promise.all(priceA.slice().map((p, i) => {
+                if (remainQty === 0) {
+                    return p;
+                } else {
+                    if (+p <= parsePrice) {
+                        if (remainQty < +volumeA[0]) {
+                            volumeA[0] -= remainQty;
+                            remainQty = 0;
+                        } else if (remainQty > +volumeA[0]) {
+                            remainQty = (+remainQty - +volumeA[0]);
+                            priceA.shift();
+                            volumeA.shift();
+                        } else {
+                            remainQty = 0;
+                            priceA.shift();
+                            volumeA.shift();
+                        }
+                    }
+                }
+
+            })).then(e => {
+                if (findPrice < 0) {
+                    if (remainQty > 0) {
+                        const findPrice = priceB.find(item => +item < +parsePrice);
+                        if (findPrice) {
+                            const place = priceB.indexOf(findPrice);
+                            priceB.splice(place, 0, parsePrice.toString());
+                            volumeB.splice(place, 0, remainQty.toString());
+                        } else {
+                            priceB.push(parsePrice.toString());
+                            volumeB.push(remainQty.toString());
+                        }
+                    }
+                } else {
+                    volumeB[findPrice] = (+volumeB[findPrice] + +remainQty).toString();
+                }
+            }).then(res => {
+                const newOrderbook = {
+                    priceA: priceA,
+                    priceB: priceB,
+                    volumeA: volumeA,
+                    volumeB: volumeB
+                }
+                this.setState({
+                    orderBook: newOrderbook
+                })
+            })
+
+        } else {
+            const findPrice = priceA.indexOf(parsePrice.toString());
+            Promise.all(priceB.slice().map((p, i) => {
+                if (remainQty === 0) {
+                    return p;
+                } else {
+                    if (+p >= +parsePrice) {
+                        if (remainQty < +volumeB[0]) {
+                            volumeB[0] = (+volumeB[0] - +remainQty).toString();
+                            remainQty = 0;
+                        } else if (remainQty > +volumeB[0]) {
+                            remainQty = (+remainQty - +volumeB[0]);
+                            priceB.shift();
+                            volumeB.shift();
+                        } else {
+                            remainQty = 0;
+                            priceB.shift();
+                            volumeB.shift();
+                        }
+                    }
+                }
+
+            })).then(e => {
+                if (findPrice < 0) {
+                    if (remainQty > 0) {
+                        const findPrice = priceA.find(item => +item > +parsePrice);
+                        if (findPrice) {
+                            const place = priceA.indexOf(findPrice);
+                            priceA.splice(place, 0, parsePrice.toString());
+                            volumeA.splice(place, 0, remainQty.toString());
+                        } else {
+                            priceA.push(parsePrice.toString());
+                            volumeA.push(remainQty.toString());
+                        }
+                    }
+                } else {
+                    volumeA[findPrice] = (+volumeA[findPrice] + +remainQty).toString();
+                }
+            }).then(res => {
+                const newOrderbook = {
+                    priceA: priceA,
+                    priceB: priceB,
+                    volumeA: volumeA,
+                    volumeB: volumeB
+                }
+                this.setState({
+                    orderBook: newOrderbook
+                })
+            })
+
+        }
+
+    }
+
+    batchMyOrder(value) {
+
+    }
+    componentWillUnmount() {
+        this.newOrders.unsubscribe();
     }
 
     componentDidUpdate(prevProps) {
