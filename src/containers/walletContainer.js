@@ -123,28 +123,39 @@ class WalletContainer extends Component {
     }
 
     deposit = (e, cellInfo) => {
-        let amount = this.state.Amount_price_deposit;
-        let tokenObj = cellInfo.original;
-        if(amount !== null && tokenObj.name === 'ETH'){
-            this.props.depositEth(amount);
-        }else if(amount !== null && tokenObj.name !== 'ETH'){
-            console.log("Token address --> ", tokenObj);
-            this.props.depositToken(tokenObj.tokenAddress, amount);
-        }else{
-            console.log("Cancelled")
+        if(this.state.Amount_price_deposit > 0){
+            let amount = this.state.Amount_price_deposit;
+            let tokenObj = cellInfo.original;
+            if(amount !== null && tokenObj.name === 'ETH'){
+                this.props.depositEth(amount);
+            }else if(amount !== null && tokenObj.name !== 'ETH'){
+                console.log("Token address --> ", tokenObj);
+                this.props.depositToken(tokenObj.tokenAddress, amount);
+            }else{
+                console.log("Cancelled")
+            }
         }
+        this.setState({
+            open: false
+        })
+        
     }
 
     withdraw = (e, cellInfo) => {
-        let amount = this.state.Amount_price_withdraw;
-        let tokenObj = cellInfo.original;
-        if(amount !== null && tokenObj.name === 'ETH'){
-            this.props.withdrawEth(amount);
-        }else if(amount !== null && tokenObj.name !== 'ETH'){
-            this.props.withdrawToken(tokenObj.tokenAddress, amount);
-        }else{
-            console.log("Cancelled")
+        if(this.state.Amount_price_withdraw > 0){
+            let amount = this.state.Amount_price_withdraw;
+            let tokenObj = cellInfo.original;
+            if(amount !== null && tokenObj.name === 'ETH'){
+                this.props.withdrawEth(amount);
+            }else if(amount !== null && tokenObj.name !== 'ETH'){
+                this.props.withdrawToken(tokenObj.tokenAddress, amount);
+            }else{
+                console.log("Cancelled")
+            }
         }
+        this.setState({
+            open: false
+        })
     }
 
 

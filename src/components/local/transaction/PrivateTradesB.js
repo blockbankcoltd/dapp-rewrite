@@ -65,12 +65,13 @@ export default class PrivateTradesB extends React.Component{
                             id: TRADES.TIME_TEXT,
                             class: "headerW",
                             accessor: d => this.constructTime(+d.timestamp)
-                        },{
-                            Header: TRADES.STATUS,
-                            id: TRADES.STATUS,
-                            class: "headerW",
-                            accessor: "status"
                         },
+                        // {
+                        //     Header: TRADES.STATUS,
+                        //     id: TRADES.STATUS,
+                        //     class: "headerW",
+                        //     accessor: "status"
+                        // },
 
                     ]}
                 defaultPageSize={10}

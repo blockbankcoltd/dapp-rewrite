@@ -28,7 +28,7 @@ const links = [
         langname : "WALLET"
     },
     {
-        name: "TransactionDetails",
+        name: "Transaction Details",
         path: "/transactionDetails",
         component: TransactionContainer,
         langname : "TRANSACTIONDETAILS"

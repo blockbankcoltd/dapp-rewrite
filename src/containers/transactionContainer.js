@@ -78,13 +78,13 @@ class TransactionContainer extends Component {
     }
 
     fetchData = (index) =>  {
-        if(index === 1){
+        if(index === 0){
             this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
         }
-        else if(index === 2){
+        else if(index === 1){
             this.props.getMyOrders();
         }
-        else if(index === 3){
+        else if(index === 2){
             this.props.getDWRecords(this.props.myAccountId);
         }
     }
