@@ -63,6 +63,7 @@ class ExchangeContainer extends Component {
         }
 
         if (prevProps.myAccountId !== this.props.myAccountId) {
+            console.log("C ", this.props.myAccountId);
             this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
         }
 
@@ -320,7 +321,7 @@ class ExchangeContainer extends Component {
                                             id="tradesTab"
                                             className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <PrivateTradesA languageConfig={this.props.languageConfig} data={this.props.orderHistory} base={this.state.baseCurrency} trade={this.state.tradeCurrency} />
+                                            <PrivateTradesA languageConfig={this.props.languageConfig} data={this.props.orderHistory} base={this.state.baseCurrency} accountId={this.props.myAccountId} trade={this.state.tradeCurrency} />
                                             {/* <PrivateTradesA languageConfig={this.props.languageConfig} records={this.state.dwRecords} /> */}
                                         </div>
                                     </div>

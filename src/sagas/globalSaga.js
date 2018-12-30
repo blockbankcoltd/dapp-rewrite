@@ -83,6 +83,8 @@ function* fetchOrderHistory(params){
             status: o.status,
             accountId,
             price: o.price,
+            accountIdBid: o.accountIdBid,
+            accountIdAsk: o.accountIdAsk,
             open: o.open
         });
     });

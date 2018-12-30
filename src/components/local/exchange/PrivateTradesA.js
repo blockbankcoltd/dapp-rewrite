@@ -13,7 +13,11 @@ export default class PrivateTradesA extends React.Component{
 
     }
 
+
     componentDidUpdate(prevProps){
+      if(prevProps.data != this.props.data){
+        // console.log("llllllllllllllll", this.props.accountId)
+      }
       // if(prevProps.records !== this.props.records){
       //   let _array = [];
       //   this.props.records.isDeposit.forEach( (o, i) => {
@@ -66,7 +70,7 @@ export default class PrivateTradesA extends React.Component{
                       <tr key={i}>
                         <td>{o.instruement}</td>
                         <td>{this.constructTime(o.timestamp)}</td>
-                        <td>{o.side}</td>
+                        <td>{+o.accountId === +o.accountIdBid ? "BUY" : "SELL"}</td>
                         <td>{divideBigNumbers(o.price, config.basePrice)}</td>
                         {/* <td> {divideBigNumbers(o.qty, transformToTokenName(this.props.trade).decimal)} </td> */}
                         <td> {o.qty} </td>
