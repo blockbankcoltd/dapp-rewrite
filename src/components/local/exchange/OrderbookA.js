@@ -83,7 +83,7 @@ export default class OrderbookA extends React.Component {
                                             </span>
                                         ) : (
                                                 <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceA)}>
-                                                    <div className="CellPublicOrders">{item.volume}</div>
+                                                    <div className="CellPublicOrders">{(+item.volume).toFixed(2)}</div>
                                                     <div className="CellBidPrice CellPrice">{item.priceA}</div>
                                                     <div className="CellMyOrders price">-</div>
                                                 </span>
@@ -104,7 +104,7 @@ export default class OrderbookA extends React.Component {
                                                 <span className="bookrow" key={i} onClick={() => this.handleChangePrice(item.priceB)}>
                                                     <div className="CellMyOrders price">-</div>
                                                     <div className="CellBidPrice CellPrice">{item.priceB}</div>
-                                                    <div className="CellPublicOrders">{item.volume}</div>
+                                                    <div className="CellPublicOrders">{(+item.volume).toFixed(2)}</div>
                                                 </span>
 
                                             )

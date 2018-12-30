@@ -67,7 +67,7 @@ export default class OpenOrdersA extends React.Component {
                 Header: OPEN_ORDERS.TYPE_TEXT,
                 id: OPEN_ORDERS.TYPE_TEXT,
                 class: "headerW",
-                accessor: (d) => d.sells ? "Sell" : "Buy"
+                accessor: (d) => d.isSell ? "Sell" : "Buy"
               }, {
                 Header: OPEN_ORDERS.PRICE_TEXT,
                 id: OPEN_ORDERS.PRICE_TEXT,
@@ -77,7 +77,7 @@ export default class OpenOrdersA extends React.Component {
                 Header: OPEN_ORDERS.TOTAL_TEXT,
                 id: OPEN_ORDERS.TOTAL_TEXT,
                 class: "headerW",
-                accessor: "qtys"
+                accessor: (d) => (+d.qtys).toFixed(2)
               }, 
               // {
               //   Header: OPEN_ORDERS.REMAINING_TEXT,

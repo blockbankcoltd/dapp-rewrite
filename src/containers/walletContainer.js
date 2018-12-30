@@ -14,6 +14,8 @@ import modalupdown_3 from "../assets/images/modalupdown_3.png";
 import modalupdown_4 from "../assets/images/modalupdown_4.png";
 import modaltest1 from "../assets/images/modaltestimg.png";
 import modaltest2 from "../assets/images/modaltestimg2.png";
+import store from "../store/reduxStore";
+import {divideBigNumbers, transformToTokenName} from "../utilities/helpers";
 
 
 class WalletContainer extends Component {
@@ -111,6 +113,24 @@ class WalletContainer extends Component {
     componentDidMount() {
         this.props.getMyAccountId();
         this.props.getBalance();
+        const self = this;
+        const {GlobalSmartContractObject} = store.getState().smartContract;
+        this.newOrders = GlobalSmartContractObject.events.allEvents({
+            address: '0x13f59e0ed9224f646a94f28ca8120fc011b890b8',
+            toBlock: 'latest'
+        }, function (error, result) {
+            console.log(result.event, result.returnValues)
+            if (result !== undefined) {
+                if(result.event === "NewWithdraw"){
+                    self.withdrawEvent(result.returnValues)
+                } else if(result.event === "NewDeposit"){
+                    self.depositEvent(result.returnValues)
+                }
+            }
+        });
+    }
+    componentWillUnMount() {
+        this.newOrders.unsubscribe()
     }
 
 
@@ -171,11 +191,48 @@ class WalletContainer extends Component {
         }
     }
 
+    depositEvent(value) {
+        const {balances} = this.state;
+        const myAccountId = this.props.accountId;
+        const {accountId, amount, prCode} = value;
+        if(myAccountId == accountId) {
+            const token = transformToTokenName(prCode);
+            const parseAmount = divideBigNumbers(amount, token.decimal);
+            const tokenIndex = balances.findIndex(element => element.name == token.productName);
+            balances[tokenIndex].total = +(+balances[tokenIndex].total + +parseAmount).toFixed(8);
+            this.setState({
+                balances
+            })
+        }
+    }
+
+    withdrawEvent(value) {
+        const {balances} = this.state;
+        const myAccountId = this.props.accountId;
+        const {accountId, amount, prCode} = value;
+        if(myAccountId == accountId) {
+            const token = transformToTokenName(prCode);
+            const parseAmount = divideBigNumbers(amount, token.decimal);
+            const tokenIndex = balances.findIndex(element => element.name == token.productName);
+            balances[tokenIndex].total = +(+balances[tokenIndex].total - +parseAmount).toFixed(8);
+            this.setState({
+                balances
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (prevProps.balance !== this.props.balance) {
+            this.setState({balances: this.props.balance});
+        }
+    }
+
     renderTable() {
         const { WALLET } = this.props.languageConfig;
         return(
             <ReactTable
-                data={this.props.balance}
+                data={this.state.balances}
                 columns={[
                     {
                         Header: WALLET.COIN_NAME,

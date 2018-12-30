@@ -14,6 +14,8 @@ import Actions from '../actions/index';
 import { config, filterMarkets } from '../utilities/config';
 import { ToastContainer, toast } from 'react-toastify';
 import ToastComponent from '../components/global/toastComponent'
+import { divideBigNumbers, transformToTokenName } from "../utilities/helpers";
+import store from '../store/reduxStore';
 
 
 class ExchangeContainer extends Component {
@@ -26,7 +28,8 @@ class ExchangeContainer extends Component {
             baseName: '',
             tradeName: '',
             price: 0,
-            marketsData: []
+            marketsData: [],
+            balance:[]
         };
     }
 
@@ -53,6 +56,134 @@ class ExchangeContainer extends Component {
                 tradeCurrency: defaultTrade.productId,
             }
         });
+        const self = this;
+        const {GlobalSmartContractObject} = store.getState().smartContract;
+        this.newOrders = GlobalSmartContractObject.events.allEvents({
+            address: '0x13f59e0ed9224f646a94f28ca8120fc011b890b8',
+            toBlock: 'latest'
+        }, function (error, result) {
+            console.log(result.event, result.returnValues)
+            if (result !== undefined) {
+                if (result.event === "NewOrder" && self.state.orderBook) {
+                    self.batchOrder(result.returnValues);
+                    self.batchMyOrder(result.returnValues);
+                } else if(result.event === "NewTrade") {
+                    setTimeout(() => self.removeMyOrder(result.returnValues,100));
+                } else if(result.event === "NewBestBidAsk") {
+                    self.updateBidAskPrice(result.returnValues);
+                }
+            }
+        });
+
+
+
+    }
+    batchOrder(value) {
+        const {baseCurrency, tradeCurrency, orderBook} = this.state;
+        const {price, qty, prBase, prTrade, isSell} = value;
+        const {priceA, priceB, volumeA, volumeB} = orderBook;
+        if (+prBase !== baseCurrency || +prTrade !== tradeCurrency) {
+            return;
+        }
+        const tradeDecimal = transformToTokenName(prTrade).decimal;
+
+        let remainQty = divideBigNumbers(qty, tradeDecimal);
+        const parsePrice = divideBigNumbers(price, config.basePrice);
+        if (!isSell) {
+            const findPrice = priceB.indexOf(parsePrice.toString());
+
+            Promise.all(priceA.slice().map((p, i) => {
+                if (remainQty === 0) {
+                    return p;
+                } else {
+                    if (+p <= parsePrice) {
+                        if (remainQty < +volumeA[0]) {
+                            volumeA[0] -= remainQty;
+                            remainQty = 0;
+                        } else{
+                            remainQty = (+remainQty - +volumeA[0]);
+                            priceA.shift();
+                            volumeA.shift();
+                        }
+                    }
+                }
+
+            })).then(e => {
+                if (findPrice < 0) {
+                    if (remainQty > 0) {
+                        const findPrice = priceB.find(item => +item < +parsePrice);
+                        if (findPrice) {
+                            const place = priceB.indexOf(findPrice);
+                            priceB.splice(place, 0, parsePrice.toString());
+                            volumeB.splice(place, 0, remainQty.toString());
+                        } else {
+                            priceB.push(parsePrice.toString());
+                            volumeB.push(remainQty.toString());
+                        }
+                    }
+                } else {
+                    volumeB[findPrice] = (+volumeB[findPrice] + +remainQty).toString();
+                }
+            }).then(res => {
+                const newOrderbook = {
+                    priceA: priceA,
+                    priceB: priceB,
+                    volumeA: volumeA,
+                    volumeB: volumeB
+                }
+                this.setState({
+                    orderBook: newOrderbook
+                })
+            })
+
+        } else {
+            const findPrice = priceA.indexOf(parsePrice.toString());
+            Promise.all(priceB.slice().map((p, i) => {
+                if (remainQty === 0) {
+                    return p;
+                } else {
+                    if (+p >= +parsePrice) {
+                        if (remainQty < +volumeB[0]) {
+                            volumeB[0] = (+volumeB[0] - +remainQty).toString();
+                            remainQty = 0;
+                        } else {
+                            remainQty = (+remainQty - +volumeB[0]);
+                            priceB.shift();
+                            volumeB.shift();
+                        }
+                    }
+                }
+
+            })).then(e => {
+                if (findPrice < 0) {
+                    if (remainQty > 0) {
+                        const findPrice = priceA.find(item => +item > +parsePrice);
+                        if (findPrice) {
+                            const place = priceA.indexOf(findPrice);
+                            priceA.splice(place, 0, parsePrice.toString());
+                            volumeA.splice(place, 0, remainQty.toString());
+                        } else {
+                            priceA.push(parsePrice.toString());
+                            volumeA.push(remainQty.toString());
+                        }
+                    }
+                } else {
+                    volumeA[findPrice] = (+volumeA[findPrice] + +remainQty).toString();
+                }
+            }).then(res => {
+                const newOrderbook = {
+                    priceA: priceA,
+                    priceB: priceB,
+                    volumeA: volumeA,
+                    volumeB: volumeB
+                }
+                this.setState({
+                    orderBook: newOrderbook
+                })
+            })
+
+        }
+
     }
 
     componentDidUpdate(prevProps) {
@@ -69,8 +200,12 @@ class ExchangeContainer extends Component {
         if (prevProps.tradeHistory !== this.props.tradeHistory) {
             this.setState({ tradeHistory: this.props.tradeHistory });
         }
+        if (prevProps.balance !== this.props.balance) {
+            this.setState({ balance: this.props.balance });
+        }
 
         if (prevProps.myOrders !== this.props.myOrders) {
+
             let _array = [];
             this.props.myOrders.forEach((o, i) => {
                 if (+o.prBase === this.state.baseCurrency && +o.prTrade === this.state.tradeCurrency) {
@@ -80,7 +215,8 @@ class ExchangeContainer extends Component {
                         prTrade: o.prTrade,
                         prices: o.prices,
                         qtys: o.qtys,
-                        isSell: o.sells
+                        isSell: o.sells,
+                        orderId : o.orderID
                     })
                 }
             });
@@ -173,6 +309,100 @@ class ExchangeContainer extends Component {
 
     }
 
+    updateBidAskPrice(value) {
+        const {marketsData} = this.state;
+        const {price, prBase, prTrade, isBid} = value;
+        const parsePrice = divideBigNumbers(price, config.basePrice);
+        const base = marketsData.findIndex((element) => element.market.productId == prBase);
+        const trade = marketsData[base].market.trades.findIndex((element) => element.productId == prTrade);
+        if(!isBid) {
+            marketsData[base].market.trades[trade].bestBid = parsePrice;
+        } else {
+            marketsData[base].market.trades[trade].bestAsk = parsePrice;
+        }
+        this.setState({
+            marketsData : marketsData
+        })
+    }
+
+    batchMyOrder(value) {
+        const {baseCurrency, tradeCurrency, myOrders, baseName, tradeName, selectedTokensBalances} = this.state;
+        const { myAccountId } = this.props;
+        const {price, qty, prBase, prTrade, isSell, accountId, id} = value;
+        const tradeDecimal = transformToTokenName(prTrade).decimal;
+        const parseQty = divideBigNumbers(qty, tradeDecimal);
+        const parsePrice = divideBigNumbers(price, config.basePrice);
+
+        if(prBase == baseCurrency && prTrade == tradeCurrency && myAccountId == accountId ) {
+            const balanceIndex = selectedTokensBalances.findIndex(element => element.name == baseName);
+            const tradeIndex = selectedTokensBalances.findIndex(element => element.name == tradeName);
+            const total = +(+parseQty * +parsePrice).toFixed(8);
+            if(!isSell){
+                selectedTokensBalances[balanceIndex].hold = (+selectedTokensBalances[balanceIndex].hold + +total).toString();
+                selectedTokensBalances[balanceIndex].total = (+selectedTokensBalances[balanceIndex].total - +total).toString();
+            } else {
+                selectedTokensBalances[tradeIndex].hold = (+selectedTokensBalances[tradeIndex].hold + +parseQty).toString();
+                selectedTokensBalances[tradeIndex].total = (+selectedTokensBalances[tradeIndex].total - +parseQty).toString();
+            }
+
+            this.setState({
+                myOrders : [{
+                    instrumentPair: myOrders[0].instrumentPair,
+                    prBase: prBase,
+                    prTrade: prTrade,
+                    prices: parsePrice,
+                    qtys: parseQty,
+                    isSell: isSell,
+                    orderId : id
+                }, ...myOrders],
+                selectedTokensBalances
+            })
+        }
+    }
+    removeMyOrder(value) {
+        const {accountIdAsk, accountIdBid, askId, bidId, isSell, prBase, prTrade, qty, price} = value;
+        const {baseCurrency, tradeCurrency, myOrders, tradeName, baseName, selectedTokensBalances} = this.state;
+        const { myAccountId } = this.props;
+        const tradeDecimal = transformToTokenName(prTrade).decimal;
+        const parseQty = divideBigNumbers(qty, tradeDecimal);
+        const parsePrice = divideBigNumbers(price, config.basePrice);
+
+        if(prBase == baseCurrency && prTrade == tradeCurrency) {
+            const baseIndex = selectedTokensBalances.findIndex(element => element.name == baseName);
+            const tradeIndex = selectedTokensBalances.findIndex(element => element.name == tradeName);
+            const total = +(+parseQty * +parsePrice).toFixed(8);
+            if(accountIdAsk == myAccountId) {
+                selectedTokensBalances[tradeIndex].hold = (+selectedTokensBalances[tradeIndex].hold - +parseQty).toString();
+                selectedTokensBalances[baseIndex].total = (+selectedTokensBalances[baseIndex].total + +total).toString();
+                const findOrderIndex = myOrders.findIndex((element) => element.orderId == askId);
+
+                myOrders[findOrderIndex].qtys = (+myOrders[findOrderIndex].qtys - +parseQty);
+                if(myOrders[findOrderIndex].qtys == 0) {
+                    myOrders.splice(findOrderIndex,1)
+                }
+            }
+            if(accountIdBid == myAccountId) {
+                selectedTokensBalances[baseIndex].hold = (+selectedTokensBalances[baseIndex].hold - +total).toString();
+                selectedTokensBalances[tradeIndex].total = (+selectedTokensBalances[tradeIndex].total + +parseQty).toString();
+                const findOrderIndex = myOrders.findIndex((element) => element.orderId == bidId);
+                if(+myOrders[findOrderIndex].prices > +parsePrice) {
+                    const diffPrice = +(+myOrders[findOrderIndex].prices - +parsePrice).toFixed(8);
+                    const diffTotal = +(+parseQty * +diffPrice).toFixed(8);
+                    selectedTokensBalances[baseIndex].total = (+selectedTokensBalances[baseIndex].total + +diffTotal).toString();
+                    selectedTokensBalances[baseIndex].hold = (+selectedTokensBalances[baseIndex].hold - +diffTotal).toString();
+                }
+                myOrders[findOrderIndex].qtys = (+myOrders[findOrderIndex].qtys - +parseQty);
+                if(myOrders[findOrderIndex].qtys == 0) {
+                    myOrders.splice(findOrderIndex,1)
+                }
+            }
+            this.setState({
+                myOrders,
+                selectedTokensBalances
+            })
+        }
+    }
+
     handleBuySellPrice = (val) => {
         this.setState({ price: val });
     }
@@ -249,7 +479,6 @@ class ExchangeContainer extends Component {
                                             languageConfig={this.props.languageConfig}
                                             baseName={this.state.baseName}
                                             tradeName={this.state.tradeName}
-                                            balance={this.props.balance}
                                             selectedTokensBalances={this.state.selectedTokensBalances}
                                         />
 
