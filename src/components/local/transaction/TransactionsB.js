@@ -51,7 +51,7 @@ export default class TransactionsB extends React.Component{
                             Header: TRADES.QUANTITY_TEXT,
                             id: TRADES.QUANTITY_TEXT,
                             class: "headerW",
-                            accessor: d => divideBigNumbers(d.qtys, transformToTokenName(d.prCode).decimal)
+                            accessor:"qtys"
                         },
                         // {
                         //     Header: OPEN_ORDERS.PRICE_TEXT,
