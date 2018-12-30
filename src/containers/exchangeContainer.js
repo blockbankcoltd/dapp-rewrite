@@ -43,6 +43,9 @@ class ExchangeContainer extends Component {
         this.changeTabData(1);
         this.props.getMyOrders(3, 1);
         this.props.getMyAccountId();
+        // if(this.state.accountID){
+        //     this.props.fetchTradeHistory(this.state.accountID, 3, 1);
+        // }
         this.setState((state, props) => {
             return {
                 marketsData: marketDataFromConfig,
@@ -219,10 +222,10 @@ class ExchangeContainer extends Component {
 
         if (prevProps.orderBook !== this.props.orderBook) {
             this.setState({ orderBook: this.props.orderBook });
+            this.props.fetchTradeHistory(this.props.myAccountId, 3, 1);
         }
 
         if (prevProps.myAccountId !== this.props.myAccountId) {
-            this.props.fetchTradeHistory(this.props.myAccountId, 3, 1);
             this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
         }
 
@@ -286,7 +289,6 @@ class ExchangeContainer extends Component {
 
     changeTradeCurrency = (base, trade) => {
 
-        console.log("Set BASE AND TRADE --> ", this.props.myOrders);
         const baseObj = filterMarkets().find(data => data.market.productId === base);
         const tradeObj = baseObj.market.trades.find(data => data.productId === trade);
 
@@ -297,7 +299,6 @@ class ExchangeContainer extends Component {
         const filteredData = this.props.myOrders && this.props.myOrders.filter(obj => {
             return +obj.prBase === base && +obj.prTrade === trade
         });
-        console.log("FilteredData --> ", filteredData, this.props.myOrders);
 
         let _array = [];
         this.props.myOrders.forEach((o, i) => {
@@ -346,35 +347,6 @@ class ExchangeContainer extends Component {
     placeSellOrder = (price, amount) => {
         this.props.placeSellOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
     }
-
-    notify = (status) => {
-        if (status === 'success') {
-            return toast.success(<ToastComponent message={"Hi"} />, {
-                position: toast.POSITION.BOTTOM_CENTER
-            })
-        }
-        if (status === 'error') {
-            return toast.error(<ToastComponent message={"Hi"} />, {
-                position: toast.POSITION.BOTTOM_CENTER
-            })
-        }
-        if (status === 'warning') {
-            return toast.warn(<ToastComponent message={"Hi"} />, {
-                position: toast.POSITION.BOTTOM_CENTER
-            })
-        }
-        if (status === 'info') {
-            return toast.info(<ToastComponent message={"Hi"} />, {
-                position: toast.POSITION.BOTTOM_CENTER
-            })
-        }
-        if (status === 'custom') {
-            return toast(<ToastComponent message={"Hi"} />, {
-                position: toast.POSITION.BOTTOM_RIGHT,
-                className: 'toasty'
-            });
-        }
-    };
 
     render() {
         const { ORDER_HISTORY, TRADES } = this.props.languageConfig;

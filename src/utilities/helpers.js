@@ -1,3 +1,4 @@
+import React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { config } from './config';
 import { Decimal } from 'decimal.js';
@@ -115,18 +116,19 @@ export const convertPriceEach = (element, prTradeDecimal) => {
 }
 
 
-// export const etherscanUrl = network => {
-//   return `https://${ network !== "main" ? `${network}.` : "" }etherscan.io`;
-// }
+export const etherscanUrl = network => {
+  return `https://${ network !== "main" ? `${network}.` : "" }etherscan.io`;
+}
 
 // export const etherscanAddress = (network, text, address) => {
 //   return <a className="address" href={`${etherscanUrl(network)}/address/${address}`} target="_blank"
 //             rel="noopener noreferrer">{text}</a>
 // }
 
-// export const etherscanTx = (network, text, tx) => {
-//   return <a href={`${etherscanUrl(network)}/tx/${tx}`} target="_blank" rel="noopener noreferrer">{text}</a>
-// }
+export const etherscanTx = (network, text, tx) => {
+	let link = `${etherscanUrl(network)}/tx/${tx}`;
+  return <a href={`${etherscanUrl(network)}/tx/${tx}`} target="_blank" rel="noopener noreferrer">{ text + " : " + link}</a>
+}
 
 // export const etherscanToken = (network, text, token, holder = false) => {
 //   return <a href={`${etherscanUrl(network)}/token/${token}${holder ? `?a=${holder}` : ""}`} target="_blank"
