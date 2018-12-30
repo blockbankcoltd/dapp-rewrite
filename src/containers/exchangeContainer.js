@@ -41,8 +41,8 @@ class ExchangeContainer extends Component {
         this.changeTabData(1);
         this.props.getMyOrders(3, 1);
         this.props.getMyAccountId();
+        this.props.fetchTradeHistory(null, 3, 1);
         // if(this.state.accountID){
-        //     this.props.fetchTradeHistory(this.state.accountID, 3, 1);
         // }
         this.setState((state, props) => {
             return {
@@ -59,7 +59,7 @@ class ExchangeContainer extends Component {
 
         if (prevProps.orderBook !== this.props.orderBook) {
             this.setState({ orderBook: this.props.orderBook });
-            this.props.fetchTradeHistory(this.props.myAccountId, 3, 1);
+            // this.props.fetchTradeHistory(null, 3, 1);
         }
 
         if (prevProps.myAccountId !== this.props.myAccountId) {
@@ -130,7 +130,7 @@ class ExchangeContainer extends Component {
         const tradeObj = baseObj.market.trades.find(data => data.productId === trade);
 
         this.props.getOrderbook(trade, base, 10);
-        this.props.fetchTradeHistory(this.props.myAccountId, trade, base);
+        this.props.fetchTradeHistory(null, trade, base);
         this.props.fetchOrderHistory(this.props.myAccountId, trade, base);
 
         const filteredData = this.props.myOrders && this.props.myOrders.filter(obj => {

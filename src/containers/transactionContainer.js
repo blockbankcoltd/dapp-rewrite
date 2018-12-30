@@ -39,6 +39,9 @@ class TransactionContainer extends Component {
     componentDidMount() {
         this.props.getMyAccountId();
         this.props.getMyOrders();
+        if(this.state.accountId){
+            this.props.fetchOrderHistory(this.state.accountId, null, null);
+        }
     }
 
     componentDidUpdate(prevProps){
@@ -46,11 +49,12 @@ class TransactionContainer extends Component {
             this.setState( {
                 myOrders: this.props.myOrders
             });
+            this.props.getDWRecords(this.props.myAccountId);
+            this.props.fetchOrderHistory(this.props.myAccountId, null, null);
         }
 
         if(prevProps.myAccountId !== this.props.myAccountId){
-            this.props.getDWRecords(this.props.myAccountId);
-            this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
+            this.setState({accountId: this.props.myAccountId});
         }
         
         if(prevProps.orderHistory !== this.props.orderHistory){
@@ -79,7 +83,7 @@ class TransactionContainer extends Component {
 
     fetchData = (index) =>  {
         if(index === 0){
-            this.props.fetchOrderHistory(this.props.myAccountId, 3, 1);
+            this.props.fetchOrderHistory(this.props.myAccountId, null, null);
         }
         else if(index === 1){
             this.props.getMyOrders();
