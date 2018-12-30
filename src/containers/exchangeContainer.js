@@ -77,24 +77,6 @@ class ExchangeContainer extends Component {
         // this.notify('custom');
     }
 
-    makeObj(data, num) {
-        let _obj = {
-            bidOrder: [],
-            askOrder: []
-        }
-        for (let i = 0; i < num; i++) {
-            _obj.bidOrder.push({
-                priceA: data.priceA[i] || 0,
-                volume: data.volumeA[i] || 0
-            });
-            _obj.askOrder.push({
-                priceB: data.priceB[i] || 0,
-                volume: data.volumeB[i] || 0
-            });
-        }
-        return _obj;
-    }
-
     batchOrder(value) {
         const {baseCurrency, tradeCurrency, orderBook} = this.state;
         const {price, qty, prBase, prTrade, isSell} = value;
