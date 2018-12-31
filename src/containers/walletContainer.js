@@ -123,50 +123,45 @@ class WalletContainer extends Component {
     }
 
     deposit = (e, cellInfo) => {
-        if(this.state.Amount_price_deposit > 0){
-            let amount = this.state.Amount_price_deposit;
-            let tokenObj = cellInfo.original;
-            if(amount !== null && tokenObj.name === 'ETH'){
-                this.props.depositEth(amount);
-            }else if(amount !== null && tokenObj.name !== 'ETH'){
-                console.log("Token address --> ", tokenObj);
-                this.props.depositToken(tokenObj.tokenAddress, amount);
-            }else{
-                console.log("Cancelled")
-            }
+        let amount = this.state.Amount_price_deposit;
+        let tokenObj = cellInfo.original;
+        if(amount !== null && tokenObj.name === 'ETH'){
+            this.props.depositEth(amount);
+            this.setState({
+                open:false
+            })
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
+            console.log("Token address --> ", tokenObj);
+            this.props.depositToken(tokenObj.tokenAddress, amount);
+            this.setState({
+                open:false
+            })
+        }else{
+            console.log("Cancelled")
         }
-        this.setState({
-            open: false
-        })
-        
     }
 
     withdraw = (e, cellInfo) => {
-        if(this.state.Amount_price_withdraw > 0){
-            let amount = this.state.Amount_price_withdraw;
-            let tokenObj = cellInfo.original;
-            if(amount !== null && tokenObj.name === 'ETH'){
-                this.props.withdrawEth(amount);
-            }else if(amount !== null && tokenObj.name !== 'ETH'){
-                this.props.withdrawToken(tokenObj.tokenAddress, amount);
-            }else{
-                console.log("Cancelled")
-            }
+        let amount = this.state.Amount_price_withdraw;
+        let tokenObj = cellInfo.original;
+        if(amount !== null && tokenObj.name === 'ETH'){
+            this.props.withdrawEth(amount);
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
+            this.props.withdrawToken(tokenObj.tokenAddress, amount);
+        }else{
+            console.log("Cancelled")
         }
-        this.setState({
-            open: false
-        })
     }
 
 
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
             return<div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
             </div>
         } else {
             return <div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
             </div>
         }
     }
@@ -355,7 +350,7 @@ class WalletContainer extends Component {
                                 </ul>
                             </div>
                             <div className="asset_balance">
-                                {/* <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button> */}
+                                <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button>
                                 <div>
                                     <div className="tab_list" />
                                     <div className="wallet_info">
@@ -568,8 +563,8 @@ const ModalBoxB = styled.div`
                     display:flex;
                     .Data_text{
                         flex:1;
-                        margin-right:15px;
-                        margin-left:95px;
+                        margin-right:10px;
+                        margin-left:92px;
                         font-size:26px;
                         line-height:36px;
                         input{
@@ -742,8 +737,8 @@ const ModalBoxC = styled.div`
                     display:flex;
                     .Data_text{
                         flex:1;
-                        margin-right:15px;
-                        margin-left:95px;
+                        margin-right:10px;
+                        margin-left:92px;
                         font-size:26px;
                         line-height:36px;
                         input{
