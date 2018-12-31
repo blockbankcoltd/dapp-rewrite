@@ -14,7 +14,7 @@ export default class OpenOrdersB extends React.Component {
 
     cancelOrder = (event, cellInfo) => {
         let dataObject = cellInfo.original;
-        console.log("Cancelling Order -> ", dataObject);
+        console.log("Cancelling Order -> ", dataObject, this.props.data);
         return this.props.cancelOrder(dataObject);
     }
 

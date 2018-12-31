@@ -81,7 +81,8 @@ class ExchangeContainer extends Component {
                         prTrade: o.prTrade,
                         prices: o.prices,
                         qtys: o.qtys,
-                        isSell: o.sells
+                        isSell: o.sells,
+                        orderID: o.orderID
                     })
                 }
             });
@@ -147,7 +148,8 @@ class ExchangeContainer extends Component {
                     prTrade: o.prTrade,
                     price: o.prices,
                     qty: o.qtys,
-                    isSell: o.sells
+                    isSell: o.sells,
+                    orderID: o.orderID
                 })
             }
         });
@@ -184,6 +186,11 @@ class ExchangeContainer extends Component {
 
     placeSellOrder = (price, amount) => {
         this.props.placeSellOrder(price, amount, this.state.baseCurrency, this.state.tradeCurrency);
+    }
+
+    cancelOpenOrder = (val) => {
+        console.log("object for cancel --> ", val);
+        this.props.cancelOrderRequest(val)
     }
 
     render() {
@@ -240,6 +247,7 @@ class ExchangeContainer extends Component {
                                         languageConfig={this.props.languageConfig}
                                         data={this.state.orderBook}
                                         handleChangePrice={this.handleBuySellPrice}
+                                        
                                     />
                                 </div>
 
@@ -315,7 +323,7 @@ class ExchangeContainer extends Component {
                                             id="historyTab"
                                             className={this.state.tabSelected === 0 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <OpenOrdersA languageConfig={this.props.languageConfig} data={this.state.myOrders} base={this.state.baseCurrency} trade={this.state.tradeCurrency} />
+                                            <OpenOrdersA languageConfig={this.props.languageConfig} data={this.state.myOrders} base={this.state.baseCurrency} trade={this.state.tradeCurrency} cancelOrderRequest={ this.cancelOpenOrder}/>
                                         </div>
                                         <div
                                             id="tradesTab"
@@ -390,6 +398,7 @@ const mapDispatchToProps = (dispatch) => {
         getMyAccountId: () => dispatch(Actions.smartContract.getMyAccountIdRequest()),
         fetchTradeHistory: (x, y, z) => dispatch(Actions.global.fetchTradeHistory(x, y, z)),
         fetchOrderHistory: (x, y, z) => dispatch(Actions.global.fetchOrderHistory(x, y, z)),
+        cancelOrderRequest: (x) => dispatch(Actions.smartContract.cancelOrderRequest(x)),
     }
 }
 

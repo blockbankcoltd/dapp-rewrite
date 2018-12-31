@@ -30,6 +30,16 @@ export default class OpenOrdersA extends React.Component {
     this.setState({ page })
   }
 
+  cancelOpenOrder = (event, data) => {
+    console.log("Cancel Clicked --> ", data.original);
+    this.props.cancelOrderRequest(data.original.orderID);
+  }
+
+  renderCancelButton = (val) => {
+    
+    return <button onClick={ (e) => this.cancelOpenOrder(e, val)}>&times;</button>
+  }
+
   render() {
     const { TRANSACTION, OPEN_ORDERS } = this.props.languageConfig;
     const maxLines = 5; // maximum of show orders
@@ -89,12 +99,13 @@ export default class OpenOrdersA extends React.Component {
               //   id: OPEN_ORDERS.TIME_TEXT,
               //   class: "headerW",
               //   accessor: OPEN_ORDERS.TIME_TEXT
-              // }, {
-              //   Header: OPEN_ORDERS.CANCEL,
-              //   id: OPEN_ORDERS.CANCEL,
-              //   class: "headerW",
-              //   accessor: OPEN_ORDERS.CANCEL
-              // },
+              // }, 
+              {
+                // Header: OPEN_ORDERS.CANCEL,
+                id: OPEN_ORDERS.CANCEL,
+                class: "headerW",
+                Cell: (d) => this.renderCancelButton(d)
+              }
 
             ]}
             defaultPageSize={10}
