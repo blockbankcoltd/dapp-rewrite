@@ -14,7 +14,18 @@ import modalupdown_3 from "../assets/images/modalupdown_3.png";
 import modalupdown_4 from "../assets/images/modalupdown_4.png";
 import modaltest1 from "../assets/images/modaltestimg.png";
 import modaltest2 from "../assets/images/modaltestimg2.png";
-
+import ETH from "../assets/images/icon/eth.png";
+import LNC from "../assets/images/icon/lnc.png";
+import BAT from "../assets/images/icon/bat.png";
+import OMG from "../assets/images/icon/omg.png";
+import VIKKY from "../assets/images/icon/vikky.png";
+import BTCB from "../assets/images/icon/btcb.png";
+import NDI from "../assets/images/icon/vote1.png";
+import VAT from "../assets/images/icon/cymt.png";
+import BNB from "../assets/images/icon/bnb.png";
+import ICON from "../assets/images/icon/icon.png";
+import TUSD from "../assets/images/icon/tusd.png";
+import VIEN from "../assets/images/icon/wab.png";
 
 class WalletContainer extends Component {
     constructor(props) {
@@ -123,50 +134,100 @@ class WalletContainer extends Component {
     }
 
     deposit = (e, cellInfo) => {
-        if(this.state.Amount_price_deposit > 0){
-            let amount = this.state.Amount_price_deposit;
-            let tokenObj = cellInfo.original;
-            if(amount !== null && tokenObj.name === 'ETH'){
-                this.props.depositEth(amount);
-            }else if(amount !== null && tokenObj.name !== 'ETH'){
-                console.log("Token address --> ", tokenObj);
-                this.props.depositToken(tokenObj.tokenAddress, amount);
-            }else{
-                console.log("Cancelled")
-            }
+        let amount = this.state.Amount_price_deposit;
+        let tokenObj = cellInfo.original;
+        if(amount !== null && tokenObj.name === 'ETH'){
+            this.props.depositEth(amount);
+            this.setState({
+                open:false
+            })
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
+            console.log("Token address --> ", tokenObj);
+            this.props.depositToken(tokenObj.tokenAddress, amount);
+            this.setState({
+                open:false
+            })
+        }else{
+            console.log("Cancelled")
         }
-        this.setState({
-            open: false
-        })
-        
     }
 
     withdraw = (e, cellInfo) => {
-        if(this.state.Amount_price_withdraw > 0){
-            let amount = this.state.Amount_price_withdraw;
-            let tokenObj = cellInfo.original;
-            if(amount !== null && tokenObj.name === 'ETH'){
-                this.props.withdrawEth(amount);
-            }else if(amount !== null && tokenObj.name !== 'ETH'){
-                this.props.withdrawToken(tokenObj.tokenAddress, amount);
-            }else{
-                console.log("Cancelled")
-            }
+        let amount = this.state.Amount_price_withdraw;
+        let tokenObj = cellInfo.original;
+        if(amount !== null && tokenObj.name === 'ETH'){
+            this.props.withdrawEth(amount);
+        }else if(amount !== null && tokenObj.name !== 'ETH'){
+            this.props.withdrawToken(tokenObj.tokenAddress, amount);
+        }else{
+            console.log("Cancelled")
         }
-        this.setState({
-            open: false
-        })
     }
 
 
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
             return<div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
             </div>
         } else {
             return <div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw</button>
+                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
+            </div>
+        }
+    }
+    renderEditable_img(cellInfo){
+        if(cellInfo.original.name==="ETH"){
+            return<div>
+                <img src={ETH}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="LNC"){
+            return<div>
+                <img src={LNC}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="BAT"){
+            return<div>
+                <img src={BAT}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="OMG"){
+            return<div>
+                <img src={OMG}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="VIKKY"){
+            return<div>
+                <img src={VIKKY}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="BTCB"){
+            return<div>
+                <img src={BTCB}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="NDI"){
+            return<div>
+                <img src={NDI}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="VAT"){
+            return<div>
+                <img src={VAT}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="BNB"){
+            return<div>
+                <img src={BNB}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="ICON"){
+            return<div>
+                <img src={ICON}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="TUSD"){
+            return<div>
+                <img src={TUSD}/>{cellInfo.original.name}
+            </div>
+        }else if(cellInfo.original.name==="VIEN"){
+            return<div>
+                <img src={VIEN}/>{cellInfo.original.name}
+            </div>
+        }else{
+            return<div>
+                coin_name null
             </div>
         }
     }
@@ -180,7 +241,7 @@ class WalletContainer extends Component {
                     {
                         Header: WALLET.COIN_NAME,
                         id: "product",
-                        accessor: "name"
+                        Cell: (d) => this.renderEditable_img(d)
                     },
                     {
                         Header: WALLET.TOTAL,
@@ -193,13 +254,14 @@ class WalletContainer extends Component {
                         accessor: d => d.hold.toString()
                     },
                     {
-                        Header: WALLET.IN,
+                        Header: WALLET.DEPOSIT_BTN,
                         id: "deposit_buttons",
+
                         // accessor: d => <div><button type="button">Deposit</button></div>,
                         Cell: (d) => this.renderEditable(d, "deposit")
                     },
                     {
-                        // Header: "Pending Deposits",
+                        Header: WALLET.WITHDRAW_BTN,
                         id: "withdraw_buttons",
                         // accessor: d => <div><button type="button">Withdraw</button></div>,
                         Cell: (d) => this.renderEditable(d, "withdraw")
@@ -215,7 +277,6 @@ class WalletContainer extends Component {
     render() {
         const { WALLET } = this.props.languageConfig;
         // this.callFunction(this.props.accountId);
-        console.log(this.state.selectToken)
         return (
             <Wallet>
                 <section className="main" role="">
@@ -355,7 +416,6 @@ class WalletContainer extends Component {
                                 </ul>
                             </div>
                             <div className="asset_balance">
-                                {/* <button onClick={(e)=>this.onOpenModalA(e)} type="button" value="gas">Settings Gas Fee</button> */}
                                 <div>
                                     <div className="tab_list" />
                                     <div className="wallet_info">
@@ -568,8 +628,8 @@ const ModalBoxB = styled.div`
                     display:flex;
                     .Data_text{
                         flex:1;
-                        margin-right:15px;
-                        margin-left:95px;
+                        margin-right:10px;
+                        margin-left:92px;
                         font-size:26px;
                         line-height:36px;
                         input{
@@ -742,8 +802,8 @@ const ModalBoxC = styled.div`
                     display:flex;
                     .Data_text{
                         flex:1;
-                        margin-right:15px;
-                        margin-left:95px;
+                        margin-right:10px;
+                        margin-left:92px;
                         font-size:26px;
                         line-height:36px;
                         input{

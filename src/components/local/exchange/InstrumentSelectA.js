@@ -4,6 +4,18 @@ import { isMobile } from 'react-device-detect';
 import updown_1 from "../../../assets/images/updown_1.png";
 import updown_2 from "../../../assets/images/updown_2.png";
 import updown_3 from "../../../assets/images/updown_3.png";
+import ETH from "../../../assets/images/icon/eth.png";
+import LNC from "../../../assets/images/icon/lnc.png";
+import BAT from "../../../assets/images/icon/bat.png";
+import OMG from "../../../assets/images/icon/omg.png";
+import VIKKY from "../../../assets/images/icon/vikky.png";
+import BTCB from "../../../assets/images/icon/btcb.png";
+import NDI from "../../../assets/images/icon/vote1.png";
+import VAT from "../../../assets/images/icon/cymt.png";
+import BNB from "../../../assets/images/icon/bnb.png";
+import ICON from "../../../assets/images/icon/icon.png";
+import TUSD from "../../../assets/images/icon/tusd.png";
+import VIEN from "../../../assets/images/icon/wab.png";
 
 
 export default class InstrumentSelectA extends React.Component {
@@ -15,7 +27,7 @@ export default class InstrumentSelectA extends React.Component {
             sortType: 'up-char',
             activeTabData: [],
             activeBaseToken: null,
-            activeTab: 0
+            activeTab: 0,
         }
     }
 
@@ -185,7 +197,41 @@ export default class InstrumentSelectA extends React.Component {
                                     className="instrument-*coinSymbol"
                                     style={{border: "none", fontWeight: "bold", display: "table-row"}}
                                 >
-                                    <td className="coinSymbol">{obj.productName}</td>
+                                    <td className="coinSymbol">
+                                        {
+                                            obj.productName === "BAT" &&
+                                            <img src={BAT}/>
+                                        }
+                                        {
+                                            obj.productName === "OMG" &&
+                                            <img src={OMG}/>
+                                        }
+                                        {
+                                            obj.productName === "VIKKY" &&
+                                            <img src={VIKKY}/>
+                                        }
+                                        {
+                                            obj.productName === "BTCB" &&
+                                            <img src={BTCB}/>
+                                        }
+                                        {
+                                            obj.productName === "NDI" &&
+                                            <img src={NDI}/>
+                                        }
+                                        {
+                                            obj.productName === "VAT" &&
+                                            <img src={VAT}/>
+                                        }
+                                        {
+                                            obj.productName === "BNB" &&
+                                            <img src={BNB}/>
+                                        }
+                                        {
+                                            obj.productName === "ICON" &&
+                                            <img src={ICON}/>
+                                        }
+                                    {obj.productName}
+                                    </td>
                                     <td className="up dataNumber">{obj.bestBid}</td>
                                     <td className="up dataNumber">{obj.bestAsk}</td>
                                 </tr>

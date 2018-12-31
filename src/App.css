@@ -42,3 +42,8 @@
   font-size: 13px;
   text-align: center;
 }
+.toast-notification a{
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
