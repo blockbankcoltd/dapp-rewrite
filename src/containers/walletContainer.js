@@ -188,13 +188,14 @@ class WalletContainer extends Component {
                         accessor: d => d.hold.toString()
                     },
                     {
-                        Header: WALLET.IN,
+                        Header: WALLET.DEPOSIT_BTN,
                         id: "deposit_buttons",
+
                         // accessor: d => <div><button type="button">Deposit</button></div>,
                         Cell: (d) => this.renderEditable(d, "deposit")
                     },
                     {
-                        // Header: "Pending Deposits",
+                        Header: WALLET.WITHDRAW_BTN,
                         id: "withdraw_buttons",
                         // accessor: d => <div><button type="button">Withdraw</button></div>,
                         Cell: (d) => this.renderEditable(d, "withdraw")
