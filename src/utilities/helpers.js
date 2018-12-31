@@ -2,6 +2,7 @@ import React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { config } from './config';
 import { Decimal } from 'decimal.js';
+import Web3 from 'web3';
 import BN from 'bn.js';
 
 export const fetchNetwork = () => {
@@ -60,7 +61,7 @@ export const filterMarkets = () => {
 
 export const fetchAccounts = async (Web3Object) => {
 	await new Promise((resolve, reject) => {
-		Web3Object.eth.getAccounts( (err, accountsArray) => { 
+		Web3Object.eth.getAccounts( (err, accountsArray) => {
 			if(err){
 					return reject(err);
 			}else{
@@ -89,7 +90,7 @@ export const divideBigNumbers = (number, divisor) => {
 export const multiplyBigNumbers = (num, mul) => {
   try {
     let result = new Decimal(num).mul(new Decimal(mul));
-    return new BN(result.toString(10));
+    return Web3.utils.toBN(result.toHexadecimal());
   } catch (e) {
     console.log(e);
   }

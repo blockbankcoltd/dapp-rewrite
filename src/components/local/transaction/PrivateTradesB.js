@@ -42,7 +42,6 @@ export default class PrivateTradesB extends React.Component{
                             Header: TRADES.QUANTITY_TEXT,
                             id: TRADES.QUANTITY_TEXT,
                             class: "headerW",
-                            // accessor: d => divideBigNumbers(d.qty, transformToTokenName(d.prTrade).decimal)
                             accessor: d => d.qty
                         },{
                             Header: TRADES.PRICE_TEXT,
@@ -86,5 +85,5 @@ export default class PrivateTradesB extends React.Component{
 }
 
 const PrivateOrder = styled.div`
-  
+
 `
