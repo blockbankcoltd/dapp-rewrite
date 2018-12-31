@@ -31,8 +31,7 @@ export default class TickerA extends React.Component{
 
               <div className="currentCurrency">
                 <div className='currentCurrencyLh'>
-                  <div className="lastPrice">
-                                *last price
+                  <div className="lastPrice">-
                     <span>{this.props.baseName}</span>
                   </div>
                   <div className="currentDayPx">
@@ -40,30 +39,30 @@ export default class TickerA extends React.Component{
                     <div
                       className="cuKrw"
                     >
-*in/decrease price
+0
                     </div>
-                    <div className="cuPer">*in/decrease percent</div>
+                    <div className="cuPer">0</div>
                   </div>
                 </div>
                 <div className="currentCurrencyRh">
-                  <div className="priceToKrw">*KRW conversion price</div>
+                  <div className="priceToKrw">0</div>
                 </div>
               </div>
               <div className='priceStatus'>
                 <div className="priceHigh priceStatusRoot">
                   <p className="remark">{EXCHANGE_PAGE.HIGH}</p>
                   <div className="dataNumber">
-                                *High price
+                                -
 
-                    <p className="priceToKrw">*KRW conversion price</p>
+                    <p className="priceToKrw">-</p>
                   </div>
                 </div>
                 <div className="priceLow priceStatusRoot">
                   <p className="remark">{EXCHANGE_PAGE.LOW}</p>
                   <div className="dataNumber">
-                                *Low price
+                                -
 
-                    <p className="priceToKrw">*KRW conversion price</p>
+                    <p className="priceToKrw">-</p>
                   </div>
                 </div>
               </div>
