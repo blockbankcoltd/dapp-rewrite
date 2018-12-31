@@ -68,7 +68,7 @@ class HomeContainer extends Component {
                                 </VisualText>
                                 {this.LoginArea}
                             </div>
-                            <div className="coin_wrap">
+                            {/*<div className="coin_wrap">
                                 <div className="head_cont">
                                     <table className="coin_table">
                                         <thead>
@@ -85,7 +85,7 @@ class HomeContainer extends Component {
                                         <tbody />
                                     </table>
                                 </div>
-                            </div>
+                            </div>*/}
                         </div>
                     </div>
                 </MainVisual>
