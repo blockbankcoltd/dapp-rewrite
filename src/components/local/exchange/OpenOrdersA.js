@@ -31,13 +31,19 @@ export default class OpenOrdersA extends React.Component {
   }
 
   cancelOpenOrder = (event, data) => {
-    console.log("Cancel Clicked --> ", data.original);
     this.props.cancelOrderRequest(data.original.orderID);
   }
 
   renderCancelButton = (val) => {
     
-    return <button onClick={ (e) => this.cancelOpenOrder(e, val)}>&times;</button>
+    return <button style={{
+      backgroundColor: "red",
+      color: "white",
+      boxShadow: "none",
+      backgroundImage: "none",
+      border: 0,
+      borderRadius: "2px",
+      padding: "5px 10px"}} onClick={ (e) => this.cancelOpenOrder(e, val)}>Cancel</button>
   }
 
   render() {
@@ -71,23 +77,27 @@ export default class OpenOrdersA extends React.Component {
                 Header: OPEN_ORDERS.INSTRUMENT_TEXT,
                 id: OPEN_ORDERS.INSTRUMENT_TEXT,
                 class: "headerW",
-                accessor: (d) => d.instrumentPair
+                accessor: (d) => d.instrumentPair,
+                width: "auto"
               },
               {
                 Header: OPEN_ORDERS.TYPE_TEXT,
                 id: OPEN_ORDERS.TYPE_TEXT,
                 class: "headerW",
-                accessor: (d) => d.sells ? "Sell" : "Buy"
+                accessor: (d) => d.sells ? "Sell" : "Buy",
+                width: "auto"
               }, {
                 Header: OPEN_ORDERS.PRICE_TEXT,
                 id: OPEN_ORDERS.PRICE_TEXT,
                 class: "headerW",
-                accessor: "prices"
+                accessor: "prices",
+                width: "auto"
               }, {
                 Header: OPEN_ORDERS.TOTAL_TEXT,
                 id: OPEN_ORDERS.TOTAL_TEXT,
                 class: "headerW",
-                accessor: "qtys"
+                accessor: "qtys",
+                width: "auto"
               }, 
               // {
               //   Header: OPEN_ORDERS.REMAINING_TEXT,
@@ -101,10 +111,11 @@ export default class OpenOrdersA extends React.Component {
               //   accessor: OPEN_ORDERS.TIME_TEXT
               // }, 
               {
-                // Header: OPEN_ORDERS.CANCEL,
+                Header: OPEN_ORDERS.CANCEL,
                 id: OPEN_ORDERS.CANCEL,
                 class: "headerW",
-                Cell: (d) => this.renderCancelButton(d)
+                Cell: (d) => this.renderCancelButton(d),
+                width: "auto"
               }
 
             ]}
