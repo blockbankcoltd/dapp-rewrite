@@ -68,24 +68,26 @@ class HomeContainer extends Component {
                                 </VisualText>
                                 {this.LoginArea}
                             </div>
-                            <div className="coin_wrap">
-                                <div className="head_cont">
-                                    <table className="coin_table">
-                                        <thead>
+                            {/*
+                                <div className="coin_wrap">
+                                    <div className="head_cont">
+                                        <table className="coin_table">
+                                            <thead>
                                             <tr>
                                                 <th className="coinName">{INDEX.NAME}</th>
                                                 <th>{INDEX.PRICE}</th>
                                                 <th>{INDEX.PXCHANGE}</th>
                                             </tr>
-                                        </thead>
-                                    </table>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div className="price_cont">
+                                        <table>
+                                            <tbody/>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div className="price_cont">
-                                    <table>
-                                        <tbody />
-                                    </table>
-                                </div>
-                            </div>
+                           */ }
                         </div>
                     </div>
                 </MainVisual>
