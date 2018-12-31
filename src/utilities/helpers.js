@@ -2,6 +2,7 @@ import React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { config } from './config';
 import { Decimal } from 'decimal.js';
+import Web3 from 'web3';
 import BN from 'bn.js';
 
 export const fetchNetwork = () => {
