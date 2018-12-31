@@ -168,61 +168,61 @@ class WalletContainer extends Component {
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
             return<div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
+                <button type="button" style={{marginLeft:'70px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
             </div>
         } else {
             return <div>
-                <button type="button" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
+                <button type="button" style={{marginLeft:'65px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
             </div>
         }
     }
     renderEditable_img(cellInfo){
         if(cellInfo.original.name==="ETH"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={ETH}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="LNC"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={LNC}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="BAT"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={BAT}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="OMG"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={OMG}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="VIKKY"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={VIKKY}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="BTCB"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={BTCB}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="NDI"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={NDI}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="VAT"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={VAT}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="BNB"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={BNB}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="ICON"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={ICON}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="TUSD"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={TUSD}/>{cellInfo.original.name}
             </div>
         }else if(cellInfo.original.name==="VIEN"){
-            return<div>
+            return<div className="coin_icon">
                 <img src={VIEN}/>{cellInfo.original.name}
             </div>
         }else{
@@ -1016,6 +1016,9 @@ const Wallet = styled.div`
         .tab_list {
             float: right;
             margin: 0 0 20px;
+            .POP_btn{
+                margin-left:70px;
+            }
             span {
                 display: block;
                 background: #999;
@@ -1189,6 +1192,13 @@ const Wallet = styled.div`
                     }
                 }
             }
+        }
+        .coin_icon{
+            img{
+                position:relative;
+                top:4px;
+                margin-right:5px;
+             }
         }
     }
     @media(max-width: 1024px) {

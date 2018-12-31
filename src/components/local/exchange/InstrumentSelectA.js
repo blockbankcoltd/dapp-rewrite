@@ -164,10 +164,10 @@ export default class InstrumentSelectA extends React.Component {
                                 <th
                                     width="33%"
                                     onClick={() => {
-                                        this.selectSort('bid');
+                                        this.selectSort('ask');
                                     }}
                                 >
-                                    {INSTRUMENTS.BEST_BID}
+                                    {INSTRUMENTS.BEST_ASK}
                                     <img alt=""
                                         src={this.selectImage('price')}
                                     />
@@ -175,10 +175,10 @@ export default class InstrumentSelectA extends React.Component {
                                 <th
                                     width="33%"
                                     onClick={() => {
-                                        this.selectSort('ask');
+                                        this.selectSort('bid');
                                     }}
                                 >
-                                    {INSTRUMENTS.BEST_ASK}
+                                    {INSTRUMENTS.BEST_BID}
                                     <img alt=""
                                         src={this.selectImage('percent')}
                                     />
@@ -370,5 +370,12 @@ const Selector = styled.div`
     }
     tr{
         cursor: pointer;
+    }
+    .coinSymbol{
+        img{
+            position:relative;
+            top:4px;
+            margin:auto 10px auto -10px;
+        }
     }
 `

@@ -62,8 +62,7 @@ export default class BalanceA extends React.Component {
               </thead>
               <tbody>
                 <tr className="first-row">
-                  <td className="symbol">
-                      {this.props.baseName}
+                  <td className="symbol">{this.props.baseName}
                   </td>
                   <td className="able">
                     <p>{+balances.baseAmount}</p>
@@ -73,7 +72,8 @@ export default class BalanceA extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="symbol">{this.props.tradeName}</td>
+                  <td className="symbol">{this.props.tradeName}
+                  </td>
                   <td className="able">
                     <p>{+balances.tradeAmount}</p>
                   </td>
@@ -89,5 +89,4 @@ export default class BalanceA extends React.Component {
 }
 
 const Balance = styled.div`
-  
 `
