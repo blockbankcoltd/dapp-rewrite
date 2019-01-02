@@ -955,9 +955,9 @@ const Wallet = styled.div`
                     text-decoration:none;
                 }
                 &.active {
-                    border-bottom: 3px solid #003366;
+                    border-bottom: 3px solid #364958;
                     a {
-                        color: #003366;
+                        color: #364958;
                     }
                 }
             }
@@ -1206,11 +1206,8 @@ const Wallet = styled.div`
                 margin-right:5px;
              }
         }
-        .table-btn1{
-            margin-left:84px;
-        }
-        .table-btn2{
-            margin-left:79px;
+        .ReactTable{
+            text-align:center;
         }
     }
     @media(max-width: 1024px) {
@@ -1270,12 +1267,6 @@ const Wallet = styled.div`
                         }
                     }
                     @media(min-width: 768px){
-                    .table-btn1{
-                        margin-left:63px;
-                    }
-                    .table-btn2{
-                        margin-left:58px;
-                    }
                     }
                     .tit_list {
                         ul {
