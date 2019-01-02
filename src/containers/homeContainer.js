@@ -457,6 +457,7 @@ const MainVisual = styled.div`
                 padding:20px 0;
                 .login_wrap {
                     width: 100%;
+                    top:40%;
                     .exchange_btn {
                         a {
                             width:80%;

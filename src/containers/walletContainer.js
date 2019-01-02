@@ -173,13 +173,14 @@ class WalletContainer extends Component {
 
 
     renderEditable(cellInfo, flag) {
+        const {ACCOUNT_ACTIONS} = this.props.languageConfig;
         if (flag === "deposit") {
             return<div>
-                <button type="button" style={{marginLeft:'84px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit</button>
+                <button type="button" className="table-btn1" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">{ACCOUNT_ACTIONS.DEPOSIT}</button>
             </div>
         } else {
             return <div>
-                <button type="button" style={{marginLeft:'79px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw</button>
+                <button type="button" className="table-btn2" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">{ACCOUNT_ACTIONS.WITHDRAW}</button>
             </div>
         }
     }
@@ -1023,9 +1024,6 @@ const Wallet = styled.div`
         .tab_list {
             float: right;
             margin: 0 0 20px;
-            .POP_btn{
-                margin-left:70px;
-            }
             span {
                 display: block;
                 background: #999;
@@ -1207,6 +1205,12 @@ const Wallet = styled.div`
                 margin-right:5px;
              }
         }
+        .table-btn1{
+            margin-left:84px;
+        }
+        .table-btn2{
+            margin-left:79px;
+        }
     }
     @media(max-width: 1024px) {
         width:100%;
@@ -1263,6 +1267,14 @@ const Wallet = styled.div`
                                 }
                             }
                         }
+                    }
+                    @media(min-width: 768px){
+                    .table-btn1{
+                        margin-left:63px;
+                    }
+                    .table-btn2{
+                        margin-left:58px;
+                    }
                     }
                     .tit_list {
                         ul {
@@ -1380,6 +1392,18 @@ const Wallet = styled.div`
                     }
                 }
             }
+        }
+    }
+    @media(max-width: 767px){
+        .asset_balance{
+            .table-btn1{
+                margin-left:0px;
+                width:100%;
+            }
+            .table-btn2{
+                margin-left:0px;
+                width:100%;
+            }    
         }
     }
 `
