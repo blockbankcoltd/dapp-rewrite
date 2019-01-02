@@ -9,10 +9,10 @@ export default class BalanceA extends React.Component {
     }
     getBalance (bal) {
         const balance = {
-            baseAmount : 0,
-            tradeAmount : 0,
-            baseHold : 0,
-            tradeHold : 0
+            baseAvailable : 0,
+            tradeAvailable : 0,
+            baseTotal : 0,
+            tradeTotal : 0
         }
         if(!bal){
             return balance;
@@ -23,10 +23,10 @@ export default class BalanceA extends React.Component {
             return balance;
         } else {
             return {
-                baseAmount : baseBalance.total,
-                tradeAmount : tradeBalance.total,
-                baseHold : baseBalance.hold,
-                tradeHold : tradeBalance.hold
+                baseAvailable : baseBalance.available,
+                tradeAvailable : tradeBalance.available,
+                baseTotal : baseBalance.total,
+                tradeTotal : tradeBalance.total
             }
         }
     }
@@ -52,19 +52,19 @@ export default class BalanceA extends React.Component {
                 <tr className="first-row">
                   <td className="symbol">{this.props.baseName}</td>
                   <td className="able">
-                    <p>{+balances.baseAmount}</p>
+                    <p>{balances.baseAvailable}</p>
                   </td>
                   <td className="total">
-                    <p>{+balances.baseAmount + +balances.baseHold}</p>
+                    <p>{balances.baseTotal}</p>
                   </td>
                 </tr>
                 <tr>
                   <td className="symbol">{this.props.tradeName}</td>
                   <td className="able">
-                    <p>{+balances.tradeAmount}</p>
+                    <p>{balances.tradeAvailable}</p>
                   </td>
                   <td className="total">
-                    <p>{+balances.tradeAmount + +balances.tradeHold}</p>
+                    <p>{balances.tradeTotal}</p>
                   </td>
                 </tr>
               </tbody>
@@ -75,5 +75,5 @@ export default class BalanceA extends React.Component {
 }
 
 const Balance = styled.div`
-  
+
 `

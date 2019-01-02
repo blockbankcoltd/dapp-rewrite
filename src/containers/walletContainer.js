@@ -138,7 +138,7 @@ class WalletContainer extends Component {
         this.setState({
             open: false
         })
-        
+
     }
 
     withdraw = (e, cellInfo) => {
@@ -185,12 +185,12 @@ class WalletContainer extends Component {
                     {
                         Header: WALLET.TOTAL,
                         id: "total_balance",
-                        accessor: d => (+d.hold + +d.total).toString()
+                        accessor: d => d.total
                     },
                     {
                         Header: WALLET.AVAILABLE,
                         id: "hold",
-                        accessor: d => d.hold.toString()
+                        accessor: d => d.hold
                     },
                     {
                         Header: WALLET.IN,

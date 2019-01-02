@@ -79,7 +79,9 @@ export const divideBigNumbers = (number, divisor) => {
   try {
     let numerator = new Decimal(number); //BN.js does not handle deciaml places.
     let denominator = new Decimal(divisor);
-    return ((numerator).dividedBy(denominator)).toString(10);
+		let result = ((numerator).dividedBy(denominator));
+		//console.log("divideBigNumbers", result.toString(10), result.toDecimalPlaces(8).toString(10));
+    return result.toDecimalPlaces(8).toString(10);
   } catch (e) {
     console.log(e);
   }
@@ -94,6 +96,16 @@ export const multiplyBigNumbers = (num, mul) => {
   } catch (e) {
     console.log(e);
   }
+}
+
+export const addBigNumbers = (a, b) => {
+  try {
+
+		let result = new Decimal(a).add(new Decimal(b));
+		return result.toString(10);
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 export const convertPriceArray = (arr) => {
