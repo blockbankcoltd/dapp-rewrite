@@ -27,6 +27,7 @@ export default class OpenOrdersB extends React.Component {
             qtys: convertVolumeArray(myOrders.qtys, transformToTokenName(myOrders.prTrade[i]).decimal),
             sells: myOrders.sells[i]
         */
+        console.log("DATA IN aaaprivate trades --> ", this.props.data)
         return this.state.isLogin ? (
             <OpenOrder>
                 <div className="table table-hover">
@@ -43,7 +44,7 @@ export default class OpenOrdersB extends React.Component {
                                 Header: OPEN_ORDERS.TYPE_TEXT,
                                 id: OPEN_ORDERS.TYPE_TEXT,
                                 class: "headerW",
-                                accessor: (d) => d.sells ? "Sell" : "Buy"
+                                accessor: (d) => d.sells ? OPEN_ORDERS.SELL : OPEN_ORDERS.BUY
                             }, {
                                 Header: OPEN_ORDERS.PRICE_TEXT,
                                 id: OPEN_ORDERS.PRICE_TEXT,

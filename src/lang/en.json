@@ -787,6 +787,8 @@
     "TIME_TEXT": "Time",
     "BUY": "Buy",
     "SELL": "Sell",
+    "DEPOSIT": "Deposit",
+    "WITHDRAW": "Withdraw",
     "EXECUTE": "Execute",
     "TOP": "Top",
     "CANCEL": "Cancel",

@@ -850,6 +850,8 @@
     "ACCOUNT": "계정",
     "BUY": "매수",
     "SELL": "매도",
+    "DEPOSIT": "입금",
+    "WITHDRAW": "출금",
     "EXECUTE": "체결",
     "TOP": "위로",
     "CANCEL": "취소",
