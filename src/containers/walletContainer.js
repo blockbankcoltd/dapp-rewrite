@@ -142,9 +142,6 @@ class WalletContainer extends Component {
             } else if (amount !== null && tokenObj.name !== 'ETH') {
                 console.log("Token address --> ", tokenObj);
                 this.props.depositToken(tokenObj.tokenAddress, amount);
-                this.setState({
-                    open: false
-                })
             } else {
                 console.log("Cancelled")
             }
@@ -152,6 +149,10 @@ class WalletContainer extends Component {
                 open: false
             })
         }
+        this.setState({
+            open: false
+        })
+
     }
 
     withdraw = (e, cellInfo) => {
@@ -254,12 +255,12 @@ class WalletContainer extends Component {
                     {
                         Header: WALLET.TOTAL,
                         id: "total_balance",
-                        accessor: d => (+d.hold + +d.total).toString()
+                        accessor: d => d.total
                     },
                     {
                         Header: WALLET.AVAILABLE,
                         id: "hold",
-                        accessor: d => d.hold.toString()
+                        accessor: d => d.hold
                     },
                     {
                         Header: WALLET.DEPOSIT_BTN,

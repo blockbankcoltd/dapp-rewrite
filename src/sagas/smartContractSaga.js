@@ -6,7 +6,7 @@ import { Decimal } from 'decimal.js';
 import store from '../store/reduxStore';
 import * as Constants from '../constants/constants';
 import { config, filterMarkets, contractList } from '../utilities/config';
-import { etherscanTx, etherscanUrl, divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName, convertQtyEach, convertPriceEach } from '../utilities/helpers.js';
+import { etherscanTx, etherscanUrl, divideBigNumbers, multiplyBigNumbers, convertPriceArray, convertVolumeArray, transformToTokenName, convertQtyEach, convertPriceEach, addBigNumbers} from '../utilities/helpers.js';
 
 let data = [];
 const coinList = config.base.concat(config.trades);
@@ -38,7 +38,7 @@ function* getMyAccountId() {
         const id = yield GlobalSmartContractObject.methods.GetMyAccountId().call({
             from: FromAddress[0]
         });
-    
+
         yield put({ type: Constants.default.Success.GET_MY_ACCOUNTID_SUCCESS, accountId: id });
     }
     catch(e){
@@ -55,7 +55,7 @@ function* getOrderBook(params) {
         const orderBook = yield call(res.call, {
             from: FromAddress[0]
         })
-    
+
         const tradeDecimal = transformToTokenName(prTrade).decimal; // coinList.find(coin => coin.productId === prTrade).decimal;
         yield put({
             type: Constants.default.Success.GET_ORDERBOOK_SUCCESS, orderbook: {
@@ -82,7 +82,7 @@ function* getMyOrders(params) {
         })
         let result = [];
         const prices = convertPriceArray(myOrders.prices);
-    
+
         myOrders.orderId.forEach((obj, i) => {
             result.push({
                 orderID: obj,
@@ -95,11 +95,11 @@ function* getMyOrders(params) {
             });
         });
         yield put({ type: Constants.default.Success.GET_MY_ORDERS_SUCCESS, myOrders: result });
-        
+
     }
     catch(e){
         yield put({ type: Constants.default.Failure.GET_MY_ORDERS_FAILURE, e });
-        
+
     }
 }
 
@@ -119,14 +119,14 @@ function* getBestBidBestAsk(params) {
             bestAskPrice: convertPriceArray(bestBidBestAsk.bestAskPrice),
             bestBidPrice: convertPriceArray(bestBidBestAsk.bestBidPrice)
         }
-    
-    
+
+
         yield put({ type: Constants.default.Success.GET_BESTBID_BESTASK_SUCCESS, bestBidBestAsk: result });
-        
+
     }
     catch(e){
         yield put({ type: Constants.default.Failure.GET_BESTBID_BESTASK_FAILURE, e });
-        
+
     }
 }
 
@@ -134,10 +134,10 @@ function* GetDepositWithdrawlRecords(params) {
     try {
 
         const { id } = params.payload;
-    
+
         const { GlobalWeb3Object, GlobalSmartContractObject } = store.getState().smartContract;
         const FromAddress = yield GlobalWeb3Object.eth.getAccounts();
-    
+
         const depositWithdrawlRecords = yield GlobalSmartContractObject.methods.GetDWrecords(id).call({
             from: FromAddress[0]
         });
@@ -148,14 +148,14 @@ function* GetDepositWithdrawlRecords(params) {
                 timestamp: depositWithdrawlRecords.timestamp[i],
                 prCode: depositWithdrawlRecords.prCode[i]
             }
-    
+
         });
-        
+
         yield put({ type: Constants.default.Success.GET_DEPOSIT_WITHDRAWL_RECORDS_SUCCESS, depositWithdrawlRecords: result })
     }
     catch(e){
         yield put({ type: Constants.default.Failure.GET_DEPOSIT_WITHDRAWL_RECORDS_FAILURE, e })
-        
+
     }
 }
 
@@ -164,7 +164,7 @@ function* cancelOrder(params) {
         const { orderId } = params.payload;
         const { GlobalWeb3Object, GlobalSmartContractObject } = store.getState().smartContract;
         const FromAddress = yield GlobalWeb3Object.eth.getAccounts();
-    
+
         const result = yield GlobalSmartContractObject.methods.cancelOrder(orderId).send({
             from: FromAddress[0]
         });
@@ -175,7 +175,7 @@ function* cancelOrder(params) {
     }
     catch(e){
         yield put({type: Constants.default.Failure.CANCEL_ORDER_FAILURE, e});
-        
+
     }
 }
 
@@ -188,14 +188,14 @@ function* placeBuyOrder(params) {
         const isSell = false;
         const ownerId = config.ownerId; // get the ownerId from the config
         const basePrice = config.basePrice;
-    
+
         const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
-    
+
         let BN_Price = multiplyBigNumbers(price, basePrice);  //new BN(calculated_price.toString(10));
-    
+
         let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);//new BN(calculated_amount.toString(10));
-    
-    
+
+
         const order = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
             from: FromAddress[0]
         });
@@ -205,7 +205,7 @@ function* placeBuyOrder(params) {
         yield put({ type: Constants.default.Success.PLACE_BUY_ORDER_SUCCESS, buyOrderStatus: order });
     }
     catch(e){
-        yield put({ type: Constants.default.Failure.PLACE_BUY_ORDER_FAILURE, e });        
+        yield put({ type: Constants.default.Failure.PLACE_BUY_ORDER_FAILURE, e });
     }
 }
 
@@ -213,19 +213,19 @@ function* placeSellOrder(params) {
     try {
         const { GlobalWeb3Object, GlobalSmartContractObject } = store.getState().smartContract;
         const FromAddress = yield GlobalWeb3Object.eth.getAccounts();
-    
+
         const { price, amount, base, trade } = params.payload;
         const isSell = true;
         const ownerId = config.ownerId; // get the ownerId from the config
         const basePrice = config.basePrice;
-    
+
         const tradeDecimal = coinList.find(coin => coin.productId === trade).decimal;
-    
+
         let BN_Price = multiplyBigNumbers(price, basePrice);
-    
+
         let BN_Amount = multiplyBigNumbers(amount, tradeDecimal);
-    
-    
+
+
         const order = yield GlobalSmartContractObject.methods.LimitOrder(ownerId, trade, base, isSell, BN_Price, BN_Amount).send({
             from: FromAddress[0]
         });
@@ -242,7 +242,7 @@ function* placeSellOrder(params) {
 function* getBalance(params) {
     try {
         const { GlobalWeb3Object, GlobalSmartContractObject } = store.getState().smartContract;
-        
+
         const FromAddress = yield GlobalWeb3Object.eth.getAccounts();
         let prCodesArray = [];
         let tokens = [];
@@ -252,7 +252,7 @@ function* getBalance(params) {
             }
             tokens.push({ name: c.product, address: c.tokenAddress, decimal: c.decimal });
         }
-        
+
         let productArray = Lodash.uniq(prCodesArray);
         const res = yield call(GlobalSmartContractObject.methods.getBalance, productArray)
         const balance = yield call(res.call, {
@@ -260,10 +260,14 @@ function* getBalance(params) {
         });
         let _result = [];
         balance.available.forEach((obj, index) => {
+              let holdAmount = divideBigNumbers(balance.reserved[index], tokens[index].decimal);
+              let availableAmount = divideBigNumbers(obj.toString(), tokens[index].decimal);
+              let totalAmount = addBigNumbers(holdAmount, availableAmount);
             _result.push({
                 name: tokens[index].name,
-                hold: divideBigNumbers(balance.reserved[index], tokens[index].decimal),
-                total: divideBigNumbers(obj.toString(), tokens[index].decimal),
+                hold: holdAmount,
+                available: availableAmount,
+                total: totalAmount,
                 tokenAddress: tokens[index].address
             });
         });
@@ -297,7 +301,7 @@ function* withdrawEthRequest(params) {
     try {
         const { GlobalWeb3Object, GlobalSmartContractObject } = store.getState().smartContract;
         const FromAddress = yield GlobalWeb3Object.eth.getAccounts();
-    
+
         const { amount } = params.payload;
         const withdrawAmount = yield GlobalSmartContractObject.methods.withdrawETH(Web3.utils.toWei(amount, 'ether')).send({
             from: FromAddress[0]
@@ -370,7 +374,7 @@ function* actionWatcher() {
 
     yield takeEvery(Constants.default.Requests.GET_BESTBID_BESTASK_REQUEST, getBestBidBestAsk)
     yield takeEvery(Constants.default.Requests.GET_DEPOSIT_WITHDRAWL_RECORDS_REQUEST, GetDepositWithdrawlRecords)
-    
+
     yield takeEvery(Constants.default.Requests.CANCEL_ORDER_REQUEST, cancelOrder)
 }
 
