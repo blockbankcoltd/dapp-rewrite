@@ -158,6 +158,9 @@ export default class TickerA extends React.Component{
 const Ticker = styled.div`
    .coin_img{
         float:left;
-        margin:auto 10px auto -10px;
+        margin:auto 14px auto -14px;
+        img{
+            width:125%;
+        }
    }
 `
