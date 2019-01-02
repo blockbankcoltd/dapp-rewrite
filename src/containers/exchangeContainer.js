@@ -11,7 +11,7 @@ import BalanceA from '../components/local/exchange/BalanceA';
 import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
 import Actions from '../actions/index';
-import { config, filterMarkets } from '../utilities/config';
+import { config, filterMarkets, contractList } from '../utilities/config';
 import { ToastContainer, toast } from 'react-toastify';
 import ToastComponent from '../components/global/toastComponent'
 import { divideBigNumbers, transformToTokenName } from "../utilities/helpers";
@@ -59,7 +59,7 @@ class ExchangeContainer extends Component {
         const self = this;
         const {GlobalSmartContractObject} = store.getState().smartContract;
         this.newOrders = GlobalSmartContractObject.events.allEvents({
-            address: '0x13f59e0ed9224f646a94f28ca8120fc011b890b8',
+            address: contractList[localStorage.getItem('contract') || 0].address,
             toBlock: 'latest'
         }, function (error, result) {
             console.log(result.event, result.returnValues)
@@ -102,8 +102,8 @@ class ExchangeContainer extends Component {
                             remainQty = 0;
                         } else{
                             remainQty = (+remainQty - +volumeA[0]);
-                            priceA.shift();
-                            volumeA.shift();
+                            // priceA.shift();
+                            // volumeA.shift();
                         }
                     }
                 }
@@ -148,8 +148,8 @@ class ExchangeContainer extends Component {
                             remainQty = 0;
                         } else {
                             remainQty = (+remainQty - +volumeB[0]);
-                            priceB.shift();
-                            volumeB.shift();
+                            // priceB.shift();
+                            // volumeB.shift();
                         }
                     }
                 }
@@ -329,7 +329,9 @@ class ExchangeContainer extends Component {
         const {baseCurrency, tradeCurrency, myOrders, baseName, tradeName, selectedTokensBalances} = this.state;
         const { myAccountId } = this.props;
         const {price, qty, prBase, prTrade, isSell, accountId, id} = value;
-        const tradeDecimal = transformToTokenName(prTrade).decimal;
+        const tradeConfig = transformToTokenName(prTrade);
+        const baseConfig = transformToTokenName(prBase);
+        const tradeDecimal =tradeConfig.decimal;
         const parseQty = divideBigNumbers(qty, tradeDecimal);
         const parsePrice = divideBigNumbers(price, config.basePrice);
 
@@ -347,7 +349,7 @@ class ExchangeContainer extends Component {
 
             this.setState({
                 myOrders : [{
-                    instrumentPair: myOrders[0].instrumentPair,
+                    instrumentPair: `${tradeConfig.productName}/${baseConfig.productName}`,
                     prBase: prBase,
                     prTrade: prTrade,
                     prices: parsePrice,

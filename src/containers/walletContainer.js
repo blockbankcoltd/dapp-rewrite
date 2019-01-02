@@ -129,10 +129,6 @@ class WalletContainer extends Component {
             }
         });
     }
-    componentWillUnMount() {
-        this.newOrders.unsubscribe()
-    }
-
 
     callFunction(id) {
         if(id && this.called === false){
