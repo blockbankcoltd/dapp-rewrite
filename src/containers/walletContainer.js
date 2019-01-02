@@ -16,6 +16,7 @@ import modaltest1 from "../assets/images/modaltestimg.png";
 import modaltest2 from "../assets/images/modaltestimg2.png";
 import store from "../store/reduxStore";
 import {divideBigNumbers, transformToTokenName} from "../utilities/helpers";
+import {contractList} from "../utilities/config";
 
 
 class WalletContainer extends Component {
@@ -116,11 +117,10 @@ class WalletContainer extends Component {
         const self = this;
         const {GlobalSmartContractObject} = store.getState().smartContract;
         this.newOrders = GlobalSmartContractObject.events.allEvents({
-            address: '0x13f59e0ed9224f646a94f28ca8120fc011b890b8',
+            address: contractList[localStorage.getItem('contract') || 0].address,
             toBlock: 'latest'
         }, function (error, result) {
-            console.log(result.event, result.returnValues)
-            if (result !== undefined) {
+            if (result !== undefined && contractList[localStorage.getItem('contract') || 0].address == result.address) {
                 if(result.event === "NewWithdraw"){
                     self.withdrawEvent(result.returnValues)
                 } else if(result.event === "NewDeposit"){
@@ -268,7 +268,6 @@ class WalletContainer extends Component {
     render() {
         const { WALLET } = this.props.languageConfig;
         // this.callFunction(this.props.accountId);
-        console.log(this.state.selectToken)
         return (
             <Wallet>
                 <section className="main" role="">

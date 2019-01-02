@@ -62,8 +62,7 @@ class ExchangeContainer extends Component {
             address: contractList[localStorage.getItem('contract') || 0].address,
             toBlock: 'latest'
         }, function (error, result) {
-            console.log(result.event, result.returnValues)
-            if (result !== undefined) {
+            if (result !== undefined && contractList[localStorage.getItem('contract') || 0].address == result.address) {
                 if (result.event === "NewOrder" && self.state.orderBook) {
                     self.batchOrder(result.returnValues);
                     self.batchMyOrder(result.returnValues);
