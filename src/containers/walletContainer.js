@@ -134,33 +134,40 @@ class WalletContainer extends Component {
     }
 
     deposit = (e, cellInfo) => {
-        let amount = this.state.Amount_price_deposit;
-        let tokenObj = cellInfo.original;
-        if(amount !== null && tokenObj.name === 'ETH'){
-            this.props.depositEth(amount);
+        if (this.state.Amount_price_deposit > 0) {
+            let amount = this.state.Amount_price_deposit;
+            let tokenObj = cellInfo.original;
+            if (amount !== null && tokenObj.name === 'ETH') {
+                this.props.depositEth(amount);
+            } else if (amount !== null && tokenObj.name !== 'ETH') {
+                console.log("Token address --> ", tokenObj);
+                this.props.depositToken(tokenObj.tokenAddress, amount);
+                this.setState({
+                    open: false
+                })
+            } else {
+                console.log("Cancelled")
+            }
             this.setState({
-                open:false
+                open: false
             })
-        }else if(amount !== null && tokenObj.name !== 'ETH'){
-            console.log("Token address --> ", tokenObj);
-            this.props.depositToken(tokenObj.tokenAddress, amount);
-            this.setState({
-                open:false
-            })
-        }else{
-            console.log("Cancelled")
         }
     }
 
     withdraw = (e, cellInfo) => {
-        let amount = this.state.Amount_price_withdraw;
-        let tokenObj = cellInfo.original;
-        if(amount !== null && tokenObj.name === 'ETH'){
-            this.props.withdrawEth(amount);
-        }else if(amount !== null && tokenObj.name !== 'ETH'){
-            this.props.withdrawToken(tokenObj.tokenAddress, amount);
-        }else{
-            console.log("Cancelled")
+        if (this.state.Amount_price_withdraw > 0) {
+            let amount = this.state.Amount_price_withdraw;
+            let tokenObj = cellInfo.original;
+            if (amount !== null && tokenObj.name === 'ETH') {
+                this.props.withdrawEth(amount);
+            } else if (amount !== null && tokenObj.name !== 'ETH') {
+                this.props.withdrawToken(tokenObj.tokenAddress, amount);
+            } else {
+                console.log("Cancelled")
+            }
+            this.setState({
+                open: false
+            })
         }
     }
 
@@ -168,11 +175,11 @@ class WalletContainer extends Component {
     renderEditable(cellInfo, flag) {
         if (flag === "deposit") {
             return<div>
-                <button type="button" style={{marginLeft:'70px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit_pop</button>
+                <button type="button" style={{marginLeft:'84px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">Deposit</button>
             </div>
         } else {
             return <div>
-                <button type="button" style={{marginLeft:'65px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw_pop</button>
+                <button type="button" style={{marginLeft:'79px'}} onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">Withdraw</button>
             </div>
         }
     }
