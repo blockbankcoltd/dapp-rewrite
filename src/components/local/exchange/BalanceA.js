@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components';
+import { addBigNumbers } from "../../../utilities/helpers";
 
 export default class BalanceA extends React.Component {
 
@@ -25,8 +26,8 @@ export default class BalanceA extends React.Component {
             return {
                 baseAvailable : baseBalance.available,
                 tradeAvailable : tradeBalance.available,
-                baseTotal : baseBalance.total,
-                tradeTotal : tradeBalance.total
+                baseTotal : addBigNumbers(baseBalance.available, baseBalance.hold),
+                tradeTotal : addBigNumbers(tradeBalance.available, tradeBalance.hold)
             }
         }
     }
