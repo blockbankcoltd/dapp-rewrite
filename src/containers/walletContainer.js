@@ -173,17 +173,12 @@ class WalletContainer extends Component {
     }
 
 
-    renderEditable(cellInfo, flag) {
+    renderEditable(cellInfo) {
         const {ACCOUNT_ACTIONS} = this.props.languageConfig;
-        if (flag === "deposit") {
             return<div>
                 <button type="button" className="table-btn1" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">{ACCOUNT_ACTIONS.DEPOSIT}</button>
-            </div>
-        } else {
-            return <div>
                 <button type="button" className="table-btn2" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">{ACCOUNT_ACTIONS.WITHDRAW}</button>
             </div>
-        }
     }
     renderEditable_img(cellInfo){
         if(cellInfo.original.name==="ETH"){
@@ -267,19 +262,11 @@ class WalletContainer extends Component {
                         accessor: d => d.hold
                     },
                     {
-                        Header: WALLET.DEPOSIT_BTN,
-                        id: "deposit_buttons",
+                        id: "deposit_withdraw_buttons",
 
                         // accessor: d => <div><button type="button">Deposit</button></div>,
-                        Cell: (d) => this.renderEditable(d, "deposit")
-                    },
-                    {
-                        Header: WALLET.WITHDRAW_BTN,
-                        id: "withdraw_buttons",
-                        // accessor: d => <div><button type="button">Withdraw</button></div>,
-                        Cell: (d) => this.renderEditable(d, "withdraw")
+                        Cell: (d) => this.renderEditable(d)
                     }
-
                 ]}
                 pageSize={pageSize}
                 className="-striped -highlight"
@@ -1061,6 +1048,7 @@ const Wallet = styled.div`
             outline:none;
             cursor:pointer;
             border-radius:7px;
+            margin-left:12px;
             &:focus{
                 background:#ff6666;
                 color:#fff;
@@ -1253,6 +1241,17 @@ const Wallet = styled.div`
         .ReactTable{
              text-align:center;
              border:none;
+             .rt-thead{
+                 .rt-th{
+                    outline:none;
+                 }
+                 .rt-th.-sort-asc{
+                    box-shadow:none;
+                 }
+                 .rt-th.-sort-desc{
+                    box-shadow:none;
+                 }    
+             }
              .rt-thead.-header{
                  font-size:18px;
                  font-weight:600;
@@ -1477,11 +1476,11 @@ const Wallet = styled.div`
         .asset_balance{
             .table-btn1{
                 margin-left:0px;
-                width:100%;
+                width:50%;
             }
             .table-btn2{
                 margin-left:0px;
-                width:100%;
+                width:50%;
             }    
         }
     }

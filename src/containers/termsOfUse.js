@@ -8,6 +8,9 @@ import {isMobile} from "react-device-detect";
 import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 import Actions from '../actions/index';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faCaretUp} from '@fortawesome/free-solid-svg-icons';
+
 
 export default class extends React.Component{
     static defaultProps = {
@@ -708,7 +711,7 @@ export default class extends React.Component{
                             </div>
                         </section>
                         <button className="topAnchor" onClick={this.goTop}>
-                            <i className="xi-caret-up"></i>
+                            <FontAwesomeIcon icon={faCaretUp} />
                         </button>
                     </Terms>
 

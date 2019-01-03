@@ -79,7 +79,6 @@ export default class PrivateTradesB extends React.Component{
                 defaultPageSize={10}
                 className="-striped -highlight"
               />
-                {console.log("aaaa",this.props)}
             </div>
           </PrivateOrder>
         ) : <div className="no-data-wrap"><p>{TRANSACTION.LOGIN_REQUIRED}</p></div>;
@@ -89,6 +88,17 @@ export default class PrivateTradesB extends React.Component{
 const PrivateOrder = styled.div`
  .ReactTable{
     border:none;
+    .rt-thead{
+        .rt-th{
+           outline:none;
+        }
+        .rt-th.-sort-asc{
+           box-shadow:none;
+        }
+        .rt-th.-sort-desc{
+           box-shadow:none;
+        }    
+    }
     .rt-thead.-header{
             font-size:18px;
             font-weight:600;

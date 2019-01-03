@@ -107,6 +107,17 @@ const OpenOrder = styled.div`
    }
    .ReactTable{
         border:none;
+        .rt-thead{
+            .rt-th{
+               outline:none;
+            }
+            .rt-th.-sort-asc{
+               box-shadow:none;
+            }
+            .rt-th.-sort-desc{
+               box-shadow:none;
+            }    
+        }
         .rt-thead.-header{
             font-size:18px;
             font-weight:600;
