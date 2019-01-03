@@ -195,7 +195,6 @@ class ExchangeContainer extends Component {
 
     render() {
         const { ORDER_HISTORY, TRADES } = this.props.languageConfig;
-        console.log(this.state)
         const isMobile = false;
         const list = [
             {
