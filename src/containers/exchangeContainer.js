@@ -29,7 +29,8 @@ class ExchangeContainer extends Component {
             tradeName: '',
             price: 0,
             marketsData: [],
-            tradeHistory:[]
+            tradeHistory: [],
+            orderHistory: []
         };
     }
 
@@ -70,6 +71,7 @@ class ExchangeContainer extends Component {
                 } else if(result.event === "NewTrade") {
                     setTimeout(() => self.removeMyOrder(result.returnValues,500));
                     self.updatePublicTrades(result.returnValues);
+                    self.updatePrivateTrades(result.returnValues);
                 } else if(result.event === "NewBestBidAsk") {
                     self.updateBidAskPrice(result.returnValues);
                 } else if(result.event === "NewCancel"){
@@ -243,6 +245,30 @@ class ExchangeContainer extends Component {
         }
     }
 
+    updatePrivateTrades(value) {
+        const {baseCurrency, tradeCurrency} = this.state;
+        const {price, qty, prBase, prTrade, isSell, accountIdBid, accountIdAsk} = value;
+        const tradeConfig = transformToTokenName(prTrade);
+        const baseConfig = transformToTokenName(prBase);
+        const tradeDecimal =tradeConfig.decimal;
+        const { myAccountId } = this.props;
+        const parseQty = divideBigNumbers(qty, tradeDecimal);
+        if(prBase == baseCurrency && prTrade == tradeCurrency) {
+            this.setState({
+                orderHistory : [{
+                    timestamp : divideBigNumbers(new Date().getTime().toString(), 1000),
+                    price,
+                    qty : parseQty,
+                    isSell,
+                    instruement: `${tradeConfig.productName}/${baseConfig.productName}`,
+                    accountId : myAccountId,
+                    accountIdBid,
+                    accountIdAsk
+                },...this.state.orderHistory]
+            })
+        }
+    }
+
     updateBidAskPrice(value) {
         const {marketsData} = this.state;
         const {price, prBase, prTrade, isBid} = value;
@@ -312,10 +338,13 @@ class ExchangeContainer extends Component {
                 selectedTokensBalances[baseIndex].available = addBigNumbers(selectedTokensBalances[baseIndex].available, total);
                 const findOrderIndex = myOrders.findIndex((element) => element.orderID == askId);
 
-                myOrders[findOrderIndex].qtys = subBigNumbers(myOrders[findOrderIndex].qtys, parseQty);
-                if(myOrders[findOrderIndex].qtys == 0) {
-                    myOrders.splice(findOrderIndex,1)
+                if(findOrderIndex >= 0) {
+                    myOrders[findOrderIndex].qtys = subBigNumbers(myOrders[findOrderIndex].qtys, parseQty);
+                    if(myOrders[findOrderIndex].qtys == 0) {
+                        myOrders.splice(findOrderIndex,1)
+                    }
                 }
+
             }
             if(accountIdBid == myAccountId) {
                 selectedTokensBalances[baseIndex].hold = subBigNumbers(selectedTokensBalances[baseIndex].hold, total);
@@ -327,10 +356,13 @@ class ExchangeContainer extends Component {
                     selectedTokensBalances[baseIndex].available = addBigNumbers(selectedTokensBalances[baseIndex].available, diffTotal);
                     selectedTokensBalances[baseIndex].hold = subBigNumbers(selectedTokensBalances[baseIndex].hold, diffTotal);
                 }
-                myOrders[findOrderIndex].qtys = subBigNumbers(myOrders[findOrderIndex].qtys, parseQty);
-                if(myOrders[findOrderIndex].qtys == 0) {
-                    myOrders.splice(findOrderIndex,1)
+                if(findOrderIndex >= 0) {
+                    myOrders[findOrderIndex].qtys = subBigNumbers(myOrders[findOrderIndex].qtys, parseQty);
+                    if(myOrders[findOrderIndex].qtys == 0) {
+                        myOrders.splice(findOrderIndex,1)
+                    }
                 }
+
             }
             this.setState({
                 myOrders,
@@ -355,6 +387,9 @@ class ExchangeContainer extends Component {
             this.setState({ tradeHistory: this.props.tradeHistory });
         }
 
+        if (prevProps.orderHistory !== this.props.orderHistory) {
+            this.setState({ orderHistory: this.props.orderHistory });
+        }
         if (prevProps.balance !== this.props.balance) {
             this.setState({ balance: this.props.balance });
         }
@@ -620,7 +655,7 @@ class ExchangeContainer extends Component {
                                             id="tradesTab"
                                             className={this.state.tabSelected === 1 ? "tab_cont active" : "tab_cont"}
                                         >
-                                            <PrivateTradesA languageConfig={this.props.languageConfig} data={this.props.orderHistory} base={this.state.baseCurrency} accountId={this.props.myAccountId} trade={this.state.tradeCurrency} />
+                                            <PrivateTradesA languageConfig={this.props.languageConfig} data={this.state.orderHistory} base={this.state.baseCurrency} accountId={this.props.myAccountId} trade={this.state.tradeCurrency} />
                                             {/* <PrivateTradesA languageConfig={this.props.languageConfig} records={this.state.dwRecords} /> */}
                                         </div>
                                     </div>

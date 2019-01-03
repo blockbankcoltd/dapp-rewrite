@@ -23,7 +23,6 @@ export default class TickerA extends React.Component{
     }
 
     render() {
-        console.log(this.props.tradeHistory)
         const {EXCHANGE, EXCHANGE_PAGE, INSTRUMENTS} = this.props.languageConfig;
         return (
           <Ticker className="ticker-wrapper down">
