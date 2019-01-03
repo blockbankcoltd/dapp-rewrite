@@ -28,7 +28,8 @@ class ExchangeContainer extends Component {
             baseName: '',
             tradeName: '',
             price: 0,
-            marketsData: []
+            marketsData: [],
+            tradeHistory:[]
         };
     }
 

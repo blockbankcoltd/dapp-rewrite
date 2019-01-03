@@ -94,7 +94,7 @@ export default class TickerA extends React.Component{
 
               <div className="currentCurrency">
                 <div className='currentCurrencyLh'>
-                  <div className="lastPrice">{`${this.props.tradeHistory ? divideBigNumbers(this.props.tradeHistory[0].price, config.basePrice) : "-"} `}
+                  <div className="lastPrice">{`${this.props.tradeHistory.length> 0 ? divideBigNumbers(this.props.tradeHistory[0].price, config.basePrice) : "-"} `}
                     <span>{this.props.baseName}</span>
                   </div>
                   <div className="currentDayPx">
