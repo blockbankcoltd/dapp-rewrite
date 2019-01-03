@@ -37,7 +37,7 @@ export default class PrivateTradesB extends React.Component{
                             Header: TRADES.SIDE_TEXT,
                             id: TRADES.SIDE_TEXT,
                             class: "headerW",
-                            accessor: "side"
+                            accessor: d=>d.side === "BUY" && TRADES.BUY || d.side === "SELL" && TRADES.SELL
                         },{
                             Header: TRADES.QUANTITY_TEXT,
                             id: TRADES.QUANTITY_TEXT,

@@ -261,7 +261,9 @@ const HeaderContents = styled.div`
         -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
         transform: translateY(-50%);
-        
+        @media (max-width: 1024px){
+            top: 122%;
+        }
         select {
             width: 250px;
             height: 30px;
@@ -302,6 +304,10 @@ const Title = styled.h1`
         a {
             top:0;
             transform: none;
+            img{
+                position:relative;
+                bottom:10px;
+            }   
         }
     }
 `
@@ -343,7 +349,7 @@ const MobileMenu = styled.div`
         flex-direction: column;
         right:-55%;
         transition: right .3s;
-        top:70px;
+        top:25px;
         box-sizing: border-box;
         padding:0 0 0 10px;
         &.on {

@@ -46,7 +46,7 @@ export default class TransactionsB extends React.Component{
                             Header: OPEN_ORDERS.TYPE_TEXT,
                             id: OPEN_ORDERS.TYPE_TEXT,
                             class: "headerW",
-                            accessor: (d) => d.isDeposit ? "Deposit" : "Withdrawal"
+                            accessor: (d) => d.isDeposit ? OPEN_ORDERS.DEPOSIT : OPEN_ORDERS.WITHDRAW
                         },{
                             Header: TRADES.QUANTITY_TEXT,
                             id: TRADES.QUANTITY_TEXT,

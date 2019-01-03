@@ -1,5 +1,17 @@
 import * as React from 'react'
 import styled from 'styled-components';
+import ETH from "../../../assets/images/icon/eth.png";
+import LNC from "../../../assets/images/icon/lnc.png";
+import BAT from "../../../assets/images/icon/bat.png";
+import OMG from "../../../assets/images/icon/omg.png";
+import VIKKY from "../../../assets/images/icon/vikky.png";
+import BTCB from "../../../assets/images/icon/btcb.png";
+import NDI from "../../../assets/images/icon/vote1.png";
+import VAT from "../../../assets/images/icon/cymt.png";
+import BNB from "../../../assets/images/icon/bnb.png";
+import ICON from "../../../assets/images/icon/icon.png";
+import TUSD from "../../../assets/images/icon/tusd.png";
+import VIEN from "../../../assets/images/icon/wab.png";
 
 export default class BalanceA extends React.Component {
 
@@ -50,7 +62,8 @@ export default class BalanceA extends React.Component {
               </thead>
               <tbody>
                 <tr className="first-row">
-                  <td className="symbol">{this.props.baseName}</td>
+                  <td className="symbol">{this.props.baseName}
+                  </td>
                   <td className="able">
                     <p>{balances.baseAvailable}</p>
                   </td>
@@ -59,7 +72,8 @@ export default class BalanceA extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="symbol">{this.props.tradeName}</td>
+                  <td className="symbol">{this.props.tradeName}
+                  </td>
                   <td className="able">
                     <p>{balances.tradeAvailable}</p>
                   </td>
@@ -75,5 +89,4 @@ export default class BalanceA extends React.Component {
 }
 
 const Balance = styled.div`
-
 `

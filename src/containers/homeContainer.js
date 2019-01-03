@@ -8,7 +8,7 @@ import thum_icon1 from "../assets/images/dexhi_icon_1.png";
 import thum_icon2 from "../assets/images/dexhi_icon_2.png";
 import thum_icon3 from "../assets/images/dexhi_icon_3.png";
 import thum_icon4 from "../assets/images/dexhi_icon_4.png";
-import thum_icon5 from "../assets/images/dexhi_icon_5.png";
+import DexHi_logo_1 from "../assets/images/DexHi_logo_1.png";
 
 class HomeContainer extends Component {
     constructor(props) {
@@ -68,11 +68,10 @@ class HomeContainer extends Component {
                                 </VisualText>
                                 {this.LoginArea}
                             </div>
-                            {/*
-                                <div className="coin_wrap">
-                                    <div className="head_cont">
-                                        <table className="coin_table">
-                                            <thead>
+                            {/*<div className="coin_wrap">
+                                <div className="head_cont">
+                                    <table className="coin_table">
+                                        <thead>
                                             <tr>
                                                 <th className="coinName">{INDEX.NAME}</th>
                                                 <th>{INDEX.PRICE}</th>
@@ -87,7 +86,12 @@ class HomeContainer extends Component {
                                         </table>
                                     </div>
                                 </div>
-                           */ }
+                                <div className="price_cont">
+                                    <table>
+                                        <tbody />
+                                    </table>
+                                </div>
+                            </div>*/}
                         </div>
                     </div>
                 </MainVisual>
@@ -97,6 +101,7 @@ class HomeContainer extends Component {
                     <ExchangeInfo id="exchangeInfo">
                         <div className="container_title">
                             <dl>
+                                <dt><img src={DexHi_logo_1}/></dt>
                                 <dt>{INDEX.EXCHANGE_TITLE2}</dt>
                                 <dd>{INDEX.EXCHANGE_TITLE3}</dd>
                                 <dd>{INDEX.EXCHANGE_TITLE4}</dd>
@@ -106,7 +111,7 @@ class HomeContainer extends Component {
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb">
                                     <img
-                                        src=""
+                                        src={thum_icon1}
                                         alt=""
                                     />
                                 </span>
@@ -122,7 +127,7 @@ class HomeContainer extends Component {
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb">
                                     <img
-                                        src=""
+                                        src={thum_icon2}
                                         alt=""
                                     />
                                 </span>
@@ -139,7 +144,7 @@ class HomeContainer extends Component {
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb">
                                     <img
-                                        src=""
+                                        src={thum_icon3}
                                         alt=""
                                     />
                                 </span>
@@ -155,7 +160,7 @@ class HomeContainer extends Component {
                             <div className={this.state.exchageAdd ? 'txt_effect' : null} ref={this.EXCHANGETOP_ref}>
                                 <span className="thumb">
                                     <img
-                                        src=""
+                                        src={thum_icon4}
                                         alt=""
                                     />
                                 </span>
@@ -459,6 +464,7 @@ const MainVisual = styled.div`
                 padding:20px 0;
                 .login_wrap {
                     width: 100%;
+                    top:40%;
                     .exchange_btn {
                         a {
                             width:80%;
@@ -707,15 +713,22 @@ const ExchangeInfo = styled.div`
         overflow: hidden;
         dl{
             margin-bottom: 130px;
+            img{
+                width:30%;
+            }
             dt{
                 font-size: 40px;
                 font-weight: 700;
                 color: #112434;
                 text-align: center;
-                margin-bottom: 25px;
+                margin-bottom: 50px;
+                &:first-child{
+                    margin-bottom: 0px;
+                }
             }
             dd{
-                font-size: 30px;
+                margin-inline-start:unset;
+                font-size: 25px;
                 color: #112434;
                 text-align: center;
             }
@@ -731,7 +744,7 @@ const ExchangeInfo = styled.div`
             overflow: hidden;
             //float: left;
             display:inline-table;
-            margin: 0 0 70px;
+            margin: 0 0 170px;
             .thumb {
                 width:100%;
                 text-align:center;

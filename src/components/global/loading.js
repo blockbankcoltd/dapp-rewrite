@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 // import spinner from '../../assets/images/spinner.gif';
 // import spinner from '../../assets/images/ethwaterloo.gif';
-import spinner from '../../assets/images/loader.gif';
+import spinner from '../../assets/images/Dexhi_loading2.gif';
 
 export default class Loading extends React.Component {
 
@@ -49,6 +49,6 @@ const Comp = styled.div`
         top : 50%;
         transform : translate(-50%,-50%);
         width: 40%;
-        height: 40%;
+       // height: 40%;
     }
 `
