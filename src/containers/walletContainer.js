@@ -149,6 +149,10 @@ class WalletContainer extends Component {
                 open: false
             })
         }
+        this.setState({
+            open: false
+        })
+
     }
 
     withdraw = (e, cellInfo) => {
@@ -239,9 +243,13 @@ class WalletContainer extends Component {
 
     renderTable() {
         const { WALLET } = this.props.languageConfig;
+        const test = this.props.balance;
+        let pageSize = test.length;
+        console.log("ddd",pageSize)
         return(
             <ReactTable
-                data={this.props.balance}
+                showPagination={false}
+                data={test}
                 columns={[
                     {
                         Header: WALLET.COIN_NAME,
@@ -273,7 +281,7 @@ class WalletContainer extends Component {
                     }
 
                 ]}
-                defaultPageSize={10}
+                pageSize={pageSize}
                 className="-striped -highlight"
             />
         );
@@ -484,6 +492,10 @@ const mapDispatchToProps = (dispatch) => {
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
         getMyAccountId : () => dispatch(Actions.smartContract.getMyAccountIdRequest())
     }
+}
+
+WalletContainer.defaultProps = {
+    balance : []
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WalletContainer));
@@ -966,30 +978,34 @@ const Wallet = styled.div`
         margin: 0 0 80px;
         h3 {
             padding: 10px 40px;
-            display: table;
-            border: 1px solid #ccc;
+            display: flex;
+            border: 1px solid #d9d9d9;
             margin: 0 auto;
             font-size: 26px;
             font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
             text-align: center;
             font-weight: bold;
             line-height: 34px;
-            width:600px;
+            width:770px;
             .first {
                 width:40%;
-                float:left
+                float:left;
+                flex:1;
+                font-size: 25px;
+                color:#1a1a1a
             }
             .second {
+                flex:1;
                 width:60%;
                 float:left;
                 strong {
                     font-size: 30px;
-                    color: #ED1C24;
+                    color: #3c92ca;
                     font-weight: 900;
                     // margin-left: 50px;
                 }
                 .krw {
-                    font-size: 24px;
+                    font-size: 25px;
                 }
             }
         }
@@ -1018,12 +1034,41 @@ const Wallet = styled.div`
         .ap-title {
             display:none;
         }
+        .table-btn1{
+            background:#fff;
+            color:#3c92ca
+            width:80px;
+            height:32px;
+            font-size:14px;
+            font-weight:bold;
+            border:1px solid #d9d9d9;
+            outline:none;
+            cursor:pointer;
+            border-radius:7px;
+            &:focus{
+                background:#3c92ca;
+                color:#fff;
+            }
+        }
+        .table-btn2{
+            background:#fff;
+            color:#ff6666
+            width:80px;
+            height:32px;
+            font-size:14px;
+            font-weight:bold;
+            border:1px solid #d9d9d9;
+            outline:none;
+            cursor:pointer;
+            border-radius:7px;
+            &:focus{
+                background:#ff6666;
+                color:#fff;
+            }
+        }
         .tab_list {
             float: right;
             margin: 0 0 20px;
-            .POP_btn{
-                margin-left:70px;
-            }
             span {
                 display: block;
                 background: #999;
@@ -1205,12 +1250,52 @@ const Wallet = styled.div`
                 margin-right:5px;
              }
         }
-<<<<<<< Updated upstream
         .ReactTable{
-            text-align:center;
+             text-align:center;
+             border:none;
+             .rt-thead.-header{
+                 font-size:18px;
+                 font-weight:600;
+                 color:#1a1a1a;
+                 box-shadow:none;
+                 border-bottom:2px solid #364958;
+                 .rt-th{
+                     border:none;
+                 }
+             }
+             .rt-tbody{
+                 .rt-tr.-odd{
+                     background:#fff;
+                 }
+                 .rt-tr.-padRow{
+                     background:#fff;
+                 }
+                 .rt-tr-group{
+                     border-bottom:none;
+                     background:#fff;
+                     &:hover{
+                         background:rgb(249, 251, 253);
+                     }
+                 }
+                 .rt-td{    
+                     padding: 8px 5px;
+                     border:none;
+                     line-height:30px;
+                     border-bottom:1px solid #d9d9d9;
+                     font-size:15px;
+                     font-weight:600;
+                     color:#1a1a1a;
+                     height:48px;
+                     &:last-child{
+                     }
+                 }
+             }
+             .-pagination{
+                 box-shadow:unset;
+                 border-top:none;
+                 margin-top:50px;
+             }
         }
-=======
->>>>>>> Stashed changes
     }
     @media(max-width: 1024px) {
         width:100%;
