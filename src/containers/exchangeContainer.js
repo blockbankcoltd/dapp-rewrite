@@ -740,7 +740,7 @@ const ExchangeColumn1 = styled.div`
                         font-size:25px;
                         font-weight:bold;
                         line-height:1.2;
-                        padding:0 0 0 36px;
+                        padding:0 0 0 15px;
                         margin:-7px 0 0 0;
                         letter-spacing:-2.1px;
                     }
@@ -2065,7 +2065,7 @@ const ExchangeColumn2 = styled.div`
                             color:#06c;
                         }
                         &.coinSymbol {
-                            padding-left:42px;
+                            padding-left:26px;
                         }
                         .marketSymbol {
                             font-size:10px;

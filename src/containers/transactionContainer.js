@@ -19,20 +19,6 @@ class TransactionContainer extends Component {
             auth: false,
             selectedTab: 0,
             myOrders: [],
-            tabs: [
-                {
-                    text: "Filled Orders",
-                    ap: this.props.languageConfig.TRANSACTION.ORDERSHISTORY
-                },
-                {
-                    text: "Open Orders",
-                    ap: this.props.languageConfig.TRANSACTION.OUTSTANDING
-                },
-                {
-                    text: "Transfer History",
-                    ap: this.props.languageConfig.TRANSACTION.TRANSHISTORY
-                }
-            ]
         };
     }
 
@@ -56,7 +42,7 @@ class TransactionContainer extends Component {
         if(prevProps.myAccountId !== this.props.myAccountId){
             this.setState({accountId: this.props.myAccountId});
         }
-        
+
         if(prevProps.orderHistory !== this.props.orderHistory){
             this.setState({orderHistory: this.props.orderHistory});
         }
@@ -65,13 +51,13 @@ class TransactionContainer extends Component {
             // let _array = [];
             // this.props.dwRecords.isDeposit.forEach( (o, i) => {
             //     _array.push({
-                    // isDeposit: o,
-                    // prCode: this.props.dwRecords.prCode[i],
-                    // qty: this.props.dwRecords.qty[i],
-                    // timestamp: new Date(this.props.dwRecords.timestamp[i] * 1000).toDateString()
+            // isDeposit: o,
+            // prCode: this.props.dwRecords.prCode[i],
+            // qty: this.props.dwRecords.qty[i],
+            // timestamp: new Date(this.props.dwRecords.timestamp[i] * 1000).toDateString()
             //     });
             // })
-            this.setState((state, props) => { 
+            this.setState((state, props) => {
                 return {dwRecords: this.props.dwRecords}
             });
         }
@@ -95,6 +81,20 @@ class TransactionContainer extends Component {
 
     render() {
         const { WALLET, TRANSACTION } = this.props.languageConfig;
+        const tabs = [
+            {
+                text: "Filled Orders",
+                ap: this.props.languageConfig.TRANSACTION.ORDERSHISTORY
+            },
+            {
+                text: "Open Orders",
+                ap: this.props.languageConfig.TRANSACTION.OUTSTANDING
+            },
+            {
+                text: "Transfer History",
+                ap: this.props.languageConfig.TRANSACTION.TRANSHISTORY
+            }
+        ]
         return (
             <Transaction>
                 <section className="main" role="">
@@ -117,7 +117,7 @@ class TransactionContainer extends Component {
                                 <div className="tab_list">
                                     <ul>
                                         {
-                                            this.state.tabs.map((item, index) => {
+                                            tabs.map((item, index) => {
                                                 return (
                                                     <li
                                                         key={index}
@@ -211,9 +211,9 @@ const Transaction = styled.div`
                             text-decoration: none;
                         }
                         &.active {
-                            border-bottom: 3px solid #036;
+                            border-bottom: 3px solid #364958;
                             a {
-                                color: #036;
+                                color: #364958;
                             }
                         }
                     }
@@ -232,6 +232,9 @@ const Transaction = styled.div`
             .tab_container {
                 width: 100%;
                 overflow: hidden;
+                .ReactTable{
+                     text-align:center;
+                }
                 .tab_list {
                     width: 100%;
                     overflow: hidden;
@@ -263,7 +266,7 @@ const Transaction = styled.div`
                             }
                             &.active {
                                 color: #fff;
-                                background:#036;
+                                background:#364958;
                                 border-bottom: none;
                             }
                         }

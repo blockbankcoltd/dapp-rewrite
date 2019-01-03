@@ -110,12 +110,12 @@ export const addBigNumbers = (a, b) => {
 
 // result == a - b
 export const subBigNumbers = (a, b) => {
-    try {
-        let result = new Decimal(a).sub(new Decimal(b));
-        return result.toString(10);
-    } catch (e) {
-        console.log(e);
-    }
+  try {
+		let result = new Decimal(a).sub(new Decimal(b));
+		return result.toString(10);
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 export const convertPriceArray = (arr) => {
