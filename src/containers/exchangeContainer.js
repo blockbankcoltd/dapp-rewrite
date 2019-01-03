@@ -71,9 +71,61 @@ class ExchangeContainer extends Component {
                     self.updatePublicTrades(result.returnValues);
                 } else if(result.event === "NewBestBidAsk") {
                     self.updateBidAskPrice(result.returnValues);
+                } else if(result.event === "NewCancel"){
+                    self.cancelOrder(result.returnValues);
                 }
             }
         });
+
+    }
+
+    cancelOrder(value) {
+        const {isSell, id, accountId, prBase, prTrade, price, qt} = value;
+        const {baseCurrency, tradeCurrency, orderBook, myOrders} = this.state;
+        const {priceA, priceB, volumeA, volumeB} = orderBook;
+        const tradeDecimal = transformToTokenName(prTrade).decimal;
+
+        const parseQty = divideBigNumbers(qt, tradeDecimal);
+        const parsePrice = divideBigNumbers(price, config.basePrice);
+        if(baseCurrency == prBase && tradeCurrency == prTrade){
+            new Promise((resolve,reject) => {
+                const myorderIndex = myOrders.findIndex((element) => element.orderID == id);
+                resolve(myorderIndex)
+            }).then(index => {
+                if(index >=0) myOrders.splice(index,1);
+            }).then(() => {
+                if(!isSell){
+                    const index = priceB.findIndex(element => element == parsePrice);
+                    if(index>=0) {
+                        if(volumeB[index] == parseQty){
+                            priceB.splice(index,1);
+                            volumeB.splice(index,1);
+                            priceB.push("0");
+                            volumeB.push("0");
+                        } else {
+                            volumeB[index] = subBigNumbers(volumeB[index], parseQty);
+                        }
+                    }
+                } else {
+                    const index = priceA.findIndex(element => element == parsePrice);
+                    if(index>=0) {
+                        if(volumeA[index] == parseQty){
+                            priceA.splice(index,1);
+                            volumeA.splice(index,1);
+                            priceA.push("0");
+                            volumeA.push("0");
+                        } else {
+                            volumeA[index] = subBigNumbers(volumeA[index], parseQty);
+                        }
+                    }
+                }
+            }).then(()=> {
+                this.setState({
+                    myOrders,
+                    orderBook
+                })
+            })
+        }
 
     }
 
@@ -107,32 +159,25 @@ class ExchangeContainer extends Component {
                         }
                     }
                 }
-
-            })).then(e => {
+            })).then(()=> {
                 if (+findPrice < 0) {
                     if (+remainQty > 0) {
-                        const findPrice = priceB.find(item => +item < +parsePrice);
-                        if (findPrice) {
-                            const place = priceB.indexOf(findPrice);
-                            priceB.splice(place, 0, parsePrice);
-                            volumeB.splice(place, 0, remainQty);
+                        const findPrice = priceB.findIndex(item => +item < +parsePrice);
+                        if (findPrice >= 0) {
+                            priceB.splice(findPrice, 0, parsePrice);
+                            volumeB.splice(findPrice, 0, remainQty);
                         } else {
-                            priceB.push(parsePrice);
-                            volumeB.push(remainQty);
+                            const place = priceB.findIndex(item => +item === 0);
+                            place ? priceB.splice(place, 0, parsePrice) :priceB.push(parsePrice);
+                            place ? volumeB.splice(place, 0, remainQty) : volumeB.push(remainQty);
                         }
                     }
                 } else {
                     volumeB[findPrice] = addBigNumbers(volumeB[findPrice], remainQty);
                 }
             }).then(res => {
-                const newOrderbook = {
-                    priceA: priceA,
-                    priceB: priceB,
-                    volumeA: volumeA,
-                    volumeB: volumeB
-                }
                 this.setState({
-                    orderBook: newOrderbook
+                    orderBook
                 })
             })
 
@@ -159,28 +204,22 @@ class ExchangeContainer extends Component {
             })).then(e => {
                 if (+findPrice < 0) {
                     if (+remainQty > 0) {
-                        const findPrice = priceA.find(item => +item > +parsePrice);
-                        if (findPrice) {
-                            const place = priceA.indexOf(findPrice);
-                            priceA.splice(place, 0, parsePrice);
-                            volumeA.splice(place, 0, remainQty);
+                        const findPrice = priceA.findIndex(item => +item < +parsePrice);
+                        if (findPrice >= 0) {
+                            priceA.splice(findPrice, 0, parsePrice);
+                            volumeA.splice(findPrice, 0, remainQty);
                         } else {
-                            priceA.push(parsePrice);
-                            volumeA.push(remainQty);
+                            const place = priceA.findIndex(item => +item === 0);
+                            place ? priceA.splice(place, 0, parsePrice) :priceA.push(parsePrice);
+                            place ? volumeA.splice(place, 0, remainQty) : volumeA.push(remainQty);
                         }
                     }
                 } else {
                     volumeA[findPrice] = addBigNumbers(volumeA[findPrice], remainQty);
                 }
             }).then(res => {
-                const newOrderbook = {
-                    priceA: priceA,
-                    priceB: priceB,
-                    volumeA: volumeA,
-                    volumeB: volumeB
-                }
                 this.setState({
-                    orderBook: newOrderbook
+                    orderBook
                 })
             })
 
@@ -466,6 +505,7 @@ class ExchangeContainer extends Component {
                             languageConfig={this.props.languageConfig}
                             baseName={this.state.baseName}
                             tradeName={this.state.tradeName}
+                            tradeHistory={this.state.tradeHistory}
                         />
                     </div>
                     <div className="example-grow">
@@ -539,6 +579,8 @@ class ExchangeContainer extends Component {
                                         languageConfig={this.props.languageConfig}
                                         base={this.state.baseCurrency}
                                         trade={this.state.tradeCurrency}
+                                        baseName={this.state.baseName}
+                                        tradeName={this.state.tradeName}
                                         data={this.state.tradeHistory}
                                     />
                                 </div>
