@@ -201,6 +201,7 @@ background : #fff;
 .main {
     width:1200px;
     margin-top:100px;
+    margin : 0 auto;
     .board_common {
         .category_list {
             margin-top:110px;

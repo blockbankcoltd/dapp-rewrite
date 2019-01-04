@@ -114,7 +114,7 @@ export class SlickA extends React.Component{
         return (
             <Slider {...settings}>
                 {notice.slice(0,3).map((item, index) => {
-                    return <div key={index}>
+                    return <div key={index} className="roll_Box">
                         <p className="roll-content"><span className="category">Notice</span><Link to={`/noticeDetail?&id=${item['_id']}`}>{item.title}</Link></p>
                     </div>
                 })}

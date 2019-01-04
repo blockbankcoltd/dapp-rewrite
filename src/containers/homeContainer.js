@@ -587,13 +587,17 @@ const InfoSection = styled.div`
             height:100%;
             box-sizing:border-box;
             .slick-slider {
+                outline:none !important;
                 height:100%;
                 color:#333;
                 padding:0 30px;
-                outline:0;
                 .slick-list {
+                    outline:none !important;
+                    &:focus{outline:0;}
+                    .roll_Box{
+                        outline:none !important;
                     .roll-content {
-                        outline:none;
+                        outline:none !important;
                         height : 100px;
                         line-height : 100px;
                         margin: 0 auto;
@@ -610,7 +614,7 @@ const InfoSection = styled.div`
                         place-content: center;
                         align-items: center;
                         justify-content: center;
-                        
+                        &:focus{outline:0;}
                         a {
                             display: block;
                             white-space: nowrap;
@@ -643,6 +647,7 @@ const InfoSection = styled.div`
                                 background:#c00;
                             }
                         }
+                    }
                     }
                 }
                 .slick-prev {
