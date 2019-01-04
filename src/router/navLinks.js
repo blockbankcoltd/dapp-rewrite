@@ -8,6 +8,7 @@ import feeInformation from '../containers/feeInformation'
 import termsOfUse from '../containers/termsOfUse'
 import privacyPolicy from '../containers/privacyPolicy'
 import ListingRequest from '../containers/ListingRequest'
+import noticeDetail from '../containers/noticeDetail'
 
 const links = [
     {
@@ -68,6 +69,12 @@ const links = [
         path: "/ListingRequest",
         component: ListingRequest,
         langname : "ListingRequest"
+    },
+    {
+        name: "noticeDetail",
+        path: "/noticeDetail",
+        component: noticeDetail,
+        langname : "noticeDetail"
     }
 ];
 

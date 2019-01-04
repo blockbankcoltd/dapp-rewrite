@@ -9,6 +9,7 @@ import thum_icon2 from "../assets/images/dexhi_icon_2.png";
 import thum_icon3 from "../assets/images/dexhi_icon_3.png";
 import thum_icon4 from "../assets/images/dexhi_icon_4.png";
 import DexHi_logo_1 from "../assets/images/DexHi_logo_1.png";
+import {SlickA} from "../components/global/SlickA";
 
 class HomeContainer extends Component {
     constructor(props) {
@@ -96,8 +97,13 @@ class HomeContainer extends Component {
                     </div>
                 </MainVisual>
                 <Content id="content">
-
-
+                    <InfoSection>
+                        <div className="container">
+                            <div className="exchange_view">
+                                <SlickA/>
+                            </div>
+                        </div>
+                    </InfoSection>
                     <ExchangeInfo id="exchangeInfo">
                         <div className="container_title">
                             <dl>
@@ -584,6 +590,7 @@ const InfoSection = styled.div`
                 height:100%;
                 color:#333;
                 padding:0 30px;
+                outline:0;
                 .slick-prev {
                     width:30px;
                     height:60px;
