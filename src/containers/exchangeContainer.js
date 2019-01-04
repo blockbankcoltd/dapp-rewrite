@@ -12,6 +12,7 @@ import PublicTradesA from '../components/local/exchange/PublicTradesA';
 import InstrumentSelectA from '../components/local/exchange/InstrumentSelectA';
 import Actions from '../actions/index';
 import { config, filterMarkets } from '../utilities/config';
+import Chart from '../components/local/exchange/Chart';
 
 class ExchangeContainer extends Component {
     constructor(props) {
@@ -108,7 +109,12 @@ class ExchangeContainer extends Component {
 
                                                 <div className="trigger-content">
                                                     <div id="chart-trigger-content-1">
-                                                        <div>*Chart Area</div>
+                                                        <div>
+                                                            <Chart 
+                                                                baseName={this.state.baseName} 
+                                                                tradeName={this.state.tradeName}
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
