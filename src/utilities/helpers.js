@@ -92,7 +92,8 @@ export const divideBigNumbers = (number, divisor) => {
 export const multiplyBigNumbers = (num, mul) => {
   try {
     let result = new Decimal(num).mul(new Decimal(mul));
-    return Web3.utils.toBN(result.toHexadecimal());
+    result = Web3.utils.toBN(result.toHexadecimal());
+		return result.toString();
   } catch (e) {
     console.log(e);
   }
