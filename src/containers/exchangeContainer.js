@@ -906,12 +906,13 @@ const ExchangeColumn1 = styled.div`
                 }
                 .priceStatus {
                     width:140px;
-                    font-size:13px;
+                    font-size:14px;
+                    font-weight:600;
                     max-width:155px;
                     position:relative;
                     .priceHigh {
                         border-bottom:1px solid #d9d9d9;
-                        color:#f33;
+                        color:#ff6666;
                     }
                     .priceLow {
                         color:#06c;
@@ -935,8 +936,11 @@ const ExchangeColumn1 = styled.div`
                             letter-spacing:0;
                             padding:0 0 3px 0;
                         }
-                        .remark {
-                            color:#1a1a1a;
+                        .remark1 {
+                            color:#ff6666;
+                        }
+                        .remark2 {
+                            color:#3c92ca;
                         }
                     }
                 }
@@ -945,6 +949,7 @@ const ExchangeColumn1 = styled.div`
                     width:190px;
                     position:relative;
                     font-size: 13px;
+                    font-weight:600;
                     margin:0 18px 0 0;
                     .vol {
                         border-bottom:1px solid #d9d9d9;
@@ -1329,10 +1334,10 @@ const ExchangeColumn1 = styled.div`
                             &.active {
                                 color:#fff;
                                 &.buy {
-                                    background:#f33;
+                                    background:#ff6666;
                                 }
                                 &.sell {
-                                    background:#06c;
+                                    background:#3c92ca;
                                 }
                             }
                             &:first-child {
@@ -1366,12 +1371,12 @@ const ExchangeColumn1 = styled.div`
                         }
                         &.buy {
                             .active {
-                                background: #f33;
+                                background: #ff6666;
                             }
                         }
                         &.sell {
                             .active {
-                                background:#06c;
+                                background:#3c92ca;
                             }
                         }
                     }
@@ -1546,11 +1551,11 @@ const ExchangeColumn1 = styled.div`
                                     width:66%;
                                     color:#fff;
                                     &.buy {
-                                        background:#f33;
+                                        background:#ff6666;
                                         opacity: 1;
                                     }
                                     &.sell {
-                                        background:#06c;
+                                        background:#3c92ca;
                                         opacity: 1;
                                     }
                                 }
@@ -1571,11 +1576,16 @@ const ExchangeColumn1 = styled.div`
                   font-size:16px;
                   height:38px;
                   line-height:38px;
-                  border-bottom:1px solid #d9d9d9;
+                 
                   font-weight: bold;
+                  margin-block-start:unset;
+                  margin-block-end:unset;
                 }
                 .recent-trades-table {
                     width:100%;
+                    td{
+                         border-bottom:1px solid #d9d9d9;
+                    }
                     th {
                         height:40px;
                         text-align:center;
@@ -1684,7 +1694,7 @@ const ExchangeColumn1 = styled.div`
                             cursor:pointer;
                             &.active {
                                 color:#fff;
-                                background:#036;
+                                background:#364958;
                             }
                             &.first-child {
                                 border-right:1px solid #d9d9d9;
@@ -2095,7 +2105,7 @@ const ExchangeColumn2 = styled.div`
                     border-right:0 none;
                 }
                 &.active {
-                    background:#036;
+                    background:#364958;
                     color:#fff;
                 }
             }
@@ -2104,10 +2114,10 @@ const ExchangeColumn2 = styled.div`
             width:409px;
             th {
                 height:40px;
-                border-bottom:2px solid #036;
+                border-bottom:2px solid #364958;
                 padding: 0;
                 color:#1a1a1a;
-                font-size:14px;
+                font-size:16px;
                 text-align:center;
                 background:#fff;
                 cursor: pointer;

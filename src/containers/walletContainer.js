@@ -194,7 +194,7 @@ class WalletContainer extends Component {
             const token = transformToTokenName(prCode);
             const parseAmount = divideBigNumbers(amount, token.decimal);
             const tokenIndex = balances.findIndex(element => element.name == token.productName);
-            balances[tokenIndex].total = addBigNumbers(balances[tokenIndex].total, parseAmount);
+            balances[tokenIndex].available = addBigNumbers(balances[tokenIndex].available, parseAmount);
             this.setState({
                 balances
             })
@@ -209,7 +209,7 @@ class WalletContainer extends Component {
             const token = transformToTokenName(prCode);
             const parseAmount = divideBigNumbers(amount, token.decimal);
             const tokenIndex = balances.findIndex(element => element.name == token.productName);
-            balances[tokenIndex].total = subBigNumbers(balances[tokenIndex].total, parseAmount);
+            balances[tokenIndex].available = subBigNumbers(balances[tokenIndex].available, parseAmount);
             this.setState({
                 balances
             })
@@ -223,17 +223,13 @@ class WalletContainer extends Component {
         }
     }
 
-    renderEditable(cellInfo, flag) {
-        const {ACCOUNT_ACTIONS} = this.props.languageConfig;
-        if (flag === "deposit") {
+    renderEditable(cellInfo) {
+        const {BUTTONS} = this.props.languageConfig;
             return<div>
-                <button type="button" className="table-btn1" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">{ACCOUNT_ACTIONS.DEPOSIT}</button>
+                <button type="button" className="table-btn1" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="deposit">{BUTTONS.TEXT_DEPOSIT}</button>
+                <button type="button" className="table-btn2" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">{BUTTONS.TEXT_WITHDRAW}</button>
+                <button type="button" className="table-btn3" value="order">{BUTTONS.TEXT_MARKET}</button>
             </div>
-        } else {
-            return <div>
-                <button type="button" className="table-btn2" onClick={(e)=>this.onOpenModalA(e, cellInfo)} value="withdraw">{ACCOUNT_ACTIONS.WITHDRAW}</button>
-            </div>
-        }
     }
     renderEditable_img(cellInfo){
         if(cellInfo.original.name==="ETH"){
@@ -292,9 +288,12 @@ class WalletContainer extends Component {
     }
 
     renderTable() {
+        console.log(this.state.balances)
         const { WALLET } = this.props.languageConfig;
+        let pageSize = this.state.balances.length;
         return(
             <ReactTable
+                showPagination={false}
                 data={this.state.balances}
                 columns={[
                     {
@@ -313,21 +312,13 @@ class WalletContainer extends Component {
                         accessor: d => d.hold
                     },
                     {
-                        Header: WALLET.DEPOSIT_BTN,
-                        id: "deposit_buttons",
+                        id: "deposit_withdraw_buttons",
 
                         // accessor: d => <div><button type="button">Deposit</button></div>,
-                        Cell: (d) => this.renderEditable(d, "deposit")
-                    },
-                    {
-                        Header: WALLET.WITHDRAW_BTN,
-                        id: "withdraw_buttons",
-                        // accessor: d => <div><button type="button">Withdraw</button></div>,
-                        Cell: (d) => this.renderEditable(d, "withdraw")
+                        Cell: (d) => this.renderEditable(d)
                     }
-
                 ]}
-                defaultPageSize={10}
+                pageSize={pageSize}
                 className="-striped -highlight"
             />
         );
@@ -483,8 +474,12 @@ class WalletContainer extends Component {
                                             <div className="first">{WALLET.TOTAL_ASSET}</div>
 
                                             <div className="second">
-                                                <strong id="balanceTxt">0</strong>
-                                                <span className="krw"> KRW</span>
+                                                <div>
+                                                    <strong id="balanceTxt">0</strong>
+                                                    <span className="eth"> ETH</span>
+                                                </div>
+                                                    <strong id="balanceTxt2">0</strong>
+                                                    <span className="krw"> KRW</span>
                                             </div>
                                         </h3>
 
@@ -538,6 +533,10 @@ const mapDispatchToProps = (dispatch) => {
         getMyOrders: () => dispatch(Actions.smartContract.getMyOrdersRequest()),
         getMyAccountId : () => dispatch(Actions.smartContract.getMyAccountIdRequest())
     }
+}
+
+WalletContainer.defaultProps = {
+    balance : []
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WalletContainer));
@@ -1020,30 +1019,45 @@ const Wallet = styled.div`
         margin: 0 0 80px;
         h3 {
             padding: 10px 40px;
-            display: table;
-            border: 1px solid #ccc;
+            display: flex;
+            border: 1px solid #d9d9d9;
             margin: 0 auto;
             font-size: 26px;
             font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
             text-align: center;
             font-weight: bold;
-            line-height: 34px;
-            width:600px;
+            line-height: 20px;
+            width:770px;
             .first {
                 width:40%;
-                float:left
+                float:left;
+                flex:1;
+                font-size: 25px;
+                color:#1a1a1a
+                line-height: 50px;
             }
             .second {
+                flex:1;
                 width:60%;
                 float:left;
                 strong {
+                   &:first-child{
                     font-size: 30px;
-                    color: #ED1C24;
+                    color: #3c92ca;
                     font-weight: 900;
                     // margin-left: 50px;
+                    }
+                    font-size: 15px;
+                    color: #666;
+                }
+                .eth {
+                    font-size: 25px;
+                    margin-left:6px;
                 }
                 .krw {
-                    font-size: 24px;
+                    font-size: 15px;
+                    color: #666;
+                    margin-left:10px;
                 }
             }
         }
@@ -1072,12 +1086,59 @@ const Wallet = styled.div`
         .ap-title {
             display:none;
         }
+        .table-btn1{
+            background:#fff;
+            color:#3c92ca
+            width:80px;
+            height:32px;
+            font-size:14px;
+            font-weight:bold;
+            border:1px solid #d9d9d9;
+            outline:none;
+            cursor:pointer;
+            border-radius:7px;
+            &:focus{
+                background:#3c92ca;
+                color:#fff;
+            }
+        }
+        .table-btn2{
+            background:#fff;
+            color:#ff6666
+            width:80px;
+            height:32px;
+            font-size:14px;
+            font-weight:bold;
+            border:1px solid #d9d9d9;
+            outline:none;
+            cursor:pointer;
+            border-radius:7px;
+            margin-left:12px;
+            &:focus{
+                background:#ff6666;
+                color:#fff;
+            }
+        }
+        .table-btn3{
+            background:#fff;
+            color:#364958;
+            width:80px;
+            height:32px;
+            font-size:14px;
+            font-weight:bold;
+            border:1px solid #d9d9d9;
+            outline:none;
+            cursor:pointer;
+            border-radius:7px;
+            margin-left:12px;
+            &:focus{
+                background:#364958;
+                color:#fff;
+            }
+        }
         .tab_list {
             float: right;
             margin: 0 0 20px;
-            .POP_btn{
-                margin-left:70px;
-            }
             span {
                 display: block;
                 background: #999;
@@ -1259,12 +1320,63 @@ const Wallet = styled.div`
                 margin-right:5px;
              }
         }
-<<<<<<< Updated upstream
         .ReactTable{
-            text-align:center;
+             text-align:center;
+             border:none;
+             .rt-thead{
+                 .rt-th{
+                    outline:none;
+                 }
+                 .rt-th.-sort-asc{
+                    box-shadow:none;
+                 }
+                 .rt-th.-sort-desc{
+                    box-shadow:none;
+                 }    
+             }
+             .rt-thead.-header{
+                 font-size:18px;
+                 font-weight:600;
+                 color:#1a1a1a;
+                 box-shadow:none;
+                 border-bottom:2px solid #364958;
+                 .rt-th{
+                     border:none;
+                 }
+             }
+             .rt-tbody{
+                 .rt-tr.-odd{
+                     background:#fff;
+                 }
+                 .rt-tr.-padRow{
+                     background:#fff;
+                 }
+                 .rt-tr-group{
+                     border-bottom:none;
+                     background:#fff;
+                     &:hover{
+                         background:rgb(249, 251, 253);
+                     }
+                 }
+                 .rt-td{    
+                     padding: 8px 5px;
+                     border:none;
+                     line-height:30px;
+                     border-bottom:1px solid #d9d9d9;
+                     font-size:15px;
+                     font-weight:600;
+                     color:#1a1a1a;
+                     height:48px;
+                     &:last-child{
+                     }
+                 }
+             }
+             .-pagination{
+                 box-shadow:unset;
+                 border-top:none;
+                 margin-top:50px;
+             }
         }
-=======
->>>>>>> Stashed changes
     }
     @media(max-width: 1024px) {
         width:100%;
@@ -1310,8 +1422,25 @@ const Wallet = styled.div`
                                     text-align: right;
                                     // float:left;
                                 }
+                                #balanceTxt2 {
+                                    font-size: 0.5rem;
+                                    margin: 0;
+                                    // display: block;
+                                    // width: 50%;
+                                    text-align: right;
+                                    // float:left;
+                                }
                                 .krw {
                                     font-size: 1.2rem;
+                                    // display: block;
+                                    // width: 45%;
+                                    text-align: left;
+                                    padding-left:0;
+                                    // padding-left: 1rem;
+                                    // float:left;
+                                }
+                                .eth {
+                                    font-size: 0.5rem;
                                     // display: block;
                                     // width: 45%;
                                     text-align: left;
@@ -1446,12 +1575,16 @@ const Wallet = styled.div`
         .asset_balance{
             .table-btn1{
                 margin-left:0px;
-                width:100%;
+                width:33%;
             }
             .table-btn2{
                 margin-left:0px;
-                width:100%;
-            }    
+                width:33%;
+            }
+            .table-btn3{
+                margin-left:0px;
+                width:33%;
+            }       
         }
     }
 `
