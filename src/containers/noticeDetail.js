@@ -155,12 +155,12 @@ class NoticeDetail extends Component{
                                 <div className="view_content">
                                     <div className="bo_title">
                                         {result.map((item)=>{
-                                            return <h3>{item.title}</h3>
+                                            return <h3 key={item.id}>{item.title}</h3>
 
                                         }
                                         )}
                                         {result.map((item)=>{
-                                                return <p>{item.date}</p>
+                                                return <p key={item.id}>{item.date}</p>
 
                                             }
                                         )}
@@ -177,7 +177,9 @@ class NoticeDetail extends Component{
                                     <ul>
                                         <Link to={{
                                             pathname: '/noticeContainer',
-                                        }}><li><span className="btn btn_small btn_col1">{DASHBOARD.LIST}</span></li></Link>
+                                        }}>
+                                        {/* <li><span className="btn btn_small btn_col1">{DASHBOARD.LIST}</span></li> */}
+                                        </Link>
                                     </ul>
                                 </div>
                             </div>
@@ -200,7 +202,7 @@ margin : 0 auto;
 background : #fff;
 .main {
     width:1200px;
-    margin-top:100px;
+    margin:100px auto 0;
     .board_common {
         .category_list {
             margin-top:110px;
