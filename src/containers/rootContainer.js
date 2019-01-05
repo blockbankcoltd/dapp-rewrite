@@ -16,7 +16,7 @@ import Loading from "../components/global/loading";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-  
+
 class RootContainer extends Component {
     constructor(props) {
         super(props);
@@ -57,7 +57,7 @@ class RootContainer extends Component {
         if(this.props.GlobalWeb3Object !== prevProps.GlobalWeb3Object){
             let currentStore = store.getState();
             console.log("Current State of Store --> ", store.getState());
-           
+
             // Dispatch action to set the current provider in the store
             // currentStore.main.GlobalWeb3Object.currentProvider.isMetaMask
             // The Above line will tell us if the provider is MetaMask or not (returns a Boolean Value)
@@ -71,7 +71,7 @@ class RootContainer extends Component {
         localStorage.setItem('lang', code);
         return this.setState({ activeLanguage: code, languageConfig: code === "kr" ? koreanConfig : englishConfig });
     };
-    
+
     render() {
 
         const {metamask} = this.state;
@@ -104,13 +104,37 @@ class RootContainer extends Component {
                 return (<Loading show={true} width={"100%"} height={"100%"}/>);
 
             case "network" :
-                return (<Error msg="Please change network to Kovan and reload page" route={"/"} buttonMsg="reload" />);
+                return (<Error
+                    msgEn="Please change to ETH main network."
+                    msgKr="Ethereum Main Network로 변경해주시기 바랍니다."
+                    buttonMsgEn="Reload page"
+                    buttonMsgKr="새로고침"
+                    infoOn={false}
+                    route="/"
+                    footMsgEn="* Please reopen your browser after changing."
+                    footMsgKr="* 변경 후 브라우저를 재실행 하시기 바랍니다."/>);
 
             case "account" :
-                return (<Error msg="Please login and reload page" route={"login"} buttonMsg="login"/>);
+                return (<Error
+                    msgEn="Please connect METAMASK first."
+                    msgKr="먼저 MetaMask를 연결시기 바랍니다."
+                    buttonMsgEn="Connect to MetaMask"
+                    buttonMsgKr="MetaMask 연결하기"
+                    infoOn={true}
+                    route="login"
+                />);
 
             case "install" :
-                return (<Error msg="Please install metamask and reload page" route={"https://metamask.io"} buttonMsg="Metamask page"/>);
+                return (<Error
+                    msgEn="Please install METAMASK first."
+                    msgKr="먼저 MetaMask를 설치해주시기 바랍니다."
+                    buttonMsgEn="Install MetaMask"
+                    buttonMsgKr="MetaMask 설치하기"
+                    infoOn={true}
+                    route="https://metamask.io"
+                    footMsgEn="* Please reopen your browser after installation is completed."
+                    footMsgKr="* 설치 완료 후 브라우저를 재실행 하시기 바랍니다."/>);
+
 
             case "ok":
                 return (
@@ -125,7 +149,7 @@ class RootContainer extends Component {
             default :
                 return (<Loading show={true} width={"100%"} height={"100%"}/>);
         }
-        
+
         // return (
         //   <div className="App">
         //     <Web3Provider fetchAccounts={fetchAccounts} fetchNetwork={fetchNetwork}></Web3Provider>

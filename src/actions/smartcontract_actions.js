@@ -94,3 +94,10 @@ export const getBestBidBestAsk = (trade, base) => {
         payload: { trade, base }
     }
 }
+
+export const cancelOrdersRequest = (idArray) => {
+    return {
+        type: Constants.default.Requests.CANCEL_ORDERS_REQUEST,
+        payload: { idArray }
+    }
+};

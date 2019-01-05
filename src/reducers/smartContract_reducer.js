@@ -103,6 +103,16 @@ export default (state = initState, action) => {
                 ...state,
                 bestBidBestAsk: action.bestBidBestAsk
             }
+        case Constants.default.Success.CANCEL_ORDERS_SUCCESS:
+            toast.success(<ToastComponent message={action.cancelOrdersStatus.etherscanLink} />, {
+                position: toast.POSITION.BOTTOM_CENTER,
+                className: 'toast-notification',
+
+            })
+            return {
+                ...state,
+                cancelOrdersStatus: action.cancelOrdersStatus
+            }
         // case Constants.default.Success.RECEIVED_SMARTCONTRACTS:
         //     toast.success(<ToastComponent message={action..etherscanLink} />, {
         //         position: toast.POSITION.BOTTOM_CENTER,

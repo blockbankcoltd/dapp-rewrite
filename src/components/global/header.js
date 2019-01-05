@@ -34,7 +34,6 @@ export default class HeaderComponent extends Component {
     }
 
     languageHandler() {
-        console.log(this.state.langActive);
         if(this.state.langActive){
             this.setState({
                 langActive : false
