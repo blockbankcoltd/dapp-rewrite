@@ -99,6 +99,15 @@ export const multiplyBigNumbers = (num, mul) => {
   }
 }
 
+export const multiplyBigNumbersToNumber = (num, mul) => {
+    try {
+        let result = new Decimal(num).mul(new Decimal(mul));
+        return result.toDecimalPlaces(8).toString(10);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export const addBigNumbers = (a, b) => {
   try {
 
